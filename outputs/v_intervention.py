@@ -38,67 +38,74 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # data
 # --------------------------------------------------------------------------- #
 def load_eval_sequences(tokenizer, num_seq, ctxlen):
-    """Return a LongTensor [N, ctxlen] of full (unpadded) token blocks.
+    """Return (LongTensor [N, ctxlen], source) of full (unpadded) token blocks.
 
-    Primary: monology/pile-uncopyrighted validation. Fallback: wikitext-103.
-    Concatenate documents (EOS-separated) then chunk into ctxlen blocks; drop
-    the remainder so every block is full length -> no padding needed.
+    Tries monology/pile-uncopyrighted (train split; the mirror has no
+    validation split) first, then wikitext-103 train. Concatenate documents
+    (EOS-separated), chunk into ctxlen blocks, drop the remainder so every
+    block is full length -> no padding needed. The result is cached to disk so
+    baseline/coarse/fine all reuse the *same* sequences (required for the loss
+    delta to be comparable) and we only hit the network once.
     """
     from datasets import load_dataset
 
-    eos = tokenizer.eos_token_id
-    text_iter = None
-    source = None
+    cache = os.path.join(HERE, f"eval_seqs_n{num_seq}_c{ctxlen}.pt")
+    if os.path.exists(cache):
+        d = torch.load(cache)
+        print(f"[data] loaded cache {os.path.basename(cache)}: "
+              f"source={d['source']} blocks={d['seqs'].shape[0]}")
+        return d["seqs"], d["source"]
 
-    def try_pile():
-        ds = load_dataset(
-            "monology/pile-uncopyrighted", split="validation", streaming=True
-        )
+    eos = tokenizer.eos_token_id
+
+    def build_from(text_iter):
+        need = num_seq * ctxlen
+        buf, total = [], 0
+        for txt in text_iter:
+            ids = tokenizer(txt, add_special_tokens=False)["input_ids"]
+            if not ids:
+                continue
+            buf.extend(ids)
+            buf.append(eos)
+            total += len(ids) + 1
+            if total >= need:
+                break
+        n_full = len(buf) // ctxlen
+        n_use = min(n_full, num_seq)
+        arr = np.array(buf[: n_use * ctxlen], dtype=np.int64).reshape(n_use, ctxlen)
+        return arr, total
+
+    def pile_iter():
+        ds = load_dataset("monology/pile-uncopyrighted", split="train", streaming=True)
         return (ex["text"] for ex in ds)
 
-    def try_wikitext():
-        ds = load_dataset(
-            "wikitext", "wikitext-103-raw-v1", split="validation"
-        )
+    def wikitext_iter():
+        ds = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
         return (t for t in ds["text"] if t.strip())
 
-    try:
-        text_iter = try_pile()
-        source = "monology/pile-uncopyrighted:validation"
-        first = next(text_iter)
-
-        def chain(first, it):
-            yield first
-            yield from it
-
-        text_iter = chain(first, text_iter)
-    except Exception as e:  # noqa: BLE001
-        print(f"[data] pile failed ({type(e).__name__}: {e}); falling back to wikitext-103")
-        text_iter = try_wikitext()
-        source = "wikitext-103-raw-v1:validation"
-
-    need_tokens = num_seq * ctxlen
-    buf = []
-    total = 0
-    for txt in text_iter:
-        ids = tokenizer(txt, add_special_tokens=False)["input_ids"]
-        if not ids:
+    arr = source = None
+    for name, it_fn, label in [
+        ("pile", pile_iter, "monology/pile-uncopyrighted:train"),
+        ("wikitext", wikitext_iter, "wikitext-103-raw-v1:train"),
+    ]:
+        try:
+            a, total = build_from(it_fn())
+        except Exception as e:  # noqa: BLE001
+            print(f"[data] {name} failed ({type(e).__name__}: {e}); trying next source")
             continue
-        buf.extend(ids)
-        buf.append(eos)
-        total += len(ids) + 1
-        if total >= need_tokens:
+        if a.shape[0] >= num_seq:
+            arr, source = a, label
+            print(f"[data] source={source} blocks={a.shape[0]} ctxlen={ctxlen} "
+                  f"(read ~{total} tokens)")
             break
+        print(f"[data] {name} produced only {a.shape[0]} blocks (< {num_seq}); trying next")
 
-    n_full = len(buf) // ctxlen
-    n_use = min(n_full, num_seq)
-    if n_use < num_seq:
-        print(f"[data] WARNING: only {n_use} full blocks available "
-              f"(asked {num_seq}); dataset too small.")
-    arr = np.array(buf[: n_use * ctxlen], dtype=np.int64).reshape(n_use, ctxlen)
-    print(f"[data] source={source} blocks={n_use} ctxlen={ctxlen} "
-          f"(total tokens read ~{total})")
-    return torch.from_numpy(arr), source
+    if arr is None:
+        raise RuntimeError(f"no dataset produced >= {num_seq} blocks of ctxlen {ctxlen}")
+
+    seqs = torch.from_numpy(arr)
+    torch.save({"seqs": seqs, "source": source}, cache)
+    return seqs, source
 
 
 # --------------------------------------------------------------------------- #
@@ -210,7 +217,7 @@ def load_model(model_name, dtype, device):
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     torch_dtype = {"fp16": torch.float16, "bf16": torch.bfloat16, "fp32": torch.float32}[dtype]
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype)
+    model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch_dtype)
     model.to(device)
     model.eval()
     return model, tok
