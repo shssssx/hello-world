@@ -246,11 +246,15 @@ def train_one(model, hook, train_seqs, layer, variant, rank, device,
         loss.backward()
         # dead-stuck guard: gradient must actually reach the adapter
         if step == 0:
-            g = hook.A.grad
-            if g is None or float(g.abs().sum()) == 0.0:
-                raise RuntimeError("DEAD-STUCK: A.grad is None/zero after first "
-                                   "backward -> grad not flowing to LoRA (check that "
-                                   "the forward is NOT wrapped in torch.no_grad()).")
+            # B is zero-initialised, so dcorr/dA = 0 at step 0 -> A.grad is
+            # legitimately 0 here while B.grad is nonzero. Dead-stuck (no_grad
+            # bug) is when BOTH are zero/None.
+            ga = 0.0 if hook.A.grad is None else float(hook.A.grad.abs().sum())
+            gb = 0.0 if hook.B.grad is None else float(hook.B.grad.abs().sum())
+            if ga + gb == 0.0:
+                raise RuntimeError("DEAD-STUCK: both A.grad and B.grad are None/zero "
+                                   "after first backward -> grad not flowing to LoRA "
+                                   "(check the forward is NOT wrapped in torch.no_grad()).")
             first_loss = loss.item()
         opt.step()
         if step % 50 == 0 or step == steps - 1:
