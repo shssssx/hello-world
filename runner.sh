@@ -15,6 +15,7 @@
 set -u
 BRANCH="${BRANCH:-claude/zen-allen-7Y8Bx}"
 POLL="${POLL:-5}"
+export GIT_TERMINAL_PROMPT=0   # never hang on a credential prompt; fail fast
 cd "$(dirname "$0")" || exit 1
 git config pull.rebase true >/dev/null 2>&1
 
