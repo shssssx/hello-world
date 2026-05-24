@@ -1,10 +1,10 @@
 {
   "model": "EleutherAI/pythia-410m-deduped",
-  "dataset": "wikitext-103-raw-v1:validation",
-  "num_seq": 246,
+  "dataset": "monology/pile-uncopyrighted:train",
+  "num_seq": 1000,
   "ctxlen": 1024,
   "batch_size": 16,
   "dtype": "fp16",
   "device": "cuda",
-  "baseline_mean_loss": 3.0662641525268555
+  "baseline_mean_loss": 2.1177587509155273
 }

@@ -1,19 +1,10 @@
-### seq=2  2026-05-24T15:42:59Z
+### seq=3  2026-05-24T15:46:15Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.8
 ----- BEGIN -----
-WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
-`torch_dtype` is deprecated! Use `dtype` instead!
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9608.57it/s]
-'_ssl.c:980: The handshake operation timed out' thrown while requesting GET https://hf-mirror.com/datasets/monology/pile-uncopyrighted/resolve/3be90335b66f24456a5d6659d9c8d208c0357119/train/00.jsonl.zst
-Retrying in 1s [Retry 1/5].
-'_ssl.c:980: The handshake operation timed out' thrown while requesting GET https://hf-mirror.com/datasets/monology/pile-uncopyrighted/resolve/3be90335b66f24456a5d6659d9c8d208c0357119/train/00.jsonl.zst
-Retrying in 2s [Retry 2/5].
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-[data] pile failed (ValueError: Bad split: validation. Available splits: ['train']); falling back to wikitext-103
-[data] WARNING: only 246 full blocks available (asked 1000); dataset too small.
-[data] source=wikitext-103-raw-v1:validation blocks=246 ctxlen=1024 (total tokens read ~252472)
-[baseline] mean=3.0663  (2.2s)
-[baseline] wrote baseline_loss.json  mean=3.0663
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 25968.17it/s]
+[data] source=monology/pile-uncopyrighted:train blocks=1000 ctxlen=1024 (read ~1028355 tokens)
+[baseline] mean=2.1178  (7.7s)
+[baseline] wrote baseline_loss.json  mean=2.1178
 ----- END (rc=0) -----
