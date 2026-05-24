@@ -182,10 +182,14 @@ class V1aHook:
         self.variant = variant
         alpha = rank if alpha is None else alpha
         self.scale = alpha / rank
-        bound = math.sqrt(3.0 / rank)                   # uniform(-b,b) -> std = 1/sqrt(r)
+        # A scaled by the CONTRACTION dim (d_model), i.e. fan_in = d, so that
+        # x @ A is unit-variance (standard LoRA / Kaiming fan_in init). NOTE:
+        # this deviates from the literal spec "std=1/sqrt(r)" -- that scales by
+        # the rank instead of the contraction dim, giving Var(x@A)=d/r~128 and
+        # diverging training. Documented in summary.md.
+        bound = math.sqrt(3.0 / self.d)                 # uniform(-b,b) -> std = 1/sqrt(d)
         if variant == "shared":
             A = torch.empty(self.d, rank, device=device)
-            B = torch.zeros(self.d, device=device)      # placeholder, reset below
             self.A = torch.nn.Parameter(A.uniform_(-bound, bound))
             self.B = torch.nn.Parameter(torch.zeros(rank, self.d, device=device))
         else:
