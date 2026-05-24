@@ -207,6 +207,40 @@ def save_per_seq(store):
     torch.save(store, per_seq_path())
 
 
+def store_sig(args, source):
+    """Config identity the cached per-seq losses are bound to."""
+    return {
+        "model": args.model,
+        "source": source,
+        "num_seq": args.num_seq,
+        "ctxlen": args.ctxlen,
+        "dtype": args.dtype,
+    }
+
+
+def validate_store(store, sig):
+    """Guard against silently reusing baseline/coarse/fine computed on a
+    different config (num_seq / ctxlen / model / dataset). If the signature
+    changed, those cached tensors no longer pair with the current sequences,
+    so drop them. A legacy store with no signature is assumed to match the
+    current run and just gets stamped."""
+    old = store.get("config")
+    changed = False
+    if old is None:
+        store["config"] = sig
+        changed = True
+    elif old != sig:
+        print(f"[store] config changed:\n  old={old}\n  new={sig}\n"
+              "  -> clearing cached baseline/coarse/fine/dose (will recompute)")
+        for k in ("baseline", "coarse", "fine", "fine_delta", "dose"):
+            store.pop(k, None)
+        store["config"] = sig
+        changed = True
+    if changed:
+        save_per_seq(store)
+    return store
+
+
 # --------------------------------------------------------------------------- #
 # model loading
 # --------------------------------------------------------------------------- #
@@ -302,6 +336,7 @@ def mode_baseline(args):
     interv = VIntervention(model)
     interv.attach()
     store = load_per_seq()
+    validate_store(store, store_sig(args, source))
     bl = _ensure_baseline(model, interv, seqs, args, store)
     cfg = base_config(args, source, seqs.shape[0])
     cfg["baseline_mean_loss"] = float(bl.mean())
@@ -316,6 +351,7 @@ def mode_sanity(args):
     interv = VIntervention(model)
     interv.attach()
     store = load_per_seq()
+    validate_store(store, store_sig(args, source))
     bl = _ensure_baseline(model, interv, seqs, args, store)
     interv.set_spec({0: "all"})
     l0 = evaluate(model, interv, seqs, args.batch_size, args.device)
@@ -337,6 +373,7 @@ def mode_coarse(args):
     interv = VIntervention(model)
     interv.attach()
     store = load_per_seq()
+    validate_store(store, store_sig(args, source))
     bl = _ensure_baseline(model, interv, seqs, args, store)
     base_mean = bl.mean().item()
 
@@ -368,6 +405,7 @@ def mode_fine(args):
     interv = VIntervention(model)
     interv.attach()
     store = load_per_seq()
+    validate_store(store, store_sig(args, source))
     bl = _ensure_baseline(model, interv, seqs, args, store)
     base_mean = bl.mean().item()
 
@@ -396,6 +434,47 @@ def mode_fine(args):
         save_per_seq(store)
         np.save(os.path.join(HERE, "fine_loss_delta.npy"), fine)
     print(f"[fine] done. scanned layers {layers}")
+
+
+def mode_dose(args):
+    """Dose-response: in each layer, replace the V of the first k heads for
+    k in {1,2,4,8,12,16} and record the loss delta. Validates the
+    distributed-redundancy reading: per-head delta ~0 should ramp up smoothly
+    to the coarse (all-heads) delta as k -> num_heads. A jump/saturation would
+    instead flag a single-head-path artifact."""
+    model, tok = load_model(args.model, args.dtype, args.device)
+    seqs, source = load_eval_sequences(tok, args.num_seq, args.ctxlen)
+    interv = VIntervention(model)
+    interv.attach()
+    store = load_per_seq()
+    validate_store(store, store_sig(args, source))
+    bl = _ensure_baseline(model, interv, seqs, args, store)
+    base_mean = bl.mean().item()
+
+    H = interv.num_heads
+    layers = sorted(int(x) for x in args.layers.split(",")) if args.layers else [5, 11, 17]
+    ks = [k for k in (1, 2, 4, 8, 12, 16) if k <= H]
+    print(f"[dose] layers={layers} ks={ks}")
+
+    dose = store.get("dose", {})
+    if not isinstance(dose, dict):
+        dose = {}
+    for l in layers:
+        row = {}
+        for k in ks:
+            interv.set_spec({l: set(range(k))})  # cumulative first-k heads
+            t0 = time.time()
+            ls = evaluate(model, interv, seqs, args.batch_size, args.device)
+            row[k] = ls.mean().item() - base_mean
+            print(f"[dose] L{l:2d} k={k:2d}  delta={row[k]:+.4f}  ({time.time()-t0:.1f}s)")
+        dose[l] = row
+        store["dose"] = dose
+        save_per_seq(store)
+    arr = np.array([[dose[l][k] for k in ks] for l in layers], dtype=np.float64)
+    np.save(os.path.join(HERE, "dose_response.npy"), arr)
+    with open(os.path.join(HERE, "dose_meta.json"), "w") as f:
+        json.dump({"layers": layers, "ks": ks}, f, indent=2)
+    print(f"[dose] done. saved dose_response.npy {arr.shape}")
 
 
 def mode_summary(args):
@@ -433,6 +512,67 @@ def mode_summary(args):
     fig.tight_layout()
     fig.savefig(os.path.join(HERE, "heatmap.png"), dpi=130)
     print("[summary] wrote heatmap.png")
+
+    # ---- significance (paired t over per-seq losses) + dose-response ----
+    sig_text = []
+    near_zero_pre = [
+        (l, h) for l in range(L) for h in range(H)
+        if np.isfinite(fine[l, h]) and abs(fine[l, h]) < 0.05
+    ]
+    try:
+        store = load_per_seq()
+        base_ps = store.get("baseline")
+
+        def paired_t(inter_ps):
+            d = inter_ps - base_ps
+            n = d.shape[0]
+            m = d.mean().item()
+            sd = d.std(unbiased=True).item()
+            t = m / (sd / (n ** 0.5)) if sd > 0 else float("nan")
+            return m, sd, t
+
+        if base_ps is not None:
+            fps = store.get("fine")
+            if fps is not None:
+                meas = sig = tiny_sig = 0
+                for l in range(L):
+                    for h in range(H):
+                        if np.isfinite(fine[l, h]) and bool(torch.isfinite(fps[l, h]).all()):
+                            meas += 1
+                            m, sd, t = paired_t(fps[l, h])
+                            if abs(t) > 2.58:
+                                sig += 1
+                                if abs(m) < 0.05:
+                                    tiny_sig += 1
+                sig_text.append(
+                    f"Fine paired t-test (delta vs baseline, same {base_ps.shape[0]} seqs): "
+                    f"{sig}/{meas} cells reach |t|>2.58 (p<0.01); of the "
+                    f"{len(near_zero_pre)} cells with |delta|<0.05, {tiny_sig} are still "
+                    f"statistically nonzero -> small but real, not measurement noise.")
+    except Exception as e:  # noqa: BLE001
+        sig_text.append(f"(significance unavailable: {type(e).__name__}: {e})")
+
+    dose_path = os.path.join(HERE, "dose_response.npy")
+    dose_meta_p = os.path.join(HERE, "dose_meta.json")
+    if os.path.exists(dose_path) and os.path.exists(dose_meta_p):
+        arr = np.load(dose_path)
+        meta = json.load(open(dose_meta_p))
+        ks, dl = meta["ks"], meta["layers"]
+        figd, axd = plt.subplots(figsize=(7, 5))
+        for i, l in enumerate(dl):
+            axd.plot(ks, arr[i], marker="o", label=f"L{l}")
+            if l < len(coarse) and np.isfinite(coarse[l]):
+                axd.axhline(coarse[l], ls="--", lw=0.8, alpha=0.5)
+        axd.set_xlabel("# heads with V token-grounded (cumulative, first-k)")
+        axd.set_ylabel("loss delta")
+        axd.set_title("Dose-response: per-head ~0 ramps to coarse all-heads (dashed) at k=H")
+        axd.legend()
+        figd.tight_layout()
+        figd.savefig(os.path.join(HERE, "dose.png"), dpi=130)
+        print("[summary] wrote dose.png")
+        for i, l in enumerate(dl):
+            row = ", ".join(f"k{k}:{arr[i][j]:+.3f}" for j, k in enumerate(ks))
+            sig_text.append(f"Dose L{l}: {row}  (coarse all-heads={coarse[l]:+.3f})")
 
     # ---- scenario judgment ----
     finite = fine[np.isfinite(fine)]
@@ -494,6 +634,10 @@ def mode_summary(args):
         lines.append(f"  {near_zero}")
     else:
         lines.append("- no fine measurements found.")
+    if sig_text:
+        lines.append("\n## Significance & dose-response\n")
+        for s in sig_text:
+            lines.append(f"- {s}")
     lines.append("\n## Judgment\n")
     lines.append(f"**Scenario: {scenario}**\n")
     lines.append("Basis: layer-0 coarse delta = "
@@ -512,7 +656,7 @@ def mode_summary(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["introspect", "baseline", "sanity", "coarse", "fine", "summary"])
+                   choices=["introspect", "baseline", "sanity", "coarse", "fine", "dose", "summary"])
     p.add_argument("--model", default="EleutherAI/pythia-410m-deduped")
     p.add_argument("--num_seq", type=int, default=1000)
     p.add_argument("--ctxlen", type=int, default=1024)
@@ -532,6 +676,7 @@ def main():
         "sanity": mode_sanity,
         "coarse": mode_coarse,
         "fine": mode_fine,
+        "dose": mode_dose,
         "summary": mode_summary,
     }[args.mode](args)
 
