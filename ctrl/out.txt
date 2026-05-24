@@ -1,62 +1,28 @@
-### seq=12  2026-05-24T16:39:26Z
+### seq=13  2026-05-24T16:39:48Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-## help
-install_aris.sh — Project-local ARIS skill installation (flat per-skill symlinks).
-
-Each ARIS skill is symlinked into `<project>/.claude/skills/<skill-name>` so
-Claude Code's slash-command discovery (which only scans one level deep) finds it.
-A versioned manifest at `<project>/.aris/installed-skills.txt` tracks every
-entry this installer created — uninstall and reconcile read from the manifest
-and never touch user-owned skills with the same name.
-
-Usage:
-  bash tools/install_aris.sh [project_path] [options]
-
-Actions (mutually exclusive, default: auto):
-  default          install if no manifest, else reconcile
-  --reconcile      explicit reconcile; refuse if no manifest
-  --uninstall      remove only entries in manifest; delete manifest
-
-Options:
-  --aris-repo PATH       override aris-repo discovery
-  --dry-run              show plan, no writes
-  --quiet                no prompts; abort on any condition that would prompt
-  --no-doc               skip CLAUDE.md update
-  --adopt-existing NAME  adopt a non-managed symlink that already points to
-                         the correct upstream target (repeatable)
-  --replace-link NAME    replace an upstream-internal symlink that points to
-                         a DIFFERENT entry than expected (repeatable)
-  --from-old             trigger migration from legacy nested install
-                         (.claude/skills/aris/)
-  --migrate-copy STRAT   for legacy COPY install: STRAT = keep-user | prefer-upstream
-                         (default: refuse)
-  --clear-stale-lock     remove stale lock dir from a crashed prior run
-                         (host+PID metadata is verified before removal)
-
-Safety rules enforced:
-  S1  Never delete a path that is not a symlink.
-  S2  Never delete a symlink whose target is outside the configured aris-repo.
-  S3  Never delete a symlink not listed in the manifest (except via --uninstall
-      which only deletes manifest entries).
-  S4  Never overwrite an existing path during CREATE — abort by default.
-  S5  Manifest write is atomic (temp + rename in same dir).
-## DRY-RUN in ~/research
-
-ARIS Project Install
-  Project:    /root/research
-  ARIS repo:  /root/aris_repo
-  Action:     auto (dry-run)
-
-
-Plan summary:
-  CREATE:        77  (new flat symlinks to add)
-  ADOPT:         0   (orphan symlinks already pointing to correct target)
-  UPDATE_TARGET: 0  (managed symlinks with stale target)
-  REUSE:         0   (already correct, no-op)
-  REMOVE:        0  (in old manifest, no longer upstream)
-  CONFLICT:      0  (must be resolved before apply)
-  (dry-run) ln -s /root/aris_repo/tools /root/research/.aris/tools
-
-(dry-run) no changes made
------ END (rc=0) -----
+## linked skills count
+77
+## sample
+ablation-planner
+alphaxiv
+analyze-results
+arxiv
+auto-paper-improvement-loop
+auto-review-loop
+auto-review-loop-llm
+auto-review-loop-minimax
+citation-audit
+claims-drafting
+comm-lit-review
+deepxiv
+dse-loop
+embodiment-description
+exa-search
+experiment-audit
+experiment-bridge
+experiment-plan
+experiment-queue
+feishu-notify
+## CLAUDE.md head
+----- END (rc=1) -----
