@@ -458,8 +458,14 @@ def mode_summary(args):
     else:
         frac_small, f_med = float("nan"), float("nan")
 
+    coarse_med_abs = float(np.median(np.abs(coarse)))
     if layer0_small and others_big:
         scenario = "S3 (only layer 0 ~ 0; V contextualization important for layers >= 1)"
+    elif finite.size and coarse_med_abs > 0.1 and frac_small > 0.5:
+        scenario = ("S1 / distributed redundancy: per-head V contextualization is "
+                    "largely removable (most per-head deltas ~0) yet removing it from "
+                    "all heads in a layer is costly -> redundant, distributed signal; "
+                    "worth escalating to low-rank correction / from-scratch training")
     elif finite.size and frac_small > 0.15 and f_med > 0.1:
         scenario = "S1 (structured: some positions ~0, some large -> signal worth escalating)"
     elif finite.size and f_med > 0.15 and frac_small < 0.1:
