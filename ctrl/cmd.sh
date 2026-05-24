@@ -1,7 +1,8 @@
-# seq=14: diagnose server reachability to Anthropic / OpenAI + any proxy env
-echo "## proxy env"; env | grep -iE "proxy" || echo "(no proxy env)"
-echo "## anthropic"; curl -s -o /dev/null -w "api.anthropic.com -> %{http_code} (%{time_total}s)\n" --max-time 12 https://api.anthropic.com/v1/models 2>&1 || echo "anthropic unreachable"
-echo "## openai"; curl -s -o /dev/null -w "api.openai.com -> %{http_code} (%{time_total}s)\n" --max-time 12 https://api.openai.com/v1/models 2>&1 || echo "openai unreachable"
-echo "## auth.openai"; curl -s -o /dev/null -w "auth.openai.com -> %{http_code} (%{time_total}s)\n" --max-time 12 https://auth.openai.com 2>&1 || echo "auth.openai unreachable"
-echo "## google (control)"; curl -s -o /dev/null -w "google -> %{http_code} (%{time_total}s)\n" --max-time 12 https://www.google.com 2>&1 || echo "google unreachable"
-echo "## hf (already used)"; curl -s -o /dev/null -w "hf-mirror -> %{http_code} (%{time_total}s)\n" --max-time 12 https://hf-mirror.com 2>&1 || echo "hf-mirror unreachable"
+# seq=15: extract ARIS setup specifics (codex MCP wiring, SSH/experiment-bridge config)
+cd ~/aris_repo
+echo "## top-level"; ls
+echo "## root md files"; ls *.md 2>/dev/null
+echo "## docs dir"; ls docs 2>/dev/null | head -40
+echo "## files mentioning codex+mcp"; grep -rIl -iE "codex.*mcp|mcp.*codex|claude mcp add" . 2>/dev/null | head -15
+echo "## files mentioning ssh/remote server config"; grep -rIl -iE "ssh -p|remote.*gpu|server.*ssh|experiment-bridge" --include=*.md . 2>/dev/null | head -15
+echo "===== experiment-bridge SKILL (head) ====="; sed -n '1,60p' skills/experiment-bridge/SKILL.md 2>/dev/null
