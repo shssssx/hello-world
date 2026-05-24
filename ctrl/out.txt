@@ -1,164 +1,38 @@
-### seq=16  2026-05-24T16:47:05Z
+### seq=17  2026-05-24T16:47:56Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-===== CODEX_CLAUDE_REVIEW_GUIDE_CN (1..130) =====
-# Codex + Claude 审稿人指南
+## codex top-level help (mcp-related)
+  mcp             Manage external MCP servers for Codex
+  mcp-server      Start Codex as an MCP server (stdio)
+  app-server      [experimental] Run the app server or related tooling
+  remote-control  [experimental] Manage the app-server daemon with remote control enabled
+  exec-server     [EXPERIMENTAL] Run the standalone exec-server service
+          Connect the TUI to a remote app server endpoint.
+          server websocket
+## codex mcp --help
+Manage external MCP servers for Codex
 
-让 ARIS 以以下方式运行：
+Usage: codex mcp [OPTIONS] <COMMAND>
 
-- **Codex** 作为主执行者
-- **Claude Code CLI** 作为审稿人
-- 通过本地 `claude-review` MCP bridge 连接两者
+Commands:
+  list    
+  get     
+  add     
+  remove  
+  login   
+  logout  
+  help    Print this message or the help of the given subcommand(s)
 
-这条路径是对上游 Codex 原生方案的**增量叠加**，不会替代 `skills/skills-codex/`。
+Options:
+  -c, --config <key=value>
+          Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`.
+          Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed
+          as TOML. If it fails to parse as TOML, the raw string is used as a literal.
+          
+          Examples: - `-c model="o3"` - `-c 'sandbox_permissions=["disk-full-read-access"]'` - `-c
+          shell_environment_policy.inherit=all`
 
-## 架构
+      --enable <FEATURE>
+          Enable a feature (repeatable). Equivalent to `-c features.<name>=true`
 
-- 基础技能包：`skills/skills-codex/`
-- 审稿覆盖层：`skills/skills-codex-claude-review/`
-- 审稿 bridge：`mcp-servers/claude-review/`
-
-安装顺序必须保持：
-
-1. 先安装 `skills/skills-codex/*`
-2. 再安装 `skills/skills-codex-claude-review/*`
-3. 最后注册 `claude-review` MCP
-
-## 安装
-
-```bash
-git clone https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git
-cd Auto-claude-code-research-in-sleep
-
-mkdir -p ~/.codex/skills
-cp -a skills/skills-codex/* ~/.codex/skills/
-cp -a skills/skills-codex-claude-review/* ~/.codex/skills/
-
-mkdir -p ~/.codex/mcp-servers/claude-review
-cp mcp-servers/claude-review/server.py ~/.codex/mcp-servers/claude-review/server.py
-codex mcp add claude-review -- python3 ~/.codex/mcp-servers/claude-review/server.py
-```
-
-如果你的 Claude 登录依赖 `claude-aws` 之类的 shell helper，请改用 wrapper：
-
-```bash
-cp mcp-servers/claude-review/run_with_claude_aws.sh ~/.codex/mcp-servers/claude-review/run_with_claude_aws.sh
-chmod +x ~/.codex/mcp-servers/claude-review/run_with_claude_aws.sh
-codex mcp add claude-review -- ~/.codex/mcp-servers/claude-review/run_with_claude_aws.sh
-```
-
-如果你想固定 Claude 审稿模型：
-
-```bash
-codex mcp remove claude-review
-codex mcp add claude-review --env CLAUDE_REVIEW_MODEL=claude-opus-4-1 -- python3 ~/.codex/mcp-servers/claude-review/server.py
-```
-
-## 验证
-
-1. 检查 MCP 注册：
-
-```bash
-codex mcp list
-```
-
-2. 检查 Claude CLI 登录：
-
-```bash
-claude -p "Reply with exactly READY" --output-format json --tools ""
-```
-
-3. 在项目中启动 Codex：
-
-```bash
-codex -C /path/to/your/project
-```
-
-## 哪些技能会被覆盖
-
-覆盖层只替换 review-heavy 技能：
-
-- `research-review`
-- `novelty-check`
-- `research-refine`
-- `auto-review-loop`
-- `paper-plan`
-- `paper-figure`
-- `paper-write`
-- `auto-paper-improvement-loop`
-
-其余技能仍然来自上游原生 `skills/skills-codex/`。
-
-## 异步 reviewer 流程
-
-对于长论文或长项目审稿，请使用：
-
-- `review_start`
-- `review_reply_start`
-- `review_status`
-
-原因是这条宿主链路里的 review hop 更长：
-
-`Codex -> claude-review MCP -> 本地 Claude CLI -> Claude 后端`
-
-多出来的本地 CLI hop，正是长同步 reviewer 调用更容易撞上 Codex 侧 MCP 超时的主要原因。
-
-## 项目配置
-
-这条路径不要求你新建特殊项目配置文件。
-
-- 继续使用现有 `CLAUDE.md`
-- 保持原有项目目录结构
-- 只需要切换 Codex 安装的技能文件和 MCP 注册
-
-## 维护
-
-重新生成这个 overlay 包：
-
-```bash
-python3 tools/generate_codex_claude_review_overrides.py
-```
-===== 'claude mcp add' / 'codex mcp' occurrences =====
-docs/ALI_CODING_PLAN_GUIDE.md:22:### 为什么不能直接用 Codex MCP
-docs/ALI_CODING_PLAN_GUIDE.md:24:原版 ARIS 的审查器使用 Codex MCP，而 Codex CLI 硬编码调用 OpenAI 专有的 **Responses API** (`/v1/responses`)，第三方 API 提供商（包括 Coding Plan）均不支持该接口。
-docs/ALI_CODING_PLAN_GUIDE.md:144:### Step 6：改写所有使用 Codex MCP 的 Skills
-docs/ALI_CODING_PLAN_GUIDE.md:156:1. 扫描 `~/.claude/skills/` 中所有使用 Codex MCP 的 skill 文件
-docs/ALI_CODING_PLAN_GUIDE.md:278:| 审查器 | GPT-5.4 (Codex MCP) | glm-5 / MiniMax-M2.7 | MiniMax-M2.7 | DeepSeek |
-docs/ANTIGRAVITY_ADAPTATION.md:13:| MCP servers | `claude mcp add ...` | `~/.gemini/settings.json` → `mcpServers` section |
-docs/ANTIGRAVITY_ADAPTATION.md:69:### 3.2 Set up Codex MCP in Antigravity (for review skills)
-docs/ANTIGRAVITY_ADAPTATION_CN.md:13:| MCP 配置 | `claude mcp add ...` | `~/.gemini/settings.json` → `mcpServers` 字段 |
-docs/ARIS_INTRO.html:384:<p>ARIS is a collection of <strong>74 composable Claude Code skills</strong> that orchestrate <strong>cross-model collaboration</strong>: Claude Code drives the research (reads files, writes code, deploys experiments) while an external LLM (GPT-5.4 / 5.5 via <a href="https://github.com/openai/codex">Codex MCP</a>) acts as a critical reviewer. The two models disagree, debate, and force each other to do better — adversarial, not self-play.</p>
-docs/ARIS_INTRO.html:402:│  (Claude Code)       │────▶│  Codex MCP (GPT-5.5)  │
-docs/ARIS_INTRO.html:501:<ul><li><strong>执行</strong>：Claude Code 读文件、写代码、跑实验、改论文</li><li><strong>审稿</strong>：GPT-5.4/5.5（via <a href="https://github.com/openai/codex">Codex MCP</a>）以<strong>跨家族</strong>审稿人身份打分、找弱点、提建议</li><li><strong>关键</strong>：每轮 review 用新 thread；执行者绝不审判自己的实验诚实度</li></ul>
-docs/ARIS_INTRO.html:513:# 3. Configure the GPT-5.4 reviewer (Codex MCP)
-docs/ARIS_INTRO.html:516:claude mcp add codex -s user -- codex mcp-server
-docs/ARIS_INTRO.md:7:ARIS is a collection of **74 composable Claude Code skills** that orchestrate **cross-model collaboration**: Claude Code drives the research (reads files, writes code, deploys experiments) while an external LLM (GPT-5.4 / 5.5 via [Codex MCP](https://github.com/openai/codex)) acts as a critical reviewer. The two models disagree, debate, and force each other to do better — adversarial, not self-play.
-docs/ARIS_INTRO.md:48:│  (Claude Code)       │────▶│  Codex MCP (GPT-5.5)  │
-docs/ARIS_INTRO.md:315:- **审稿**：GPT-5.4/5.5（via [Codex MCP](https://github.com/openai/codex)）以**跨家族**审稿人身份打分、找弱点、提建议
-docs/ARIS_INTRO.md:334:# 3. Configure the GPT-5.4 reviewer (Codex MCP)
-docs/ARIS_INTRO.md:337:claude mcp add codex -s user -- codex mcp-server
-docs/CODEX_CLAUDE_REVIEW_GUIDE.md:35:codex mcp add claude-review -- python3 ~/.codex/mcp-servers/claude-review/server.py
-docs/CODEX_CLAUDE_REVIEW_GUIDE.md:43:codex mcp add claude-review -- ~/.codex/mcp-servers/claude-review/run_with_claude_aws.sh
-docs/CODEX_CLAUDE_REVIEW_GUIDE.md:49:codex mcp remove claude-review
-docs/CODEX_CLAUDE_REVIEW_GUIDE.md:50:codex mcp add claude-review --env CLAUDE_REVIEW_MODEL=claude-opus-4-1 -- python3 ~/.codex/mcp-servers/claude-review/server.py
-docs/CODEX_CLAUDE_REVIEW_GUIDE.md:58:codex mcp list
-docs/CODEX_CLAUDE_REVIEW_GUIDE_CN.md:35:codex mcp add claude-review -- python3 ~/.codex/mcp-servers/claude-review/server.py
-docs/CODEX_CLAUDE_REVIEW_GUIDE_CN.md:43:codex mcp add claude-review -- ~/.codex/mcp-servers/claude-review/run_with_claude_aws.sh
-===== SSH / GPU-server config mentions =====
-docs/PROJECT_FILES_GUIDE_CN.md:17:├── CLAUDE.md                              # 仪表盘 — Pipeline Status + 项目约束
-docs/PROJECT_FILES_GUIDE_CN.md:113:1. `CLAUDE.md` → Pipeline Status（30 秒定位）
-docs/PROJECT_FILES_GUIDE_CN.md:131:| "当前阶段是 training"放哪？ | `CLAUDE.md` Pipeline Status |
-docs/PROJECT_FILES_GUIDE_CN.md:147:**不带时间戳的文件**：追加式文件（`findings.md`）、每轮文件（`round_N_*.md`）、仪表盘（`CLAUDE.md`）、清单（`MANIFEST.md`）。
-README_CN.md:157:- **2026-04-17** — ![NEW](https://img.shields.io/badge/NEW-red?style=flat-square) 🔗 **[项目级 symlink 安装](tools/install_aris.sh)**（解决 [#118](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep/issues/118)）— 新推荐默认安装方式。`bash tools/install_aris.sh` 自动检测平台（Claude Code / Codex CLI），创建 `.claude/skills/aris` 或 `.agents/skills/aris` symlink 指向 ARIS 仓库，在 `CLAUDE.md` / `AGENTS.md` 添加 `<!-- ARIS:BEGIN -->` 管理块告知 agent 仅用项目本地 skill，并在 `.aris/skill-source.txt` 记录安装元数据。**解决 skill 命名冲突问题**——当 ARIS 与 Superpowers / OpenHands 等社区 skill 包共用全局目录时，agent 会错误调用其他包的 skill 打断 ARIS 工作流。Windows 用户用 `install_aris.ps1`（基于 junction）。同时 `smart_update.sh` 新增 `--target-subdir` 参数支持 Codex `.agents/skills/aris` 项目级 copy 安装；symlink 安装会被拒绝并提示用 `git pull` 更新。全局安装继续支持给 power user
-README_CN.md:173:- **2026-04-03** — ![NEW](https://img.shields.io/badge/NEW-red?style=flat-square) ☁️ **[Modal 无服务器 GPU](skills/serverless-modal/SKILL.md)** — 没有 GPU？CLAUDE.md 写 `gpu: modal`，一条命令跑实验，无需 SSH/Docker，跑完自动停止。**$30/月免费额度**，`pip install modal && modal setup` 即可体验 ARIS 全流程。社区贡献 by [@zeyuzhangzyz](https://github.com/zeyuzhangzyz)
-README_CN.md:313:| `wandb` | `false` | 自动给实验脚本加 W&B 日志。设 `true` + 在 CLAUDE.md 配 `wandb_project`。`/monitor-experiment` 从 W&B 拉训练曲线 |
-README_CN.md:360:- 🖥️ **审稿驱动实验** — GPT-5.4 说"跑个消融"，Claude 自动写脚本、rsync 到 GPU、`screen` 启动、收结果、写回论文。`CLAUDE.md` 里配服务器（[配置](#%EF%B8%8F-gpu-服务器配置自动实验用)），或用 `gpu: vast` 从 [Vast.ai](https://vast.ai) 按需租
-README_CN.md:587:> GPT-5.4 审稿 → 定位弱点 → 建议实验 → Claude Code 自动写脚本、部署到 GPU、监控结果、改写论文——你睡觉就行。只需在 `CLAUDE.md` 里配好[GPU 服务器信息](#%EF%B8%8F-gpu-服务器配置自动实验用)。
-README_CN.md:1146:# → 更新 CLAUDE.md ARIS 管理块（best-effort + compare-and-swap，不会覆盖用户改动）
-README_CN.md:1247:在项目的 `CLAUDE.md` 中添加服务器信息：
-README_CN.md:1252:- SSH：`ssh my-gpu-server`（密钥免密登录）
-README_CN.md:1260:Claude Code 读到这些就知道怎么 SSH、激活环境、启动实验。GPT-5.4（审稿人）只决定**做什么实验**——Claude Code 根据你的 `CLAUDE.md` 搞定**怎么跑**。
-README_CN.md:1262:如果你已经在 GPU 服务器上，可以添加以下到你的 `CLAUDE.md`：
-README_CN.md:1282:在项目 `CLAUDE.md` 加：
-README_CN.md:1454:| `WANDB` | false | 自动加 W&B 日志。需在 CLAUDE.md 配 `wandb_project` |
 ----- END (rc=0) -----
