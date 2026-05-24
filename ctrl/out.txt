@@ -1,15 +1,17 @@
-### seq=1  2026-05-24T15:40:55Z
+### seq=2  2026-05-24T15:42:59Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.8
 ----- BEGIN -----
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
 `torch_dtype` is deprecated! Use `dtype` instead!
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9149.18it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9608.57it/s]
+'_ssl.c:980: The handshake operation timed out' thrown while requesting GET https://hf-mirror.com/datasets/monology/pile-uncopyrighted/resolve/3be90335b66f24456a5d6659d9c8d208c0357119/train/00.jsonl.zst
+Retrying in 1s [Retry 1/5].
+'_ssl.c:980: The handshake operation timed out' thrown while requesting GET https://hf-mirror.com/datasets/monology/pile-uncopyrighted/resolve/3be90335b66f24456a5d6659d9c8d208c0357119/train/00.jsonl.zst
+Retrying in 2s [Retry 2/5].
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-[data] pile failed (ValueError: Compression type zstd not supported); falling back to wikitext-103
-Generating test split:   0%|          | 0/4358 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 4358/4358 [00:00<00:00, 255600.76 examples/s]
-Generating train split:   0%|          | 0/1801350 [00:00<?, ? examples/s]Generating train split:   3%|▎         | 62000/1801350 [00:00<00:02, 609738.70 examples/s]Generating train split:   9%|▊         | 154000/1801350 [00:00<00:02, 788994.16 examples/s]Generating train split:  13%|█▎        | 240000/1801350 [00:00<00:02, 761091.38 examples/s]Generating train split:  19%|█▉        | 343000/1801350 [00:00<00:01, 857619.08 examples/s]Generating train split:  24%|██▍       | 436000/1801350 [00:00<00:01, 829860.65 examples/s]Generating train split:  30%|██▉       | 539000/1801350 [00:00<00:01, 888943.12 examples/s]Generating train split:  35%|███▍      | 629000/1801350 [00:00<00:01, 858110.64 examples/s]Generating train split:  40%|████      | 728000/1801350 [00:00<00:01, 895304.34 examples/s]Generating train split:  46%|████▌     | 820000/1801350 [00:00<00:01, 869302.78 examples/s]Generating train split:  53%|█████▎    | 946675/1801350 [00:01<00:01, 820795.02 examples/s]Generating train split:  58%|█████▊    | 1050675/1801350 [00:01<00:00, 874241.69 examples/s]Generating train split:  63%|██████▎   | 1143675/1801350 [00:01<00:00, 853267.34 examples/s]Generating train split:  69%|██████▉   | 1246675/1801350 [00:01<00:00, 900330.34 examples/s]Generating train split:  77%|███████▋  | 1381675/1801350 [00:01<00:00, 871379.16 examples/s]Generating train split:  82%|████████▏ | 1476675/1801350 [00:01<00:00, 844886.88 examples/s]Generating train split:  87%|████████▋ | 1575675/1801350 [00:01<00:00, 879262.81 examples/s]Generating train split:  93%|█████████▎| 1669675/1801350 [00:01<00:00, 874833.74 examples/s]Generating train split:  98%|█████████▊| 1766675/1801350 [00:02<00:00, 898036.13 examples/s]Generating train split: 100%|██████████| 1801350/1801350 [00:02<00:00, 862428.34 examples/s]
-Generating validation split:   0%|          | 0/3760 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 3760/3760 [00:00<00:00, 723189.02 examples/s]
+[data] pile failed (ValueError: Bad split: validation. Available splits: ['train']); falling back to wikitext-103
 [data] WARNING: only 246 full blocks available (asked 1000); dataset too small.
 [data] source=wikitext-103-raw-v1:validation blocks=246 ctxlen=1024 (total tokens read ~252472)
 [baseline] mean=3.0663  (2.2s)
