@@ -1,0 +1,12 @@
+### seq=0  2026-05-24T15:14:50Z
+### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.8
+----- BEGIN -----
+[handshake] runner is alive
+cwd: /root/hello-world
+python: Python 3.10.8
+torch: 2.5.1+cu124 True
+--- nvidia-smi ---
+GPU 0: NVIDIA GeForce RTX 4090 (UUID: GPU-52797446-51a8-9f20-a16f-c2cc7eec3a8d)
+--- pip check (transformers/datasets) ---
+transformers 5.5.4 | datasets 4.8.4
+----- END (rc=0) -----
