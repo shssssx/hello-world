@@ -149,7 +149,7 @@ class VIntervention:
             else:
                 idx = torch.tensor(sorted(heads), device=out.device, dtype=torch.long)
                 out[:, :, idx, 2 * hd:] = tgv[:, :, idx, 2 * hd:]
-            return out.view(B, S, 3 * hd)
+            return out.view(B, S, nh * 3 * hd)
 
         return hook
 
