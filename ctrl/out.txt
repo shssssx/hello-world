@@ -1,133 +1,28 @@
-### seq=19  2026-05-24T17:41:03Z
+### seq=20  2026-05-24T17:46:02Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9002.37it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9077.37it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
+/root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  seqs = torch.load(cache)
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
-[scale_stats] split=eval wrote /root/hello-world/outputs/v1a/vstats_eval.npz (10.7s)
-  L 0  mean|dmu|=0.0000  mean(sig_int/sig_orig)=1.000
-  L 1  mean|dmu|=0.1233  mean(sig_int/sig_orig)=1.053
-  L 2  mean|dmu|=0.1327  mean(sig_int/sig_orig)=1.062
-  L 3  mean|dmu|=0.1425  mean(sig_int/sig_orig)=1.192
-  L 4  mean|dmu|=0.1392  mean(sig_int/sig_orig)=1.112
-  L 5  mean|dmu|=0.1413  mean(sig_int/sig_orig)=1.127
-  L 6  mean|dmu|=0.2182  mean(sig_int/sig_orig)=1.026
-  L 7  mean|dmu|=0.2109  mean(sig_int/sig_orig)=0.978
-  L 8  mean|dmu|=0.2100  mean(sig_int/sig_orig)=0.999
-  L 9  mean|dmu|=0.1890  mean(sig_int/sig_orig)=0.992
-  L10  mean|dmu|=0.2192  mean(sig_int/sig_orig)=1.007
-  L11  mean|dmu|=0.2123  mean(sig_int/sig_orig)=1.072
-  L12  mean|dmu|=0.2020  mean(sig_int/sig_orig)=1.138
-  L13  mean|dmu|=0.2150  mean(sig_int/sig_orig)=1.140
-  L14  mean|dmu|=0.1936  mean(sig_int/sig_orig)=1.280
-  L15  mean|dmu|=0.1939  mean(sig_int/sig_orig)=1.250
-  L16  mean|dmu|=0.2348  mean(sig_int/sig_orig)=1.318
-  L17  mean|dmu|=0.2449  mean(sig_int/sig_orig)=1.675
-  L18  mean|dmu|=0.2674  mean(sig_int/sig_orig)=1.744
-  L19  mean|dmu|=0.3196  mean(sig_int/sig_orig)=1.979
-  L20  mean|dmu|=0.2728  mean(sig_int/sig_orig)=1.751
-  L21  mean|dmu|=0.2294  mean(sig_int/sig_orig)=1.996
-  L22  mean|dmu|=0.1951  mean(sig_int/sig_orig)=1.780
-  L23  mean|dmu|=0.1856  mean(sig_int/sig_orig)=1.619
-/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
-  warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8936.03it/s]
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-[data] train: building blocks [1000:2000] (no overlap with eval)
-[scale_stats] split=train wrote /root/hello-world/outputs/v1a/vstats_train.npz (10.8s)
-  L 0  mean|dmu|=0.0000  mean(sig_int/sig_orig)=1.000
-  L 1  mean|dmu|=0.1207  mean(sig_int/sig_orig)=1.057
-  L 2  mean|dmu|=0.1312  mean(sig_int/sig_orig)=1.066
-  L 3  mean|dmu|=0.1408  mean(sig_int/sig_orig)=1.198
-  L 4  mean|dmu|=0.1377  mean(sig_int/sig_orig)=1.117
-  L 5  mean|dmu|=0.1399  mean(sig_int/sig_orig)=1.130
-  L 6  mean|dmu|=0.2168  mean(sig_int/sig_orig)=1.031
-  L 7  mean|dmu|=0.2088  mean(sig_int/sig_orig)=0.979
-  L 8  mean|dmu|=0.2094  mean(sig_int/sig_orig)=1.002
-  L 9  mean|dmu|=0.1869  mean(sig_int/sig_orig)=0.993
-  L10  mean|dmu|=0.2159  mean(sig_int/sig_orig)=1.008
-  L11  mean|dmu|=0.2099  mean(sig_int/sig_orig)=1.075
-  L12  mean|dmu|=0.1998  mean(sig_int/sig_orig)=1.142
-  L13  mean|dmu|=0.2128  mean(sig_int/sig_orig)=1.145
-  L14  mean|dmu|=0.1910  mean(sig_int/sig_orig)=1.284
-  L15  mean|dmu|=0.1912  mean(sig_int/sig_orig)=1.256
-  L16  mean|dmu|=0.2330  mean(sig_int/sig_orig)=1.317
-  L17  mean|dmu|=0.2417  mean(sig_int/sig_orig)=1.685
-  L18  mean|dmu|=0.2645  mean(sig_int/sig_orig)=1.751
-  L19  mean|dmu|=0.3170  mean(sig_int/sig_orig)=1.992
-  L20  mean|dmu|=0.2715  mean(sig_int/sig_orig)=1.765
-  L21  mean|dmu|=0.2288  mean(sig_int/sig_orig)=2.001
-  L22  mean|dmu|=0.1932  mean(sig_int/sig_orig)=1.794
-  L23  mean|dmu|=0.1826  mean(sig_int/sig_orig)=1.632
-/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
-  warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 14357.99it/s]
-/root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  d = torch.load(cache)
-[data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
-[scale_coarse] baseline=2.1178
-  L 0  v0_delta=+0.0000  rescaled_delta=+0.0000
-  L 1  v0_delta=+0.3209  rescaled_delta=+0.2346
-  L 2  v0_delta=+0.0878  rescaled_delta=+0.0672
-  L 3  v0_delta=+0.3426  rescaled_delta=+0.2518
-  L 4  v0_delta=+0.1255  rescaled_delta=+0.0934
-  L 5  v0_delta=+0.6230  rescaled_delta=+0.5257
-  L 6  v0_delta=+0.3236  rescaled_delta=+0.5682
-  L 7  v0_delta=+0.2651  rescaled_delta=+0.4683
-  L 8  v0_delta=+0.3667  rescaled_delta=+0.4060
-  L 9  v0_delta=+0.2248  rescaled_delta=+0.2088
-  L10  v0_delta=+0.3811  rescaled_delta=+0.4531
-  L11  v0_delta=+0.4536  rescaled_delta=+0.3843
-  L12  v0_delta=+0.4071  rescaled_delta=+0.2914
-  L13  v0_delta=+0.3866  rescaled_delta=+0.2460
-  L14  v0_delta=+0.3348  rescaled_delta=+0.1877
-  L15  v0_delta=+0.2702  rescaled_delta=+0.1563
-  L16  v0_delta=+0.4191  rescaled_delta=+0.2790
-  L17  v0_delta=+0.5728  rescaled_delta=+0.1846
-  L18  v0_delta=+0.3215  rescaled_delta=+0.1017
-  L19  v0_delta=+0.3774  rescaled_delta=+0.1082
-  L20  v0_delta=+0.1679  rescaled_delta=+0.0703
-  L21  v0_delta=+0.1740  rescaled_delta=+0.0440
-  L22  v0_delta=+0.0942  rescaled_delta=+0.0426
-  L23  v0_delta=+0.0775  rescaled_delta=+0.0416
-[scale_coarse] inverted_u_survives=True -> wrote scale_sanity.md
-===== scale_sanity.md =====
-# v1a scale/norm sanity
-
-Re-ran the coarse all-heads token-table swap with a per-feature affine rescale of V_intervention to match real-V mean/std (eval-set stats). If the inverted-U (mid layers >> edge layers) survives rescaling, the v0 signal is not a LayerNorm-OOD scale artifact.
-
-| layer | v0 delta | rescaled delta |
-|---|---|---|
-| L0 | +0.0000 | +0.0000 |
-| L1 | +0.3209 | +0.2346 |
-| L2 | +0.0878 | +0.0672 |
-| L3 | +0.3426 | +0.2518 |
-| L4 | +0.1255 | +0.0934 |
-| L5 | +0.6230 | +0.5257 |
-| L6 | +0.3236 | +0.5682 |
-| L7 | +0.2651 | +0.4683 |
-| L8 | +0.3667 | +0.4060 |
-| L9 | +0.2248 | +0.2088 |
-| L10 | +0.3811 | +0.4531 |
-| L11 | +0.4536 | +0.3843 |
-| L12 | +0.4071 | +0.2914 |
-| L13 | +0.3866 | +0.2460 |
-| L14 | +0.3348 | +0.1877 |
-| L15 | +0.2702 | +0.1563 |
-| L16 | +0.4191 | +0.2790 |
-| L17 | +0.5728 | +0.1846 |
-| L18 | +0.3215 | +0.1017 |
-| L19 | +0.3774 | +0.1082 |
-| L20 | +0.1679 | +0.0703 |
-| L21 | +0.1740 | +0.0440 |
-| L22 | +0.0942 | +0.0426 |
-| L23 | +0.0775 | +0.0416 |
-
-- mid (L5/11/17) mean delta:  v0=+0.5498  rescaled=+0.3649
-- low (L20-23) mean delta:    v0=+0.1284  rescaled=+0.0496
-
-**Verdict: inverted-U SURVIVES rescaling -> scale is NOT the main cause; v1a uses RAW token-table V (no rescale).**
------ END (rc=0) -----
+[data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
+[baseline] recomputed eval CE = 2.1177 (v0=2.1178)
+Traceback (most recent call last):
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 671, in <module>
+    main()
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 661, in main
+    {
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 475, in mode_train
+    run_single(model, eval_seqs, train_seqs, args.layer, args.variant, args.rank,
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 422, in run_single
+    curve, still_falling = train_one(model, hook, train_seqs, layer, variant, rank,
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 251, in train_one
+    raise RuntimeError("DEAD-STUCK: A.grad is None/zero after first "
+RuntimeError: DEAD-STUCK: A.grad is None/zero after first backward -> grad not flowing to LoRA (check that the forward is NOT wrapped in torch.no_grad()).
+===== L5_shared_r8.json =====
+cat: outputs/v1a/L5_shared_r8.json: No such file or directory
+----- END (rc=1) -----
