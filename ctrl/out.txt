@@ -1,10 +1,126 @@
-### seq=3  2026-05-24T15:46:15Z
+### seq=4  2026-05-24T15:50:30Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.8
 ----- BEGIN -----
+########## SANITY ##########
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 25968.17it/s]
-[data] source=monology/pile-uncopyrighted:train blocks=1000 ctxlen=1024 (read ~1028355 tokens)
-[baseline] mean=2.1178  (7.7s)
-[baseline] wrote baseline_loss.json  mean=2.1178
------ END (rc=0) -----
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8744.06it/s]
+/root/hello-world/outputs/v_intervention.py:54: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  d = torch.load(cache)
+/root/hello-world/outputs/v_intervention.py:203: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(p) if os.path.exists(p) else {}
+[data] loaded cache eval_seqs_n1000_c1024.pt: source=monology/pile-uncopyrighted:train blocks=1000
+Traceback (most recent call last):
+  File "/root/hello-world/outputs/v_intervention.py", line 534, in <module>
+    main()
+  File "/root/hello-world/outputs/v_intervention.py", line 523, in main
+    {
+  File "/root/hello-world/outputs/v_intervention.py", line 321, in mode_sanity
+    l0 = evaluate(model, interv, seqs, args.batch_size, args.device)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/root/hello-world/outputs/v_intervention.py", line 183, in evaluate
+    logits = model(ids).logits  # [B,S,V]
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 452, in forward
+    outputs: BaseModelOutputWithPast = self.gpt_neox(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 952, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 248, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 366, in forward
+    hidden_states = layer(
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/modeling_layers.py", line 93, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 268, in forward
+    attn_output, _ = self.attention(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 214, in forward
+    qkv = self.query_key_value(hidden_states).view(hidden_shape).transpose(1, 2)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1844, in _call_impl
+    return inner()
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1803, in inner
+    hook_result = hook(self, args, result)
+  File "/root/hello-world/outputs/v_intervention.py", line 152, in hook
+    return out.view(B, S, 3 * hd)
+RuntimeError: shape '[16, 1024, 192]' is invalid for input of size 50331648
+########## COARSE ##########
+/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9129.47it/s]
+/root/hello-world/outputs/v_intervention.py:54: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  d = torch.load(cache)
+/root/hello-world/outputs/v_intervention.py:203: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  return torch.load(p) if os.path.exists(p) else {}
+[data] loaded cache eval_seqs_n1000_c1024.pt: source=monology/pile-uncopyrighted:train blocks=1000
+Traceback (most recent call last):
+  File "/root/hello-world/outputs/v_intervention.py", line 534, in <module>
+    main()
+  File "/root/hello-world/outputs/v_intervention.py", line 523, in main
+    {
+  File "/root/hello-world/outputs/v_intervention.py", line 349, in mode_coarse
+    ls = evaluate(model, interv, seqs, args.batch_size, args.device)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/root/hello-world/outputs/v_intervention.py", line 183, in evaluate
+    logits = model(ids).logits  # [B,S,V]
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 452, in forward
+    outputs: BaseModelOutputWithPast = self.gpt_neox(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 952, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 248, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 366, in forward
+    hidden_states = layer(
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/modeling_layers.py", line 93, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 268, in forward
+    attn_output, _ = self.attention(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 214, in forward
+    qkv = self.query_key_value(hidden_states).view(hidden_shape).transpose(1, 2)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1844, in _call_impl
+    return inner()
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1803, in inner
+    hook_result = hook(self, args, result)
+  File "/root/hello-world/outputs/v_intervention.py", line 152, in hook
+    return out.view(B, S, 3 * hd)
+RuntimeError: shape '[16, 1024, 192]' is invalid for input of size 50331648
+----- END (rc=1) -----
