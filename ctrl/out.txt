@@ -1,9 +1,9 @@
-### seq=22  2026-05-24T18:03:42Z
+### seq=23  2026-05-24T18:15:00Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9508.46it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8794.67it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
@@ -11,44 +11,62 @@
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
 [baseline] recomputed eval CE = 2.1177 (v0=2.1178)
-    [train L5 shared r8] step   0 loss 2.8033
-    [train L5 shared r8] step  50 loss 3.0682
-    [train L5 shared r8] step 100 loss 2.9933
-    [train L5 shared r8] step 150 loss 2.7150
-    [train L5 shared r8] step 200 loss 2.7851
-    [train L5 shared r8] step 250 loss 2.8663
-    [train L5 shared r8] step 300 loss 2.8082
-    [train L5 shared r8] step 350 loss 2.4621
-    [train L5 shared r8] step 400 loss 2.5745
-    [train L5 shared r8] step 450 loss 2.7711
-    [train L5 shared r8] step 499 loss 2.7632
-[run] L5 shared r8: eval=2.6810 resid=+0.5633 recovery=0.096 params=0.0164M rec/M=5.847 (72.3s)
-/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
-  warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9538.23it/s]
-/root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  d = torch.load(cache)
-/root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  seqs = torch.load(cache)
-[data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
-[data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
-[baseline] recomputed eval CE = 2.1177 (v0=2.1178)
-    [train L5 perhead r8] step   0 loss 3.0300
-    [train L5 perhead r8] step  50 loss 2.0434
-    [train L5 perhead r8] step 100 loss 2.6509
-    [train L5 perhead r8] step 150 loss 2.3954
-    [train L5 perhead r8] step 200 loss 2.3097
-    [train L5 perhead r8] step 250 loss 2.4551
-    [train L5 perhead r8] step 300 loss 2.6903
-    [train L5 perhead r8] step 350 loss 2.0398
-    [train L5 perhead r8] step 400 loss 2.4411
-    [train L5 perhead r8] step 450 loss 2.2816
-    [train L5 perhead r8] step 499 loss 2.4534
-[run] L5 perhead r8: eval=2.5295 resid=+0.4118 recovery=0.339 params=0.1393M rec/M=2.434 (72.8s)
-=== L5 shared r8 ===
-{'eval_loss': 2.681, 'residual_delta': 0.5633, 'recovery_ratio': 0.0958, 'param_count_M': 0.0164, 'recovery_per_M': 5.8471}
-curve: [2.803, 3.068, 2.993, 2.715, 2.785, 2.866, 2.808, 2.462, 2.575, 2.771, 2.763]
-=== L5 perhead r8 ===
-{'eval_loss': 2.5295, 'residual_delta': 0.4118, 'recovery_ratio': 0.339, 'param_count_M': 0.1393, 'recovery_per_M': 2.434}
-curve: [3.03, 2.043, 2.651, 2.395, 2.31, 2.455, 2.69, 2.04, 2.441, 2.282, 2.453]
+    [train L5 shared r2] step   0 loss 2.8966
+    [train L5 shared r2] step  50 loss 2.5179
+    [train L5 shared r2] step 100 loss 2.3699
+    [train L5 shared r2] step 150 loss 2.4915
+    [train L5 shared r2] step 200 loss 2.8652
+    [train L5 shared r2] step 250 loss 1.9994
+    [train L5 shared r2] step 300 loss 2.2558
+    [train L5 shared r2] step 350 loss 2.5646
+    [train L5 shared r2] step 400 loss 2.3010
+    [train L5 shared r2] step 450 loss 2.6608
+    [train L5 shared r2] step 499 loss 2.7500
+[run] L5 shared r2: eval=2.6336 resid=+0.5159 recovery=0.172 params=0.0041M rec/M=41.955 (72.5s)
+    [train L5 shared r4] step   0 loss 2.8695
+    [train L5 shared r4] step  50 loss 2.5377
+    [train L5 shared r4] step 100 loss 2.6577
+    [train L5 shared r4] step 150 loss 2.8185
+    [train L5 shared r4] step 200 loss 2.6840
+    [train L5 shared r4] step 250 loss 2.8020
+    [train L5 shared r4] step 300 loss 2.2516
+    [train L5 shared r4] step 350 loss 2.8286
+    [train L5 shared r4] step 400 loss 3.1614
+    [train L5 shared r4] step 450 loss 2.5796
+    [train L5 shared r4] step 499 loss 2.8833
+[run] L5 shared r4: eval=2.6143 resid=+0.4966 recovery=0.203 params=0.0082M rec/M=24.762 (72.6s)
+[skip] L5_shared_r8.json exists
+    [train L5 shared r16] step   0 loss 2.2238
+    [train L5 shared r16] step  50 loss 2.9287
+    [train L5 shared r16] step 100 loss 2.3186
+    [train L5 shared r16] step 150 loss 2.3153
+    [train L5 shared r16] step 200 loss 2.5760
+    [train L5 shared r16] step 250 loss 2.4073
+    [train L5 shared r16] step 300 loss 2.9179
+    [train L5 shared r16] step 350 loss 2.6572
+    [train L5 shared r16] step 400 loss 2.7509
+    [train L5 shared r16] step 450 loss 2.7027
+    [train L5 shared r16] step 499 loss 2.4778
+[run] L5 shared r16: eval=2.6714 resid=+0.5537 recovery=0.111 params=0.0328M rec/M=3.394 (72.8s)
+    [train L5 shared r32] step   0 loss 2.8071
+    [train L5 shared r32] step  50 loss 2.6537
+    [train L5 shared r32] step 100 loss 2.5103
+    [train L5 shared r32] step 150 loss 2.4859
+    [train L5 shared r32] step 200 loss 2.5508
+    [train L5 shared r32] step 250 loss 2.5424
+    [train L5 shared r32] step 300 loss 2.7480
+    [train L5 shared r32] step 350 loss 2.5861
+    [train L5 shared r32] step 400 loss 2.4737
+    [train L5 shared r32] step 450 loss 2.9923
+    [train L5 shared r32] step 499 loss 2.4825
+    [warn] L5 shared r32: train loss still falling at step 500 (last two: 2.9923->2.4825); using final checkpoint anyway
+[run] L5 shared r32: eval=2.7149 resid=+0.5972 recovery=0.041 params=0.0655M rec/M=0.632 (72.9s)
+[all] completed 4 runs
+===== L5 jsons so far =====
+perhead r8  resid=+0.412 rec=+0.339 pM=0.1393 rec/M=+2.43
+shared  r16 resid=+0.554 rec=+0.111 pM=0.0328 rec/M=+3.39
+shared  r2  resid=+0.516 rec=+0.172 pM=0.0041 rec/M=+41.95
+shared  r32 resid=+0.597 rec=+0.041 pM=0.0655 rec/M=+0.63
+shared  r4  resid=+0.497 rec=+0.203 pM=0.0082 rec/M=+24.76
+shared  r8  resid=+0.563 rec=+0.096 pM=0.0164 rec/M=+5.85
 ----- END (rc=0) -----
