@@ -1,28 +1,18 @@
-### seq=13  2026-05-24T16:39:48Z
+### seq=14  2026-05-24T16:44:08Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-## linked skills count
-77
-## sample
-ablation-planner
-alphaxiv
-analyze-results
-arxiv
-auto-paper-improvement-loop
-auto-review-loop
-auto-review-loop-llm
-auto-review-loop-minimax
-citation-audit
-claims-drafting
-comm-lit-review
-deepxiv
-dse-loop
-embodiment-description
-exa-search
-experiment-audit
-experiment-bridge
-experiment-plan
-experiment-queue
-feishu-notify
-## CLAUDE.md head
------ END (rc=1) -----
+## proxy env
+(no proxy env)
+## anthropic
+api.anthropic.com -> 403 (0.676842s)
+## openai
+api.openai.com -> 000 (0.126512s)
+openai unreachable
+## auth.openai
+auth.openai.com -> 403 (0.740545s)
+## google (control)
+google -> 000 (6.209601s)
+google unreachable
+## hf (already used)
+hf-mirror -> 200 (1.562063s)
+----- END (rc=0) -----
