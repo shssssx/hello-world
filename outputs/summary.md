@@ -1,10 +1,3 @@
-### seq=7  2026-05-24T16:13:55Z
-### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.8
------ BEGIN -----
-[summary] wrote heatmap.png
-[summary] wrote summary.md
-[summary] scenario: S1 / distributed redundancy: per-head V contextualization is largely removable (most per-head deltas ~0) yet removing it from all heads in a layer is costly -> redundant, distributed signal; worth escalating to low-rank correction / from-scratch training
-########## summary.md ##########
 # V-path contextualization audit -- summary
 
 ## Config
@@ -63,4 +56,3 @@
 **Scenario: S1 / distributed redundancy: per-head V contextualization is largely removable (most per-head deltas ~0) yet removing it from all heads in a layer is costly -> redundant, distributed signal; worth escalating to low-rank correction / from-scratch training**
 
 Basis: layer-0 coarse delta = +0.0000; coarse median |delta| = 0.3225; fine median |delta| = 0.0120; fraction of fine heads ~0 = 97.66%.
------ END (rc=0) -----
