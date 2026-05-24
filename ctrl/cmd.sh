@@ -1,13 +1,8 @@
-# seq=22: v1a smoke v2 -- shared AND per-head at L5 r8 after init fix (expect recovery>0)
-python outputs/v1a/v1a_correction.py --mode train --layer 5 --variant shared  --rank 8 --batch_size 8 --force
-python outputs/v1a/v1a_correction.py --mode train --layer 5 --variant perhead --rank 8 --batch_size 8 --force
-for v in shared perhead; do
-  echo "=== L5 $v r8 ==="
-  python - "$v" <<'PY'
-import json,sys
-v=sys.argv[1]
-d=json.load(open(f"outputs/v1a/L5_{v}_r8.json"))
-print({k:round(d[k],4) for k in ['eval_loss','residual_delta','recovery_ratio','param_count_M','recovery_per_M']})
-print("curve:",[round(x[1],3) for x in d['train_curve']])
+# seq=23: v1a full grid -- layer 5 (2 variants x 5 ranks; skips the 2 smoke runs)
+python outputs/v1a/v1a_correction.py --mode all --layers 5 --batch_size 8
+echo "===== L5 jsons so far ====="
+for f in outputs/v1a/L5_*.json; do python - "$f" <<'PY'
+import json,sys; d=json.load(open(sys.argv[1]))
+print(f"{d['variant']:7s} r{d['rank']:<2d} resid={d['residual_delta']:+.3f} rec={d['recovery_ratio']:+.3f} pM={d['param_count_M']:.4f} rec/M={d['recovery_per_M']:+.2f}")
 PY
 done
