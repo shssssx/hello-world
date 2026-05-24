@@ -1,273 +1,133 @@
-### seq=18  2026-05-24T16:55:38Z
+### seq=19  2026-05-24T17:41:03Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9181.28it/s]
-/root/hello-world/outputs/v_intervention.py:54: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9002.37it/s]
+/root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
-/root/hello-world/outputs/v_intervention.py:203: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  return torch.load(p) if os.path.exists(p) else {}
-[data] loaded cache eval_seqs_n1000_c1024.pt: source=monology/pile-uncopyrighted:train blocks=1000
-[fine] layers to scan: [0, 1, 3, 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22]
-[fine] L 0 H 0  delta=+0.0000  (7.9s)
-[fine] L 0 H 1  delta=+0.0000  (7.5s)
-[fine] L 0 H 2  delta=+0.0000  (7.5s)
-[fine] L 0 H 3  delta=+0.0000  (7.6s)
-[fine] L 0 H 4  delta=+0.0000  (7.6s)
-[fine] L 0 H 5  delta=+0.0000  (7.6s)
-[fine] L 0 H 6  delta=+0.0000  (7.6s)
-[fine] L 0 H 7  delta=+0.0000  (7.6s)
-[fine] L 0 H 8  delta=+0.0000  (7.6s)
-[fine] L 0 H 9  delta=+0.0000  (7.6s)
-[fine] L 0 H10  delta=+0.0000  (7.6s)
-[fine] L 0 H11  delta=+0.0000  (7.6s)
-[fine] L 0 H12  delta=+0.0000  (7.6s)
-[fine] L 0 H13  delta=+0.0000  (7.6s)
-[fine] L 0 H14  delta=+0.0000  (7.6s)
-[fine] L 0 H15  delta=+0.0000  (7.6s)
-[fine] L 1 H 0  delta=+0.0034  (7.6s)
-[fine] L 1 H 1  delta=+0.0076  (7.6s)
-[fine] L 1 H 2  delta=+0.0063  (7.7s)
-[fine] L 1 H 3  delta=+0.0091  (7.7s)
-[fine] L 1 H 4  delta=+0.0053  (7.7s)
-[fine] L 1 H 5  delta=+0.0062  (7.7s)
-[fine] L 1 H 6  delta=+0.0226  (7.7s)
-[fine] L 1 H 7  delta=+0.0104  (7.7s)
-[fine] L 1 H 8  delta=+0.0052  (7.7s)
-[fine] L 1 H 9  delta=+0.0075  (7.6s)
-[fine] L 1 H10  delta=+0.0353  (7.6s)
-[fine] L 1 H11  delta=+0.0149  (7.6s)
-[fine] L 1 H12  delta=+0.0065  (7.6s)
-[fine] L 1 H13  delta=+0.0103  (7.6s)
-[fine] L 1 H14  delta=+0.0039  (7.6s)
-[fine] L 1 H15  delta=+0.0078  (7.6s)
-[fine] L 3 H 0  delta=+0.0102  (7.6s)
-[fine] L 3 H 1  delta=+0.0045  (7.5s)
-[fine] L 3 H 2  delta=+0.0087  (7.6s)
-[fine] L 3 H 3  delta=+0.0051  (7.6s)
-[fine] L 3 H 4  delta=+0.0132  (7.6s)
-[fine] L 3 H 5  delta=+0.0076  (7.5s)
-[fine] L 3 H 6  delta=+0.0049  (7.5s)
-[fine] L 3 H 7  delta=+0.0166  (7.6s)
-[fine] L 3 H 8  delta=+0.0054  (7.6s)
-[fine] L 3 H 9  delta=+0.0064  (7.7s)
-[fine] L 3 H10  delta=+0.0051  (7.7s)
-[fine] L 3 H11  delta=+0.0047  (7.7s)
-[fine] L 3 H12  delta=+0.0092  (7.7s)
-[fine] L 3 H13  delta=+0.0125  (7.7s)
-[fine] L 3 H14  delta=+0.0050  (7.7s)
-[fine] L 3 H15  delta=+0.0103  (7.7s)
-[fine] L 4 H 0  delta=+0.0104  (7.7s)
-[fine] L 4 H 1  delta=+0.0058  (7.7s)
-[fine] L 4 H 2  delta=+0.0226  (7.7s)
-[fine] L 4 H 3  delta=+0.0059  (7.7s)
-[fine] L 4 H 4  delta=+0.0049  (7.7s)
-[fine] L 4 H 5  delta=+0.0042  (7.6s)
-[fine] L 4 H 6  delta=+0.0730  (7.6s)
-[fine] L 4 H 7  delta=+0.0052  (7.6s)
-[fine] L 4 H 8  delta=+0.0066  (7.6s)
-[fine] L 4 H 9  delta=+0.0083  (7.6s)
-[fine] L 4 H10  delta=+0.0057  (7.6s)
-[fine] L 4 H11  delta=+0.0045  (7.6s)
-[fine] L 4 H12  delta=+0.0046  (7.6s)
-[fine] L 4 H13  delta=+0.0127  (7.6s)
-[fine] L 4 H14  delta=+0.0081  (7.6s)
-[fine] L 4 H15  delta=+0.0084  (7.7s)
-[fine] L 6 H 0  delta=+0.0081  (7.6s)
-[fine] L 6 H 1  delta=+0.0144  (7.6s)
-[fine] L 6 H 2  delta=+0.0115  (7.6s)
-[fine] L 6 H 3  delta=+0.0155  (7.6s)
-[fine] L 6 H 4  delta=+0.0146  (7.6s)
-[fine] L 6 H 5  delta=+0.0177  (7.6s)
-[fine] L 6 H 6  delta=+0.0160  (7.6s)
-[fine] L 6 H 7  delta=+0.0170  (7.6s)
-[fine] L 6 H 8  delta=+0.0213  (7.6s)
-[fine] L 6 H 9  delta=+0.0149  (7.6s)
-[fine] L 6 H10  delta=+0.0081  (7.6s)
-[fine] L 6 H11  delta=+0.0056  (7.6s)
-[fine] L 6 H12  delta=+0.0083  (7.6s)
-[fine] L 6 H13  delta=+0.0157  (7.6s)
-[fine] L 6 H14  delta=+0.0193  (7.6s)
-[fine] L 6 H15  delta=+0.0083  (7.6s)
-[fine] L 7 H 0  delta=+0.0196  (7.7s)
-[fine] L 7 H 1  delta=+0.0093  (7.6s)
-[fine] L 7 H 2  delta=+0.0188  (7.6s)
-[fine] L 7 H 3  delta=+0.0107  (7.7s)
-[fine] L 7 H 4  delta=+0.0065  (7.7s)
-[fine] L 7 H 5  delta=+0.0109  (7.6s)
-[fine] L 7 H 6  delta=+0.0101  (7.6s)
-[fine] L 7 H 7  delta=+0.0107  (7.7s)
-[fine] L 7 H 8  delta=+0.0097  (7.7s)
-[fine] L 7 H 9  delta=+0.0129  (7.7s)
-[fine] L 7 H10  delta=+0.0144  (7.7s)
-[fine] L 7 H11  delta=+0.0095  (7.6s)
-[fine] L 7 H12  delta=+0.0106  (7.7s)
-[fine] L 7 H13  delta=+0.0080  (7.7s)
-[fine] L 7 H14  delta=+0.0217  (7.7s)
-[fine] L 7 H15  delta=+0.0181  (7.6s)
-[fine] L 9 H 0  delta=+0.0106  (7.6s)
-[fine] L 9 H 1  delta=+0.0109  (7.5s)
-[fine] L 9 H 2  delta=+0.0144  (7.6s)
-[fine] L 9 H 3  delta=+0.0193  (7.6s)
-[fine] L 9 H 4  delta=+0.0139  (7.6s)
-[fine] L 9 H 5  delta=+0.0129  (7.8s)
-[fine] L 9 H 6  delta=+0.0224  (7.7s)
-[fine] L 9 H 7  delta=+0.0246  (7.7s)
-[fine] L 9 H 8  delta=+0.0127  (7.7s)
-[fine] L 9 H 9  delta=+0.0077  (7.5s)
-[fine] L 9 H10  delta=+0.0113  (7.6s)
-[fine] L 9 H11  delta=+0.0234  (7.6s)
-[fine] L 9 H12  delta=+0.0030  (7.6s)
-[fine] L 9 H13  delta=+0.0143  (7.6s)
-[fine] L 9 H14  delta=+0.0112  (7.6s)
-[fine] L 9 H15  delta=+0.0262  (7.7s)
-[fine] L10 H 0  delta=+0.0069  (7.6s)
-[fine] L10 H 1  delta=+0.0157  (7.6s)
-[fine] L10 H 2  delta=+0.0144  (7.6s)
-[fine] L10 H 3  delta=+0.0185  (7.6s)
-[fine] L10 H 4  delta=+0.0106  (7.6s)
-[fine] L10 H 5  delta=+0.0270  (7.6s)
-[fine] L10 H 6  delta=+0.0240  (7.6s)
-[fine] L10 H 7  delta=+0.0352  (7.6s)
-[fine] L10 H 8  delta=+0.0293  (7.6s)
-[fine] L10 H 9  delta=+0.0093  (7.6s)
-[fine] L10 H10  delta=+0.0285  (7.7s)
-[fine] L10 H11  delta=+0.0288  (7.7s)
-[fine] L10 H12  delta=+0.0132  (7.6s)
-[fine] L10 H13  delta=+0.0111  (7.6s)
-[fine] L10 H14  delta=+0.0147  (7.6s)
-[fine] L10 H15  delta=+0.0161  (7.6s)
-[fine] L12 H 0  delta=+0.0556  (7.6s)
-[fine] L12 H 1  delta=+0.0165  (7.6s)
-[fine] L12 H 2  delta=+0.0215  (7.6s)
-[fine] L12 H 3  delta=+0.0277  (7.6s)
-[fine] L12 H 4  delta=+0.0065  (7.6s)
-[fine] L12 H 5  delta=+0.0200  (7.6s)
-[fine] L12 H 6  delta=+0.0233  (7.6s)
-[fine] L12 H 7  delta=+0.0163  (7.6s)
-[fine] L12 H 8  delta=+0.0302  (7.6s)
-[fine] L12 H 9  delta=+0.0146  (7.7s)
-[fine] L12 H10  delta=+0.0268  (7.7s)
-[fine] L12 H11  delta=+0.0183  (7.7s)
-[fine] L12 H12  delta=+0.0501  (7.6s)
-[fine] L12 H13  delta=+0.0200  (7.6s)
-[fine] L12 H14  delta=+0.0150  (7.6s)
-[fine] L12 H15  delta=+0.0147  (7.6s)
-[fine] L13 H 0  delta=+0.0138  (7.6s)
-[fine] L13 H 1  delta=+0.0141  (7.6s)
-[fine] L13 H 2  delta=+0.0143  (7.6s)
-[fine] L13 H 3  delta=+0.0173  (7.6s)
-[fine] L13 H 4  delta=+0.0255  (7.6s)
-[fine] L13 H 5  delta=+0.0187  (7.7s)
-[fine] L13 H 6  delta=+0.0178  (7.7s)
-[fine] L13 H 7  delta=+0.0193  (7.7s)
-[fine] L13 H 8  delta=+0.0170  (7.7s)
-[fine] L13 H 9  delta=+0.0310  (7.7s)
-[fine] L13 H10  delta=+0.0502  (7.7s)
-[fine] L13 H11  delta=+0.0239  (7.7s)
-[fine] L13 H12  delta=+0.0142  (7.7s)
-[fine] L13 H13  delta=+0.0408  (7.7s)
-[fine] L13 H14  delta=+0.0157  (7.6s)
-[fine] L13 H15  delta=+0.0121  (7.6s)
-[fine] L15 H 0  delta=+0.0129  (7.7s)
-[fine] L15 H 1  delta=+0.0296  (7.6s)
-[fine] L15 H 2  delta=+0.0127  (7.6s)
-[fine] L15 H 3  delta=+0.0177  (7.6s)
-[fine] L15 H 4  delta=+0.0206  (7.6s)
-[fine] L15 H 5  delta=+0.0275  (7.6s)
-[fine] L15 H 6  delta=+0.0046  (7.6s)
-[fine] L15 H 7  delta=+0.0165  (7.7s)
-[fine] L15 H 8  delta=+0.0030  (7.7s)
-[fine] L15 H 9  delta=+0.0126  (7.8s)
-[fine] L15 H10  delta=+0.0127  (7.7s)
-[fine] L15 H11  delta=+0.0104  (7.7s)
-[fine] L15 H12  delta=+0.0036  (7.7s)
-[fine] L15 H13  delta=+0.0330  (7.6s)
-[fine] L15 H14  delta=+0.0206  (7.6s)
-[fine] L15 H15  delta=+0.0239  (7.6s)
-[fine] L16 H 0  delta=+0.0291  (7.6s)
-[fine] L16 H 1  delta=+0.0191  (7.7s)
-[fine] L16 H 2  delta=+0.0163  (7.7s)
-[fine] L16 H 3  delta=+0.0151  (7.7s)
-[fine] L16 H 4  delta=+0.0204  (7.7s)
-[fine] L16 H 5  delta=+0.0111  (7.6s)
-[fine] L16 H 6  delta=+0.0139  (7.5s)
-[fine] L16 H 7  delta=+0.0120  (7.6s)
-[fine] L16 H 8  delta=+0.0111  (7.6s)
-[fine] L16 H 9  delta=+0.0234  (7.6s)
-[fine] L16 H10  delta=+0.0081  (7.8s)
-[fine] L16 H11  delta=+0.0168  (7.7s)
-[fine] L16 H12  delta=+0.0189  (7.7s)
-[fine] L16 H13  delta=+0.0240  (7.7s)
-[fine] L16 H14  delta=+0.0283  (7.6s)
-[fine] L16 H15  delta=+0.0259  (7.6s)
-[fine] L18 H 0  delta=+0.0249  (7.6s)
-[fine] L18 H 1  delta=+0.0055  (7.6s)
-[fine] L18 H 2  delta=+0.0113  (7.7s)
-[fine] L18 H 3  delta=+0.0040  (7.7s)
-[fine] L18 H 4  delta=+0.0067  (7.7s)
-[fine] L18 H 5  delta=+0.0141  (7.7s)
-[fine] L18 H 6  delta=+0.0109  (7.7s)
-[fine] L18 H 7  delta=+0.0255  (7.6s)
-[fine] L18 H 8  delta=+0.0129  (7.6s)
-[fine] L18 H 9  delta=+0.0130  (7.7s)
-[fine] L18 H10  delta=+0.0261  (7.7s)
-[fine] L18 H11  delta=+0.0212  (7.8s)
-[fine] L18 H12  delta=+0.0333  (7.7s)
-[fine] L18 H13  delta=+0.0292  (7.7s)
-[fine] L18 H14  delta=+0.0218  (7.7s)
-[fine] L18 H15  delta=+0.0069  (7.5s)
-[fine] L19 H 0  delta=+0.0217  (7.5s)
-[fine] L19 H 1  delta=+0.0155  (7.6s)
-[fine] L19 H 2  delta=+0.0119  (7.6s)
-[fine] L19 H 3  delta=+0.0081  (7.6s)
-[fine] L19 H 4  delta=+0.0103  (7.6s)
-[fine] L19 H 5  delta=+0.0071  (7.6s)
-[fine] L19 H 6  delta=+0.0355  (7.6s)
-[fine] L19 H 7  delta=+0.0247  (7.6s)
-[fine] L19 H 8  delta=+0.0199  (7.6s)
-[fine] L19 H 9  delta=+0.0242  (7.6s)
-[fine] L19 H10  delta=+0.0726  (7.6s)
-[fine] L19 H11  delta=+0.0124  (7.6s)
-[fine] L19 H12  delta=+0.0128  (7.6s)
-[fine] L19 H13  delta=+0.0197  (7.6s)
-[fine] L19 H14  delta=+0.0243  (7.6s)
-[fine] L19 H15  delta=+0.0014  (7.6s)
-[fine] L21 H 0  delta=+0.0051  (7.6s)
-[fine] L21 H 1  delta=+0.0013  (7.6s)
-[fine] L21 H 2  delta=+0.0047  (7.6s)
-[fine] L21 H 3  delta=+0.0009  (7.6s)
-[fine] L21 H 4  delta=+0.0011  (7.6s)
-[fine] L21 H 5  delta=+0.0307  (7.6s)
-[fine] L21 H 6  delta=+0.0082  (7.6s)
-[fine] L21 H 7  delta=+0.0292  (7.6s)
-[fine] L21 H 8  delta=+0.0010  (7.6s)
-[fine] L21 H 9  delta=+0.0105  (7.5s)
-[fine] L21 H10  delta=+0.0025  (7.6s)
-[fine] L21 H11  delta=+0.0103  (7.6s)
-[fine] L21 H12  delta=+0.0121  (7.6s)
-[fine] L21 H13  delta=+0.0081  (7.8s)
-[fine] L21 H14  delta=+0.0105  (7.7s)
-[fine] L21 H15  delta=+0.0145  (7.7s)
-[fine] L22 H 0  delta=+0.0011  (7.6s)
-[fine] L22 H 1  delta=+0.0017  (7.7s)
-[fine] L22 H 2  delta=+0.0029  (7.7s)
-[fine] L22 H 3  delta=+0.0036  (7.6s)
-[fine] L22 H 4  delta=+0.0022  (7.6s)
-[fine] L22 H 5  delta=+0.0040  (7.2s)
-[fine] L22 H 6  delta=+0.0050  (7.6s)
-[fine] L22 H 7  delta=+0.0014  (7.6s)
-[fine] L22 H 8  delta=+0.0029  (7.6s)
-[fine] L22 H 9  delta=+0.0080  (7.7s)
-[fine] L22 H10  delta=+0.0134  (7.8s)
-[fine] L22 H11  delta=+0.0210  (7.7s)
-[fine] L22 H12  delta=+0.0071  (7.7s)
-[fine] L22 H13  delta=+0.0008  (7.7s)
-[fine] L22 H14  delta=+0.0013  (7.5s)
-[fine] L22 H15  delta=+0.0005  (7.6s)
-[fine] done. scanned layers [0, 1, 3, 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22]
-## fine coverage check
-measured rows: 24 / 24
-measured cells: 384 / 384
+[data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
+[scale_stats] split=eval wrote /root/hello-world/outputs/v1a/vstats_eval.npz (10.7s)
+  L 0  mean|dmu|=0.0000  mean(sig_int/sig_orig)=1.000
+  L 1  mean|dmu|=0.1233  mean(sig_int/sig_orig)=1.053
+  L 2  mean|dmu|=0.1327  mean(sig_int/sig_orig)=1.062
+  L 3  mean|dmu|=0.1425  mean(sig_int/sig_orig)=1.192
+  L 4  mean|dmu|=0.1392  mean(sig_int/sig_orig)=1.112
+  L 5  mean|dmu|=0.1413  mean(sig_int/sig_orig)=1.127
+  L 6  mean|dmu|=0.2182  mean(sig_int/sig_orig)=1.026
+  L 7  mean|dmu|=0.2109  mean(sig_int/sig_orig)=0.978
+  L 8  mean|dmu|=0.2100  mean(sig_int/sig_orig)=0.999
+  L 9  mean|dmu|=0.1890  mean(sig_int/sig_orig)=0.992
+  L10  mean|dmu|=0.2192  mean(sig_int/sig_orig)=1.007
+  L11  mean|dmu|=0.2123  mean(sig_int/sig_orig)=1.072
+  L12  mean|dmu|=0.2020  mean(sig_int/sig_orig)=1.138
+  L13  mean|dmu|=0.2150  mean(sig_int/sig_orig)=1.140
+  L14  mean|dmu|=0.1936  mean(sig_int/sig_orig)=1.280
+  L15  mean|dmu|=0.1939  mean(sig_int/sig_orig)=1.250
+  L16  mean|dmu|=0.2348  mean(sig_int/sig_orig)=1.318
+  L17  mean|dmu|=0.2449  mean(sig_int/sig_orig)=1.675
+  L18  mean|dmu|=0.2674  mean(sig_int/sig_orig)=1.744
+  L19  mean|dmu|=0.3196  mean(sig_int/sig_orig)=1.979
+  L20  mean|dmu|=0.2728  mean(sig_int/sig_orig)=1.751
+  L21  mean|dmu|=0.2294  mean(sig_int/sig_orig)=1.996
+  L22  mean|dmu|=0.1951  mean(sig_int/sig_orig)=1.780
+  L23  mean|dmu|=0.1856  mean(sig_int/sig_orig)=1.619
+/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8936.03it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[data] train: building blocks [1000:2000] (no overlap with eval)
+[scale_stats] split=train wrote /root/hello-world/outputs/v1a/vstats_train.npz (10.8s)
+  L 0  mean|dmu|=0.0000  mean(sig_int/sig_orig)=1.000
+  L 1  mean|dmu|=0.1207  mean(sig_int/sig_orig)=1.057
+  L 2  mean|dmu|=0.1312  mean(sig_int/sig_orig)=1.066
+  L 3  mean|dmu|=0.1408  mean(sig_int/sig_orig)=1.198
+  L 4  mean|dmu|=0.1377  mean(sig_int/sig_orig)=1.117
+  L 5  mean|dmu|=0.1399  mean(sig_int/sig_orig)=1.130
+  L 6  mean|dmu|=0.2168  mean(sig_int/sig_orig)=1.031
+  L 7  mean|dmu|=0.2088  mean(sig_int/sig_orig)=0.979
+  L 8  mean|dmu|=0.2094  mean(sig_int/sig_orig)=1.002
+  L 9  mean|dmu|=0.1869  mean(sig_int/sig_orig)=0.993
+  L10  mean|dmu|=0.2159  mean(sig_int/sig_orig)=1.008
+  L11  mean|dmu|=0.2099  mean(sig_int/sig_orig)=1.075
+  L12  mean|dmu|=0.1998  mean(sig_int/sig_orig)=1.142
+  L13  mean|dmu|=0.2128  mean(sig_int/sig_orig)=1.145
+  L14  mean|dmu|=0.1910  mean(sig_int/sig_orig)=1.284
+  L15  mean|dmu|=0.1912  mean(sig_int/sig_orig)=1.256
+  L16  mean|dmu|=0.2330  mean(sig_int/sig_orig)=1.317
+  L17  mean|dmu|=0.2417  mean(sig_int/sig_orig)=1.685
+  L18  mean|dmu|=0.2645  mean(sig_int/sig_orig)=1.751
+  L19  mean|dmu|=0.3170  mean(sig_int/sig_orig)=1.992
+  L20  mean|dmu|=0.2715  mean(sig_int/sig_orig)=1.765
+  L21  mean|dmu|=0.2288  mean(sig_int/sig_orig)=2.001
+  L22  mean|dmu|=0.1932  mean(sig_int/sig_orig)=1.794
+  L23  mean|dmu|=0.1826  mean(sig_int/sig_orig)=1.632
+/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 14357.99it/s]
+/root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  d = torch.load(cache)
+[data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
+[scale_coarse] baseline=2.1178
+  L 0  v0_delta=+0.0000  rescaled_delta=+0.0000
+  L 1  v0_delta=+0.3209  rescaled_delta=+0.2346
+  L 2  v0_delta=+0.0878  rescaled_delta=+0.0672
+  L 3  v0_delta=+0.3426  rescaled_delta=+0.2518
+  L 4  v0_delta=+0.1255  rescaled_delta=+0.0934
+  L 5  v0_delta=+0.6230  rescaled_delta=+0.5257
+  L 6  v0_delta=+0.3236  rescaled_delta=+0.5682
+  L 7  v0_delta=+0.2651  rescaled_delta=+0.4683
+  L 8  v0_delta=+0.3667  rescaled_delta=+0.4060
+  L 9  v0_delta=+0.2248  rescaled_delta=+0.2088
+  L10  v0_delta=+0.3811  rescaled_delta=+0.4531
+  L11  v0_delta=+0.4536  rescaled_delta=+0.3843
+  L12  v0_delta=+0.4071  rescaled_delta=+0.2914
+  L13  v0_delta=+0.3866  rescaled_delta=+0.2460
+  L14  v0_delta=+0.3348  rescaled_delta=+0.1877
+  L15  v0_delta=+0.2702  rescaled_delta=+0.1563
+  L16  v0_delta=+0.4191  rescaled_delta=+0.2790
+  L17  v0_delta=+0.5728  rescaled_delta=+0.1846
+  L18  v0_delta=+0.3215  rescaled_delta=+0.1017
+  L19  v0_delta=+0.3774  rescaled_delta=+0.1082
+  L20  v0_delta=+0.1679  rescaled_delta=+0.0703
+  L21  v0_delta=+0.1740  rescaled_delta=+0.0440
+  L22  v0_delta=+0.0942  rescaled_delta=+0.0426
+  L23  v0_delta=+0.0775  rescaled_delta=+0.0416
+[scale_coarse] inverted_u_survives=True -> wrote scale_sanity.md
+===== scale_sanity.md =====
+# v1a scale/norm sanity
+
+Re-ran the coarse all-heads token-table swap with a per-feature affine rescale of V_intervention to match real-V mean/std (eval-set stats). If the inverted-U (mid layers >> edge layers) survives rescaling, the v0 signal is not a LayerNorm-OOD scale artifact.
+
+| layer | v0 delta | rescaled delta |
+|---|---|---|
+| L0 | +0.0000 | +0.0000 |
+| L1 | +0.3209 | +0.2346 |
+| L2 | +0.0878 | +0.0672 |
+| L3 | +0.3426 | +0.2518 |
+| L4 | +0.1255 | +0.0934 |
+| L5 | +0.6230 | +0.5257 |
+| L6 | +0.3236 | +0.5682 |
+| L7 | +0.2651 | +0.4683 |
+| L8 | +0.3667 | +0.4060 |
+| L9 | +0.2248 | +0.2088 |
+| L10 | +0.3811 | +0.4531 |
+| L11 | +0.4536 | +0.3843 |
+| L12 | +0.4071 | +0.2914 |
+| L13 | +0.3866 | +0.2460 |
+| L14 | +0.3348 | +0.1877 |
+| L15 | +0.2702 | +0.1563 |
+| L16 | +0.4191 | +0.2790 |
+| L17 | +0.5728 | +0.1846 |
+| L18 | +0.3215 | +0.1017 |
+| L19 | +0.3774 | +0.1082 |
+| L20 | +0.1679 | +0.0703 |
+| L21 | +0.1740 | +0.0440 |
+| L22 | +0.0942 | +0.0426 |
+| L23 | +0.0775 | +0.0416 |
+
+- mid (L5/11/17) mean delta:  v0=+0.5498  rescaled=+0.3649
+- low (L20-23) mean delta:    v0=+0.1284  rescaled=+0.0496
+
+**Verdict: inverted-U SURVIVES rescaling -> scale is NOT the main cause; v1a uses RAW token-table V (no rescale).**
 ----- END (rc=0) -----
