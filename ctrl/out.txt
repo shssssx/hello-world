@@ -1,0 +1,69 @@
+### seq=2  2026-05-25T05:14:58Z
+### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
+----- BEGIN -----
+[handshake] runner is alive
+host: autodl-container-hnl1t3bbzh-98d0ce3f
+cwd:  /root/hello-world
+date: 2026-05-25T05:14:58Z
+python: Python 3.10.8
+--- torch / cuda ---
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+torch 2.4.0+cu121 cuda_available True device_count 3
+  gpu 0 NVIDIA A800-SXM4-80GB
+  gpu 1 NVIDIA A800-SXM4-80GB
+  gpu 2 NVIDIA A800-SXM4-80GB
+--- transformers / datasets ---
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+transformers 4.46.0 | datasets 3.0.0
+--- nvidia-smi ---
+Mon May 25 13:15:02 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A800-SXM4-80GB          On  |   00000000:10:00.0 Off |                  Off |
+| N/A   35C    P0             64W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A800-SXM4-80GB          On  |   00000000:16:00.0 Off |                  Off |
+| N/A   34C    P0             61W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A800-SXM4-80GB          On  |   00000000:49:00.0 Off |                  Off |
+| N/A   34C    P0             61W /  400W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+--- disk (cwd + /root/autodl-tmp) ---
+Filesystem      Size  Used Avail Use% Mounted on
+overlay          30G   11G   20G  35% /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/md0        150G  100G   51G  67% /root/autodl-tmp
+--- look for option_b scripts + artifacts on this machine ---
+[search scripts]
+[search seed dirs]
+/root/autodl-tmp/artifacts_llama/seed0
+/root/autodl-tmp/artifacts_llama/seed2
+/root/autodl-tmp/artifacts_llama/seed1
+/root/autodl-tmp/artifacts_llama/seed3
+[artifacts_llama]
+total 16
+drwxr-xr-x 6 root root   78 Apr 29 09:14 .
+drwxr-xr-x 5 root root 4096 Apr 29 18:25 ..
+drwxr-xr-x 2 root root  120 Apr 29 14:00 seed0
+drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed1
+drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed2
+drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed3
+----- END (rc=0) -----
