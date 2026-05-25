@@ -1225,6 +1225,86 @@ def mode_ridge_init(args):
     print("[ridge_init] wrote v1b_ridge/ridge_init_zeroshot.json")
 
 
+def _train_AB(model, hook, train_seqs, params, steps, bs, lr, device):
+    opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
+    hook.mode = "correct"; model.eval()
+    n = train_seqs.shape[0]; order = torch.randperm(n); ptr = 0
+    for step in range(steps):
+        if ptr + bs > n:
+            order = torch.randperm(n); ptr = 0
+        ids = train_seqs[order[ptr:ptr + bs]].to(device); ptr += bs
+        hook.current_ids = ids
+        opt.zero_grad(set_to_none=True)
+        logits = model(ids).logits
+        sl = logits[:, :-1, :].float(); lab = ids[:, 1:]
+        loss = F.cross_entropy(sl.reshape(-1, sl.shape[-1]), lab.reshape(-1))
+        if not torch.isfinite(loss):
+            raise RuntimeError(f"non-finite loss at step {step}")
+        loss.backward(); opt.step()
+
+
+def mode_ridge_ft(args):
+    """Tiny CE finetune: ridge-init (no train) vs ridge-init+finetune vs
+    random-init+finetune, at the relaxed cap zero-shot showed sufficient."""
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline_anchor(model, eval_seqs, args.batch_size, device)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [6, 7, 11]
+    rank = 64; cap = 0.5; lr = args.lr if args.lr != 1e-3 else 3e-5; steps = args.steps
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    sub = eval_seqs[:256]; I = torch.eye(d, dtype=torch.float64, device=device)
+    out = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        print(f"[ridge_ft] L{layer}: calibrating ...")
+        mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib_seqs, args.batch_size,
+                                               device, vocab, d)
+        vd = float(v0[layer])
+        hook = V1aHook(model, layer); hook.attach()
+        hook.anchor_mu = mu; hook.anchor_cnt = cnt; hook.variant = "shared"
+        hook.scale = 1.0; hook.dv_cap = cap
+        hook.mode = "table"; hook.A = hook.B = None
+        d_a1 = eval_loss(model, hook, eval_seqs, args.batch_size, device) - base
+        best = None
+        for lam in lams:
+            W = torch.linalg.solve(XtX + lam * I, XtY).float()
+            U, Sv, Vh = torch.linalg.svd(W.double())
+            A = (U[:, :256] * Sv[:256].sqrt()).float(); B = (Sv[:256].sqrt().unsqueeze(1) * Vh[:256]).float()
+            hook.A, hook.B = A, B; hook.mode = "correct"
+            ce = eval_loss(model, hook, sub, args.batch_size, device)
+            if best is None or ce < best[1]:
+                best = (lam, ce)
+        W = torch.linalg.solve(XtX + best[0] * I, XtY).float()
+        U, Sv, Vh = torch.linalg.svd(W.double())
+        Ar = (U[:, :rank] * Sv[:rank].sqrt()).float(); Br = (Sv[:rank].sqrt().unsqueeze(1) * Vh[:rank]).float()
+
+        def ctx(ce):
+            return round((d_a1 - (ce - base)) / d_a1, 4) if abs(d_a1) > 1e-6 else None
+
+        res = {"A1_recovery": round(1 - d_a1 / vd, 4), "best_lambda": best[0]}
+        hook.A = torch.nn.Parameter(Ar.clone()); hook.B = torch.nn.Parameter(Br.clone()); hook.mode = "correct"
+        res["ridge_init_notrain"] = ctx(eval_loss(model, hook, eval_seqs, args.batch_size, device))
+        hook.A = torch.nn.Parameter(Ar.clone()); hook.B = torch.nn.Parameter(Br.clone())
+        _train_AB(model, hook, calib_seqs, [hook.A, hook.B], steps, args.batch_size, lr, device)
+        res["ridge_init_ft"] = ctx(eval_loss(model, hook, eval_seqs, args.batch_size, device))
+        hook.init_lora("shared", rank, device)
+        _train_AB(model, hook, calib_seqs, [hook.A, hook.B], steps, args.batch_size, lr, device)
+        res["random_init_ft"] = ctx(eval_loss(model, hook, eval_seqs, args.batch_size, device))
+        hook.detach()
+        out[str(layer)] = res
+        print(f"[ridge_ft] L{layer} A1={res['A1_recovery']:+.3f} | R_context: "
+              f"ridge_notrain={res['ridge_init_notrain']} ridge_ft={res['ridge_init_ft']} "
+              f"random_ft={res['random_init_ft']}")
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "ridge_ft.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[ridge_ft] wrote v1b_ridge/ridge_ft.json")
+
+
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
@@ -1367,7 +1447,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1400,6 +1480,7 @@ def main():
         "v1b": mode_v1b,
         "ridge": mode_ridge,
         "ridge_init": mode_ridge_init,
+        "ridge_ft": mode_ridge_ft,
         "plots": mode_plots,
     }[args.mode](args)
 
