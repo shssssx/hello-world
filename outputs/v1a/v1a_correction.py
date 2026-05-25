@@ -764,6 +764,199 @@ def mode_svd_diff(args):
 
 
 # --------------------------------------------------------------------------- #
+# anchor audit + oracle upper bound (diagnostic; no corrector training)
+# --------------------------------------------------------------------------- #
+def _token_table_flat(model, layer, ids):
+    """A0 anchor: W_V . LN_l(E[x]) flattened to [B,S,d]."""
+    nh = model.config.num_attention_heads
+    hd = model.config.hidden_size // nh
+    qkv = layer.attention.query_key_value
+    normed = layer.input_layernorm(model.gpt_neox.embed_in(ids))
+    tg = F.linear(normed, qkv.weight, qkv.bias)
+    B, S, _ = tg.shape
+    return tg.view(B, S, nh, 3 * hd)[..., 2 * hd:].reshape(B, S, nh * hd)
+
+
+class AnchorHook:
+    """Replaces layer l's V with a configurable anchor / oracle, for eval only."""
+
+    def __init__(self, model, layer_idx):
+        self.model = model
+        self.gpt_neox = model.gpt_neox
+        self.layer = self.gpt_neox.layers[layer_idx]
+        self.qkv = self.layer.attention.query_key_value
+        self.nh = model.config.num_attention_heads
+        self.hd = model.config.hidden_size // self.nh
+        self.d = model.config.hidden_size
+        self.ids = None
+        self.mode = "A0"           # A0 | A1 | A2 | A3 | oracle
+        self.mu = None             # [vocab,d] per-token mean V
+        self.cnt = None            # [vocab]
+        self.lam = 5.0
+        self.affine = None         # (a0_mean,a0_std,real_mean,real_std) [d]
+        self.U = None              # [d,r] residual PCA basis (oracle)
+        self._h = self.qkv.register_forward_hook(self._hook)
+
+    def detach(self):
+        self._h.remove()
+
+    @torch.no_grad()
+    def _hook(self, module, inputs, output):
+        B, S, _ = output.shape
+        nh, hd = self.nh, self.hd
+        o4 = output.view(B, S, nh, 3 * hd)
+        vreal = o4[..., 2 * hd:].reshape(B, S, self.d)
+        a0 = _token_table_flat(self.model, self.layer, self.ids)        # [B,S,d]
+        if self.mode == "A0":
+            vnew = a0
+        elif self.mode in ("A1", "A2"):
+            mu = self.mu[self.ids]                                       # [B,S,d]
+            seen = (self.cnt[self.ids] > 0).unsqueeze(-1)
+            if self.mode == "A1":
+                vnew = torch.where(seen, mu, a0)
+            else:
+                n = self.cnt[self.ids].unsqueeze(-1).float()
+                w = n / (n + self.lam)
+                vnew = torch.where(seen, w * mu + (1 - w) * a0, a0)
+        elif self.mode == "A3":
+            a0m, a0s, rm, rs = self.affine
+            vnew = (a0 - a0m) / a0s * rs + rm
+        else:  # oracle: A0 + P_r(Vreal - A0)
+            resid = (vreal - a0).float()
+            proj = (resid @ self.U) @ self.U.t()
+            vnew = a0 + proj.to(a0.dtype)
+        v4 = vnew.view(B, S, nh, hd)
+        new = torch.cat([o4[..., :hd], o4[..., hd:2 * hd], v4], dim=-1)
+        return new.view(B, S, nh * 3 * hd)
+
+
+@torch.no_grad()
+def _calibrate(model, layer, calib_seqs, bs, device, vocab, d, n_pca=256):
+    """Per-token-id mean V, counts, residual PCA basis, affine stats — on calib."""
+    nh = model.config.num_attention_heads
+    hd = d // nh
+    qkv = layer.attention.query_key_value
+    Vsum = torch.zeros(vocab, d, device=device)
+    cnt = torch.zeros(vocab, device=device)
+    C = torch.zeros(d, d, dtype=torch.float64, device=device)
+    rm = torch.zeros(d, dtype=torch.float64, device=device)
+    am = torch.zeros(d, dtype=torch.float64, device=device)
+    rsq = torch.zeros(d, dtype=torch.float64, device=device)
+    asq = torch.zeros(d, dtype=torch.float64, device=device)
+    ntok = 0
+    cap = {"v": None}
+
+    def hook(module, inputs, output):
+        B, S, _ = output.shape
+        cap["v"] = output.view(B, S, nh, 3 * hd)[..., 2 * hd:].reshape(B, S, d)
+    h = qkv.register_forward_hook(hook)
+    for i in range(0, calib_seqs.shape[0], bs):
+        ids = calib_seqs[i:i + bs].to(device)
+        model(ids)
+        vr = cap["v"]                                   # [B,S,d]
+        a0 = _token_table_flat(model, layer, ids)
+        flat_ids = ids.reshape(-1)
+        vr2 = vr.reshape(-1, d)
+        Vsum.index_add_(0, flat_ids, vr2)
+        cnt.index_add_(0, flat_ids, torch.ones_like(flat_ids, dtype=Vsum.dtype))
+        resid = (vr2 - a0.reshape(-1, d)).double()
+        C += resid.t() @ resid
+        rm += vr2.double().sum(0); rsq += (vr2.double() ** 2).sum(0)
+        am += a0.reshape(-1, d).double().sum(0); asq += (a0.reshape(-1, d).double() ** 2).sum(0)
+        ntok += vr2.shape[0]
+    h.remove()
+    mu = Vsum / cnt.clamp_min(1).unsqueeze(1)
+    rm /= ntok; am /= ntok
+    rstd = (rsq / ntok - rm ** 2).clamp_min(1e-8).sqrt()
+    astd = (asq / ntok - am ** 2).clamp_min(1e-8).sqrt()
+    evals, evecs = torch.linalg.eigh(C / ntok)
+    U = evecs.flip(1)[:, :n_pca].float()               # top-n_pca, [d,n_pca]
+    affine = (am.float(), astd.float(), rm.float(), rstd.float())
+    return mu, cnt, U, affine, ntok
+
+
+def mode_anchor(args):
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)   # disjoint from eval
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size
+    vocab = model.config.vocab_size
+    base = _recompute_baseline_anchor(model, eval_seqs, args.batch_size, device)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [5, 11, 17, 23]
+    lams = [1, 5, 20, 100]
+    oracle_rs = [16, 32, 64, 128, 256]
+    out = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        print(f"[anchor] L{layer}: calibrating on {calib_seqs.shape[0]} seqs ...")
+        mu, cnt, U, affine, ntok = _calibrate(model, lyr, calib_seqs, args.batch_size,
+                                              device, vocab, d)
+        # coverage on eval
+        ev_ids = eval_seqs.reshape(-1).to(device)
+        cov = float((cnt[ev_ids] > 0).float().mean())
+        hook = AnchorHook(model, layer)
+        hook.mu, hook.cnt, hook.U, hook.affine = mu, cnt, U, affine
+        res = {"v0_delta": float(v0[layer]), "coverage": round(cov, 4)}
+
+        def ev(tag, setter):
+            setter()
+            ce = _anchor_eval(model, hook, eval_seqs, args.batch_size, device)
+            dl = ce - base
+            rec = 1.0 - dl / float(v0[layer])
+            res[tag] = {"ce": round(ce, 4), "delta": round(dl, 4), "recovery": round(rec, 4)}
+            print(f"  L{layer} {tag:10s} ce={ce:.4f} delta={dl:+.4f} rec={rec:+.3f}")
+
+        def s_a0(): hook.mode = "A0"
+        def s_a1(): hook.mode = "A1"
+        def s_a3(): hook.mode = "A3"
+        ev("A0", s_a0); ev("A1", s_a1); ev("A3", s_a3)
+        for lam in lams:
+            def s_a2(l=lam): hook.mode = "A2"; hook.lam = float(l)
+            ev(f"A2_lam{lam}", s_a2)
+        for r in oracle_rs:
+            def s_or(rr=r): hook.mode = "oracle"; hook.U = U[:, :rr]
+            ev(f"oracle_r{r}", s_or)
+            hook.U = U  # restore
+        hook.detach()
+        out[str(layer)] = res
+    with open(os.path.join(HERE, "anchor_audit.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[anchor] wrote anchor_audit.json")
+
+
+@torch.no_grad()
+def _anchor_eval(model, hook, seqs, bs, device):
+    tot, ntok = 0.0, 0
+    for i in range(0, seqs.shape[0], bs):
+        ids = seqs[i:i + bs].to(device)
+        hook.ids = ids
+        logits = model(ids).logits
+        sl = logits[:, :-1, :].float(); lab = ids[:, 1:]
+        tot += F.cross_entropy(sl.reshape(-1, sl.shape[-1]), lab.reshape(-1),
+                               reduction="sum").item()
+        ntok += lab.numel()
+    return tot / ntok
+
+
+@torch.no_grad()
+def _recompute_baseline_anchor(model, seqs, bs, device):
+    tot, ntok = 0.0, 0
+    for i in range(0, seqs.shape[0], bs):
+        ids = seqs[i:i + bs].to(device)
+        logits = model(ids).logits
+        sl = logits[:, :-1, :].float(); lab = ids[:, 1:]
+        tot += F.cross_entropy(sl.reshape(-1, sl.shape[-1]), lab.reshape(-1),
+                               reduction="sum").item()
+        ntok += lab.numel()
+    b = tot / ntok
+    print(f"[anchor] baseline CE = {b:.4f} (v0 {V0_BASELINE})")
+    assert abs(b - V0_BASELINE) < 0.005, f"baseline drift {b}"
+    return b
+
+
+# --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
 def mode_plots(args):
@@ -905,7 +1098,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -934,6 +1127,7 @@ def main():
         "all": mode_all,
         "probe": mode_probe,
         "svd_diff": mode_svd_diff,
+        "anchor": mode_anchor,
         "plots": mode_plots,
     }[args.mode](args)
 
