@@ -475,6 +475,8 @@ def _recompute_baseline(model, eval_seqs, device, args):
 
 def mode_train(args):
     device = args.device
+    if not args.variant:
+        args.variant = "shared"
     model, tok = load_model(device)
     eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
     train_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
@@ -653,7 +655,7 @@ def main():
                    choices=["scale_stats", "scale_coarse", "train", "all", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
-    p.add_argument("--variant", default="shared")
+    p.add_argument("--variant", default="")
     p.add_argument("--rank", type=int, default=8)
     p.add_argument("--layers", default="")
     p.add_argument("--ranks", default="")
