@@ -567,6 +567,14 @@ MLP_MATRIX = [
     (5, "mlp", 16, 1e-4, 500, 0.0, 0.15),
 ]
 
+# is L11 a rank/capacity wall? push rank up (capped, stable lr).
+HIGHRANK_MATRIX = [
+    (11, "shared", 64, 1e-4, 500, 0.0, 0.15),
+    (11, "shared", 128, 1e-4, 500, 0.0, 0.15),
+    (11, "shared", 256, 1e-4, 800, 0.0, 0.15),
+    (5, "shared", 64, 1e-4, 500, 0.0, 0.15),
+]
+
 
 def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
               layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0):
@@ -651,7 +659,11 @@ def mode_probe(args):
     h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
     base_small = eval_loss(model, h0, small, args.batch_size, device); h0.detach()
     print(f"[probe] base_small(64 seq) = {base_small:.4f}")
-    if args.mlp_matrix:
+    if args.highrank_matrix:
+        for (layer, variant, rank, lr, steps, clip, cap) in HIGHRANK_MATRIX:
+            run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                      layer, variant, rank, lr, steps, clip, args.batch_size, device, dv_cap=cap)
+    elif args.mlp_matrix:
         for (layer, variant, rank, lr, steps, clip, cap) in MLP_MATRIX:
             run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
                       layer, variant, rank, lr, steps, clip, args.batch_size, device, dv_cap=cap)
@@ -825,6 +837,7 @@ def main():
     p.add_argument("--dv_cap", type=float, default=0.0)
     p.add_argument("--cap_matrix", action="store_true")
     p.add_argument("--mlp_matrix", action="store_true")
+    p.add_argument("--highrank_matrix", action="store_true")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     args = p.parse_args()
     {
