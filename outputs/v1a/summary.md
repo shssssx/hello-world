@@ -39,9 +39,20 @@
 > hidden state. (`v1b_anchor_plus_corr.json`)
 >
 > **Net:** the deployable win is the **fitted per-token anchor A1** itself (59–87%
-> recovery, a per-token value table beats W_V·LN(E[x]) by a wide margin). A learned
-> correction off LN_l(h) is a dead end; the precise open question is *which
-> representation* makes the (oracle-recoverable) residual learnable.
+> recovery, a per-token value table beats W_V·LN(E[x]) by a wide margin).
+>
+> ### UPDATE (ridge probe — refutes "not learnable from LN(h)"; see `v1b_ridge/`)
+> A closed-form **ridge** map `W=(XᵀX+λI)⁻¹XᵀY`, X=LN_l(h), Y=A1 residual, injected
+> and evaluated on held data, recovers **71–86% of the genuine-context residual at
+> every probed layer** (L6/L7 86%, L11 77%; total recovery 0.89–0.98). So the
+> residual IS a generalizing linear function of LN_l(h) — the trained LoRA/MLP
+> corrector's failure (v1a ~3%, v1b +0%) was an **optimization/parameterization
+> pathology, NOT a representation problem.** Two culprits: the 0.15 norm-cap is far
+> too tight (capped ridge only 0.32–0.46) and SGD-uncapped diverged — the corrector
+> was stuck between "capped→unreachable" and "uncapped→diverges". **Option 1
+> (representation search) is OFF the table.** v1b = fix the *training* of the
+> linear corrector (init from ridge / relax norm budget / MSE-pretrain → CE
+> finetune), not change the input.
 >
 > ### Full-depth profile (layers 1–23, `depth_profile.png`, `anchor_audit_full24.json`)
 > A1 token-determinability is **U-shaped in depth**, not flat: high at early
