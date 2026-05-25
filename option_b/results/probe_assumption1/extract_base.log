@@ -1,0 +1,9 @@
+Extracting base hidden states from /root/autodl-tmp/models/Qwen/Qwen2.5-7B-Instruct (n=100 probes)...
+  loading /root/autodl-tmp/models/Qwen/Qwen2.5-7B-Instruct ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  6.57it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  6.29it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  5.97it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.62it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.46it/s]
+  probe 25/100
+  probe 50/100
+  probe 75/100
+  probe 100/100
+Shape: (29, 100, 3584)
+Saved: /root/autodl-tmp/artifacts_llama/base_qwen_hidden_states.npz  (18.7 MB)

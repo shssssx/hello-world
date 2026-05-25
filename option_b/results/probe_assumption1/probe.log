@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py", line 33, in <module>
+    from sklearn.linear_model import LogisticRegression
+ModuleNotFoundError: No module named 'sklearn'
