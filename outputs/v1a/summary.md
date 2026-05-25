@@ -86,8 +86,21 @@ L11 r16 lr3e-4 cap.10 : rec +0.029
 
 Capping stabilizes training (dV/V pinned at the cap, higher lr now safe). L5
 recovers ~0.24–0.27; **L11 stays ~0.02–0.03 even when training is perfectly
-stable.** So L11's near-zero recovery is **not** an optimization artifact — it is
-a ceiling of the low-rank additive linear correction. (`cap_probe.png`)
+stable.** So L11's near-zero recovery is **not** an optimization artifact. (`cap_probe.png`)
+
+## Is the L11 ceiling about linearity or rank? (both ruled out)
+
+Two further capped/stable probes (`L11_ceiling.png`):
+
+- **Nonlinear bottleneck (`mlp`: LN_h→W1→GELU→W2, equal param count):**
+  L11 mlp k16/k32 → rec +0.033/+0.035 — identical to linear. **Not linearity.**
+- **High-rank sweep (linear, capped):** L11 r64/r128/r256 → +0.023/+0.037/+0.033.
+  Flat from r2 to r256 (r256 ≈ 1/4 of d_model). **Not rank/capacity.**
+
+For comparison L5 plateaus at ~0.26 by r16 and stays there to r64. So **L11's
+recovery is pinned at ~0.03 across rank 2–256, linear and nonlinear, under stable
+capped training** — a robust wall, not tunable away by capacity, nonlinearity,
+lr, steps, or clipping.
 
 ## Answers
 
@@ -100,13 +113,16 @@ heterogeneous one. (Tentative: one recoverable layer.)
 **Q2 — is low-rank correction effective?** **Depth-dependent.**
 - Mid layer (L5, v0 delta 0.62): **yes** — ~24–27% recovered at r≤16, shared,
   generalizes to held data, stable under capping.
-- Deep layer (L11, v0 delta 0.45): **no** — ceiling ~3% even with stable, capped,
-  higher-lr training. The missing V-contextualization at L11 is **not a low-rank
-  (≤32) linear function of LN_l(h)**; it is higher-rank / not linearly read-out.
+- Deep layer (L11, v0 delta 0.45): **no** — ceiling ~3% that is **not** moved by
+  rank (2→256), nonlinearity (mlp), lr, steps, clipping, or norm-capping. The
+  useful V-contextualization at L11 is essentially **not recoverable by any trained
+  read-out of the current layer's post-LN hidden state LN_l(h)** under this setup.
 
 This mirrors v0's "distributed redundancy": deeper layers carry V-contextualization
-in a higher-rank, more distributed form that a small shared linear adapter cannot
-reconstruct.
+in a form a per-layer adapter on LN_l(h) cannot reconstruct. Candidate reasons
+(not disambiguated here): the token-table is a fundamentally lossy anchor deep in
+the stack; or the needed signal lives in information not linearly/compactly present
+in LN_l(h); or deep-layer V-contextualization is irreducibly distributed.
 
 ## Caveats
 
@@ -121,14 +137,19 @@ reconstruct.
 
 ## Recommendation for v1b / redesign
 
-- A simple low-rank additive linear correction is sufficient for mid layers but
-  hits a representational wall at deep layers. Before extending to all 24 layers,
-  the correction should be redesigned for deep layers: higher rank, a **gated**
-  correction, or a norm-constrained / nonlinear read-out. Norm-capping (cap≈0.15)
-  should be the default training stabilizer (it is a stability device, not an
-  architecture trick) so higher lr can be used.
-- The shared-vs-per-head verdict (Reading A) should be re-confirmed on a second
-  recoverable layer once the deep-layer correction is fixed.
+- For **mid layers**, the shared low-rank correction works; v1b can extend it and
+  re-confirm Reading A on more recoverable layers. Use **norm-cap (≈0.15) + lr 1e-4**
+  as the default stable recipe (cap is a stability device, not an architecture trick).
+- For **deep layers**, capacity/nonlinearity/optimization are NOT the bottleneck —
+  do not just throw rank or gating at it. The informative next experiments are
+  *diagnostic*, not bigger adapters: (a) feed the correction a richer input than
+  LN_l(h) (e.g. earlier-layer states, or the actual residual stream), to test
+  whether the needed signal is simply absent from LN_l(h); (b) measure the true
+  rank of `V_real − V_table` at L11 directly (SVD of the per-token difference) to
+  see if it is intrinsically high-rank; (c) check whether the loss is recoverable
+  at all by *any* per-token V at L11 (oracle: train an unconstrained per-position V).
+- Do **not** run the full 24-layer v1b grid with the current parameterization —
+  it would mostly reproduce this L5-good / L11-bad gradient.
 
 Artifacts: `recovery_curves.png`, `probe_diagnostics.png`, `cap_probe.png`,
 `L{5,11}_{shared,perhead}_r*.json` (grid), `probe_*.json` (stability + cap),
