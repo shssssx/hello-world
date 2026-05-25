@@ -1,9 +1,10 @@
-# seq=31: high-rank sweep on L11 (capped, stable) -- is it a rank/capacity wall?
-rm -f outputs/v1a/hr.done
-python outputs/v1a/v1a_correction.py --mode probe --highrank_matrix --batch_size 8
-echo done > outputs/v1a/hr.done
+# seq=32: SVD/covariance spectrum of (V_real - V_table) at L5 vs L11 -- intrinsic rank
+rm -f outputs/v1a/svd.done
+python outputs/v1a/v1a_correction.py --mode svd_diff --layers 5,11 --batch_size 16
+echo "===== svd_diff.json ====="; cat outputs/v1a/svd_diff.json
+echo done > outputs/v1a/svd.done
 git add outputs/v1a
-git commit -m "v1a high-rank probe results" || true
+git commit -m "v1a svd_diff results" || true
 for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
   git pull --rebase -q origin claude/zen-allen-7Y8Bx 2>/dev/null || true
   git push -q origin claude/zen-allen-7Y8Bx 2>/dev/null && { echo SELFPUSH_OK; break; }
