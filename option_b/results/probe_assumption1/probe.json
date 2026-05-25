@@ -1,0 +1,241 @@
+{
+  "n_layers": 29,
+  "best_layer": 0,
+  "best_mi_linear": 0.8112781244576902,
+  "best_mi_mlp": 0.8112781244576902,
+  "best_ratio": 1.0,
+  "per_layer": [
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 1.0,
+      "layer": 0,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112626976305433,
+      "mi_mlp_bits": 0.2987677850064784,
+      "linear_over_mlp": 2.715362024767671,
+      "layer": 1,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112735597251449,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999943734061012,
+      "layer": 2,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8111805749194563,
+      "linear_over_mlp": 1.0001202562552038,
+      "layer": 3,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112653463888825,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999842494596828,
+      "layer": 4,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 1.0,
+      "layer": 5,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8107127620138824,
+      "linear_over_mlp": 1.0006973646774764,
+      "layer": 6,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112720111939444,
+      "mi_mlp_bits": 0.810014158083322,
+      "linear_over_mlp": 1.0015528779319103,
+      "layer": 7,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112690322781931,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999887927712791,
+      "layer": 8,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112778664806339,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.999999682011571,
+      "layer": 9,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112412372239265,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999545319506941,
+      "layer": 10,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8107698793725493,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.999373525465782,
+      "layer": 11,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8101656214100199,
+      "mi_mlp_bits": 0.811270249191835,
+      "linear_over_mlp": 0.9986383972752415,
+      "layer": 12,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8106121290180329,
+      "mi_mlp_bits": 0.81125324444324,
+      "linear_over_mlp": 0.9992097222049977,
+      "layer": 13,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112699049727208,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999898684745445,
+      "layer": 14,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112764932401166,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999979893238529,
+      "layer": 15,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112327317237995,
+      "linear_over_mlp": 1.0000559552544117,
+      "layer": 16,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112091601017257,
+      "linear_over_mlp": 1.0000850142717272,
+      "layer": 17,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112684002016785,
+      "mi_mlp_bits": 0.8107763185631534,
+      "linear_over_mlp": 1.0006069265064341,
+      "layer": 18,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112639428447342,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.999982519419015,
+      "layer": 19,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112506625568499,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9999661498319596,
+      "layer": 20,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.811149987759469,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.9998420557705696,
+      "layer": 21,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 1.0,
+      "layer": 22,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112710587980526,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 0.999991290706079,
+      "layer": 23,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.8112781244576902,
+      "linear_over_mlp": 1.0,
+      "layer": 24,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.811273696682448,
+      "mi_mlp_bits": 0.29350906496825757,
+      "linear_over_mlp": 2.7640498829914697,
+      "layer": 25,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.290778252773648,
+      "linear_over_mlp": 2.7900233828326138,
+      "layer": 26,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.30236819869393783,
+      "linear_over_mlp": 2.683080191508101,
+      "layer": 27,
+      "n_base": 100,
+      "n_teacher": 300
+    },
+    {
+      "mi_linear_bits": 0.8112781244576902,
+      "mi_mlp_bits": 0.0,
+      "linear_over_mlp": 811278124.4576901,
+      "layer": 28,
+      "n_base": 100,
+      "n_teacher": 300
+    }
+  ]
+}

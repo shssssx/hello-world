@@ -1,4 +1,43 @@
-Traceback (most recent call last):
-  File "/root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py", line 33, in <module>
-    from sklearn.linear_model import LogisticRegression
-ModuleNotFoundError: No module named 'sklearn'
+Base hidden: (29, 100, 3584)
+Teacher /root/autodl-tmp/artifacts_llama/seed1/qwen_hidden_states.npz: (29, 100, 3584)
+Teacher /root/autodl-tmp/artifacts_llama/seed2/qwen_hidden_states.npz: (29, 100, 3584)
+Teacher /root/autodl-tmp/artifacts_llama/seed3/qwen_hidden_states.npz: (29, 100, 3584)
+
+Probing 29 layers (base vs teacher_w pooled)...
+  layer  0: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer  1: linear MI = 0.8113  MLP MI = 0.2988  ratio = 2.715
+  layer  2: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer  3: linear MI = 0.8113  MLP MI = 0.8112  ratio = 1.000
+  layer  4: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer  5: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer  6: linear MI = 0.8113  MLP MI = 0.8107  ratio = 1.001
+  layer  7: linear MI = 0.8113  MLP MI = 0.8100  ratio = 1.002
+  layer  8: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer  9: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 10: linear MI = 0.8112  MLP MI = 0.8113  ratio = 1.000
+  layer 11: linear MI = 0.8108  MLP MI = 0.8113  ratio = 0.999
+  layer 12: linear MI = 0.8102  MLP MI = 0.8113  ratio = 0.999
+  layer 13: linear MI = 0.8106  MLP MI = 0.8113  ratio = 0.999
+  layer 14: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 15: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 16: linear MI = 0.8113  MLP MI = 0.8112  ratio = 1.000
+  layer 17: linear MI = 0.8113  MLP MI = 0.8112  ratio = 1.000
+  layer 18: linear MI = 0.8113  MLP MI = 0.8108  ratio = 1.001
+  layer 19: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 20: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 21: linear MI = 0.8111  MLP MI = 0.8113  ratio = 1.000
+  layer 22: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 23: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 24: linear MI = 0.8113  MLP MI = 0.8113  ratio = 1.000
+  layer 25: linear MI = 0.8113  MLP MI = 0.2935  ratio = 2.764
+  layer 26: linear MI = 0.8113  MLP MI = 0.2908  ratio = 2.790
+  layer 27: linear MI = 0.8113  MLP MI = 0.3024  ratio = 2.683
+  layer 28: linear MI = 0.8113  MLP MI = 0.0000  ratio = 811278124.458
+
+=== Best layer (0) ===
+  Linear MI: 0.8113 bits
+  MLP MI:    0.8113 bits
+  Ratio:     1.000
+>> Assumption 1 SUPPORTED: linear probe recovers ≥70% of MLP MI
+
+Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/probe.csv, /root/autodl-tmp/option_b_analyses/results/probe_assumption1/probe.json
