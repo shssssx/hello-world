@@ -1,0 +1,258 @@
+{
+  "5": {
+    "v0_delta": 0.6230111122131348,
+    "coverage": 0.9743,
+    "A0": {
+      "ce": 2.7408,
+      "delta": 0.623,
+      "recovery": -0.0
+    },
+    "A1": {
+      "ce": 2.1961,
+      "delta": 0.0784,
+      "recovery": 0.8742
+    },
+    "A3": {
+      "ce": 2.6465,
+      "delta": 0.5287,
+      "recovery": 0.1513
+    },
+    "A2_lam1": {
+      "ce": 2.1997,
+      "delta": 0.0819,
+      "recovery": 0.8685
+    },
+    "A2_lam5": {
+      "ce": 2.2131,
+      "delta": 0.0953,
+      "recovery": 0.847
+    },
+    "A2_lam20": {
+      "ce": 2.2398,
+      "delta": 0.122,
+      "recovery": 0.8041
+    },
+    "A2_lam100": {
+      "ce": 2.293,
+      "delta": 0.1752,
+      "recovery": 0.7188
+    },
+    "oracle_r16": {
+      "ce": 2.3191,
+      "delta": 0.2014,
+      "recovery": 0.6768
+    },
+    "oracle_r32": {
+      "ce": 2.247,
+      "delta": 0.1292,
+      "recovery": 0.7926
+    },
+    "oracle_r64": {
+      "ce": 2.1933,
+      "delta": 0.0755,
+      "recovery": 0.8788
+    },
+    "oracle_r128": {
+      "ce": 2.155,
+      "delta": 0.0373,
+      "recovery": 0.9401
+    },
+    "oracle_r256": {
+      "ce": 2.1317,
+      "delta": 0.014,
+      "recovery": 0.9776
+    }
+  },
+  "11": {
+    "v0_delta": 0.45355939865112305,
+    "coverage": 0.9743,
+    "A0": {
+      "ce": 2.5713,
+      "delta": 0.4536,
+      "recovery": 0.0
+    },
+    "A1": {
+      "ce": 2.3049,
+      "delta": 0.1871,
+      "recovery": 0.5875
+    },
+    "A3": {
+      "ce": 2.5046,
+      "delta": 0.3868,
+      "recovery": 0.1472
+    },
+    "A2_lam1": {
+      "ce": 2.3015,
+      "delta": 0.1837,
+      "recovery": 0.595
+    },
+    "A2_lam5": {
+      "ce": 2.3017,
+      "delta": 0.1839,
+      "recovery": 0.5945
+    },
+    "A2_lam20": {
+      "ce": 2.3062,
+      "delta": 0.1885,
+      "recovery": 0.5844
+    },
+    "A2_lam100": {
+      "ce": 2.3171,
+      "delta": 0.1993,
+      "recovery": 0.5605
+    },
+    "oracle_r16": {
+      "ce": 2.3329,
+      "delta": 0.2151,
+      "recovery": 0.5257
+    },
+    "oracle_r32": {
+      "ce": 2.287,
+      "delta": 0.1692,
+      "recovery": 0.6269
+    },
+    "oracle_r64": {
+      "ce": 2.2432,
+      "delta": 0.1254,
+      "recovery": 0.7235
+    },
+    "oracle_r128": {
+      "ce": 2.2008,
+      "delta": 0.083,
+      "recovery": 0.817
+    },
+    "oracle_r256": {
+      "ce": 2.1557,
+      "delta": 0.038,
+      "recovery": 0.9163
+    }
+  },
+  "17": {
+    "v0_delta": 0.5728280544281006,
+    "coverage": 0.9743,
+    "A0": {
+      "ce": 2.6906,
+      "delta": 0.5728,
+      "recovery": -0.0
+    },
+    "A1": {
+      "ce": 2.1896,
+      "delta": 0.0718,
+      "recovery": 0.8747
+    },
+    "A3": {
+      "ce": 2.302,
+      "delta": 0.1842,
+      "recovery": 0.6784
+    },
+    "A2_lam1": {
+      "ce": 2.1893,
+      "delta": 0.0716,
+      "recovery": 0.875
+    },
+    "A2_lam5": {
+      "ce": 2.1956,
+      "delta": 0.0778,
+      "recovery": 0.8641
+    },
+    "A2_lam20": {
+      "ce": 2.209,
+      "delta": 0.0912,
+      "recovery": 0.8408
+    },
+    "A2_lam100": {
+      "ce": 2.2319,
+      "delta": 0.1141,
+      "recovery": 0.8008
+    },
+    "oracle_r16": {
+      "ce": 2.3072,
+      "delta": 0.1894,
+      "recovery": 0.6693
+    },
+    "oracle_r32": {
+      "ce": 2.2729,
+      "delta": 0.1552,
+      "recovery": 0.7291
+    },
+    "oracle_r64": {
+      "ce": 2.2332,
+      "delta": 0.1154,
+      "recovery": 0.7985
+    },
+    "oracle_r128": {
+      "ce": 2.1887,
+      "delta": 0.071,
+      "recovery": 0.8761
+    },
+    "oracle_r256": {
+      "ce": 2.1488,
+      "delta": 0.031,
+      "recovery": 0.9458
+    }
+  },
+  "23": {
+    "v0_delta": 0.07748174667358398,
+    "coverage": 0.9743,
+    "A0": {
+      "ce": 2.1952,
+      "delta": 0.0775,
+      "recovery": -0.0
+    },
+    "A1": {
+      "ce": 2.1361,
+      "delta": 0.0183,
+      "recovery": 0.7637
+    },
+    "A3": {
+      "ce": 2.1591,
+      "delta": 0.0414,
+      "recovery": 0.4659
+    },
+    "A2_lam1": {
+      "ce": 2.1358,
+      "delta": 0.0181,
+      "recovery": 0.7666
+    },
+    "A2_lam5": {
+      "ce": 2.1363,
+      "delta": 0.0185,
+      "recovery": 0.7607
+    },
+    "A2_lam20": {
+      "ce": 2.1376,
+      "delta": 0.0198,
+      "recovery": 0.744
+    },
+    "A2_lam100": {
+      "ce": 2.1403,
+      "delta": 0.0225,
+      "recovery": 0.7097
+    },
+    "oracle_r16": {
+      "ce": 2.1518,
+      "delta": 0.034,
+      "recovery": 0.5609
+    },
+    "oracle_r32": {
+      "ce": 2.1472,
+      "delta": 0.0294,
+      "recovery": 0.6203
+    },
+    "oracle_r64": {
+      "ce": 2.141,
+      "delta": 0.0232,
+      "recovery": 0.7005
+    },
+    "oracle_r128": {
+      "ce": 2.134,
+      "delta": 0.0163,
+      "recovery": 0.79
+    },
+    "oracle_r256": {
+      "ce": 2.1264,
+      "delta": 0.0087,
+      "recovery": 0.8883
+    }
+  }
+}
