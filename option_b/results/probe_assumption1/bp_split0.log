@@ -1,0 +1,44 @@
+Loaded /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.316
+Loaded /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.352
+Loaded /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.320
+
+All-seed score stats: mean=0.329, std=0.374, min=0.000, max=1.000
+
+Probing 29 layers, top-20 PCs, n=150 examples total...
+  layer  0:  R²_lin=-0.128  R²_NL=-0.124 (mlp)  ratio=None  (PCA 100.0%)
+  layer  1:  R²_lin=-0.405  R²_NL=+0.191 (mlp)  ratio=-2.1194380965352093  (PCA 88.2%)
+  layer  2:  R²_lin=-0.363  R²_NL=+0.145 (mlp)  ratio=-2.513268996063446  (PCA 87.3%)
+  layer  3:  R²_lin=-0.209  R²_NL=+0.095 (mlp)  ratio=-2.206307558606319  (PCA 88.4%)
+  layer  4:  R²_lin=-0.331  R²_NL=+0.371 (mlp)  ratio=-0.8925243822595722  (PCA 88.1%)
+  layer  5:  R²_lin=+0.068  R²_NL=+0.030 (mlp)  ratio=2.2597136401673685  (PCA 89.7%)
+  layer  6:  R²_lin=+0.038  R²_NL=+0.066 (mlp)  ratio=0.582654403353644  (PCA 89.6%)
+  layer  7:  R²_lin=+0.114  R²_NL=+0.192 (mlp)  ratio=0.5952650224469103  (PCA 89.8%)
+  layer  8:  R²_lin=+0.164  R²_NL=+0.082 (mlp)  ratio=1.9987512868667756  (PCA 89.0%)
+  layer  9:  R²_lin=+0.251  R²_NL=+0.165 (mlp)  ratio=1.5221082570352782  (PCA 88.7%)
+  layer 10:  R²_lin=+0.055  R²_NL=+0.232 (mlp)  ratio=0.23783596419678868  (PCA 89.6%)
+  layer 11:  R²_lin=+0.071  R²_NL=+0.266 (mlp)  ratio=0.2659727308640745  (PCA 89.4%)
+  layer 12:  R²_lin=+0.104  R²_NL=+0.251 (mlp)  ratio=0.41549333380593045  (PCA 88.5%)
+  layer 13:  R²_lin=+0.040  R²_NL=+0.182 (mlp)  ratio=0.2203319438173734  (PCA 88.2%)
+  layer 14:  R²_lin=-0.038  R²_NL=+0.176 (mlp)  ratio=-0.21415986185403993  (PCA 89.2%)
+  layer 15:  R²_lin=+0.071  R²_NL=+0.255 (mlp)  ratio=0.2765640092507075  (PCA 89.1%)
+  layer 16:  R²_lin=+0.006  R²_NL=+0.297 (mlp)  ratio=0.018899621658164084  (PCA 89.0%)
+  layer 17:  R²_lin=+0.111  R²_NL=+0.388 (mlp)  ratio=0.28734539844727897  (PCA 88.5%)
+  layer 18:  R²_lin=-0.008  R²_NL=+0.422 (mlp)  ratio=-0.020048924971592226  (PCA 88.3%)
+  layer 19:  R²_lin=+0.033  R²_NL=+0.270 (mlp)  ratio=0.12395371011408673  (PCA 87.8%)
+  layer 20:  R²_lin=+0.155  R²_NL=+0.260 (mlp)  ratio=0.5975052184243572  (PCA 88.1%)
+  layer 21:  R²_lin=+0.144  R²_NL=+0.229 (mlp)  ratio=0.6289936652005076  (PCA 87.9%)
+  layer 22:  R²_lin=+0.291  R²_NL=+0.448 (mlp)  ratio=0.6480778148494438  (PCA 87.1%)
+  layer 23:  R²_lin=+0.477  R²_NL=+0.422 (mlp)  ratio=1.1316966101138095  (PCA 86.2%)
+  layer 24:  R²_lin=+0.555  R²_NL=+0.556 (mlp)  ratio=0.9993592723507079  (PCA 85.4%)
+  layer 25:  R²_lin=+0.518  R²_NL=+0.563 (mlp)  ratio=0.9198609302979662  (PCA 85.7%)
+  layer 26:  R²_lin=+0.545  R²_NL=+0.565 (mlp)  ratio=0.9646581486015284  (PCA 86.0%)
+  layer 27:  R²_lin=+0.548  R²_NL=+0.558 (mlp)  ratio=0.9821095136215727  (PCA 84.8%)
+  layer 28:  R²_lin=+0.508  R²_NL=+0.538 (mlp)  ratio=0.9443445762783858  (PCA 83.9%)
+
+=== Best layer (26) ===
+  R² linear:        0.545
+  R² best nonlinear:0.565 (mlp)
+  Ratio:            0.9646581486015284
+>> Assumption 1 SUPPORTED: linear recovers ≥70% of nonlinear R²
+
+Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/bp_split0.csv, /root/autodl-tmp/option_b_analyses/results/probe_assumption1/bp_split0.json
