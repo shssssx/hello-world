@@ -1,22 +1,59 @@
-### seq=6  2026-05-25T05:38:36Z
+### seq=7  2026-05-25T05:54:27Z
 ### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
 ----- BEGIN -----
-'/root/autodl-tmp/artifacts_llama/multilayer_cka_aggregate.json' -> '/root/hello-world/option_b/results/cka/multilayer_cka_aggregate.json'
-'/root/autodl-tmp/artifacts_llama/seed1/multilayer_cka_summary.json' -> '/root/hello-world/option_b/results/cka/seed1_multilayer_cka_summary.json'
-'/root/autodl-tmp/artifacts_llama/seed1/multilayer_cka.csv' -> '/root/hello-world/option_b/results/cka/seed1_multilayer_cka.csv'
-'/root/autodl-tmp/artifacts_llama/seed2/multilayer_cka_summary.json' -> '/root/hello-world/option_b/results/cka/seed2_multilayer_cka_summary.json'
-'/root/autodl-tmp/artifacts_llama/seed2/multilayer_cka.csv' -> '/root/hello-world/option_b/results/cka/seed2_multilayer_cka.csv'
-'/root/autodl-tmp/artifacts_llama/seed3/multilayer_cka_summary.json' -> '/root/hello-world/option_b/results/cka/seed3_multilayer_cka_summary.json'
-'/root/autodl-tmp/artifacts_llama/seed3/multilayer_cka.csv' -> '/root/hello-world/option_b/results/cka/seed3_multilayer_cka.csv'
---- delivered back ---
-total 48
-drwxr-xr-x 2 root root 4096 May 25 13:38 .
-drwxr-xr-x 3 root root   25 May 25 13:38 ..
--rw-r--r-- 1 root root 7482 May 25 13:38 multilayer_cka_aggregate.json
--rw-r--r-- 1 root root 2847 May 25 13:38 seed1_multilayer_cka.csv
--rw-r--r-- 1 root root 7645 May 25 13:38 seed1_multilayer_cka_summary.json
--rw-r--r-- 1 root root 2855 May 25 13:38 seed2_multilayer_cka.csv
--rw-r--r-- 1 root root 7652 May 25 13:38 seed2_multilayer_cka_summary.json
--rw-r--r-- 1 root root 2858 May 25 13:38 seed3_multilayer_cka.csv
--rw-r--r-- 1 root root 7656 May 25 13:38 seed3_multilayer_cka_summary.json
+=== ls /root/autodl-tmp/models ===
+total 4
+drwxr-xr-x 5 root root   65 Apr 28 23:46 .
+drwxr-xr-x 6 root root 4096 May 25 13:34 ..
+drwxr-xr-x 3 root root   26 Apr 28 23:46 ._____temp
+drwxr-xr-x 2 root root   48 Apr 28 23:46 .lock
+drwxr-xr-x 3 root root   74 Apr 29 00:02 Qwen
+=== ls /root/autodl-tmp/models/Qwen ===
+total 4
+drwxr-xr-x 3 root root   74 Apr 29 00:02 .
+drwxr-xr-x 5 root root   65 Apr 28 23:46 ..
+lrwxrwxrwx 1 root root   50 Apr 29 00:02 Qwen2.5-7B-Instruct -> /root/autodl-tmp/models/Qwen/Qwen2___5-7B-Instruct
+drwxr-xr-x 2 root root 4096 Apr 29 00:02 Qwen2___5-7B-Instruct
+=== find Qwen2.5-7B-Instruct dirs ===
+/root/autodl-tmp/models/._____temp/Qwen/Qwen2.5-7B-Instruct
+/root/autodl-tmp/models/._____temp/Qwen/Qwen2.5-7B-Instruct
+=== HF hub cache ===
+total 4
+drwxr-xr-x 2 root root 33 Apr 29 00:04 .
+drwxr-xr-x 4 root root 45 Apr 29 00:26 ..
+-rw-r--r-- 1 root root  1 Apr 29 00:04 version.txt
+=== teacher_model config (what base were these FT'd from?) ===
+{
+  "_name_or_path": "/root/autodl-tmp/models/Qwen/Qwen2___5-7B-Instruct",
+  "architectures": [
+    "Qwen2ForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 3584,
+  "initializer_range": 0.02,
+  "intermediate_size": 18944,
+  "max_position_embeddings": 32768,
+  "max_window_layers": 28,
+  "model_type": "qwen2",
+  "num_attention_heads": 28,
+  "num_hidden_layers": 28,
+  "num_key_value_heads": 4,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 1000000.0,
+  "sliding_window": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.0",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "vocab_size": 152064
+}
+=== sizes / disk ===
+15G	/root/autodl-tmp/models/
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/md0        150G  100G   51G  67% /root/autodl-tmp
 ----- END (rc=0) -----
