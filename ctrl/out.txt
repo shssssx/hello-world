@@ -1,302 +1,49 @@
-### seq=40  2026-05-25T13:54:52Z
+### seq=41  2026-05-25T14:21:51Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9775.84it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8668.55it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   seqs = torch.load(cache)
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
-[anchor] baseline CE = 2.1178 (v0 2.1178)
-[ridge_init] L5: calibrating ...
-[ridge_init] L5 A1=+0.874 r64_unc Rtot=+0.941 Rctx=0.5338 | r64_cap.15=0.3083 cap.3=0.485 cap.5=0.5338
-[ridge_init] L6: calibrating ...
-[ridge_init] L6 A1=+0.234 r64_unc Rtot=+0.835 Rctx=0.7839 | r64_cap.15=0.4989 cap.3=0.7047 cap.5=0.7839
-[ridge_init] L7: calibrating ...
-[ridge_init] L7 A1=+0.219 r64_unc Rtot=+0.802 Rctx=0.7466 | r64_cap.15=0.4173 cap.3=0.6512 cap.5=0.7466
-[ridge_init] L11: calibrating ...
-[ridge_init] L11 A1=+0.587 r64_unc Rtot=+0.825 Rctx=0.5751 | r64_cap.15=0.2721 cap.3=0.4641 cap.5=0.5751
-[ridge_init] wrote v1b_ridge/ridge_init_zeroshot.json
-===== ridge_init_zeroshot.json =====
+[anchor] baseline CE = 2.1177 (v0 2.1178)
+[ridge_ft] L6: calibrating ...
+[ridge_ft] L6 A1=+0.234 | R_context: ridge_notrain=0.7833 ridge_ft=0.7835 random_ft=0.3173
+[ridge_ft] L7: calibrating ...
+[ridge_ft] L7 A1=+0.219 | R_context: ridge_notrain=0.7462 ridge_ft=0.7443 random_ft=0.0603
+[ridge_ft] L11: calibrating ...
+[ridge_ft] L11 A1=+0.587 | R_context: ridge_notrain=0.5747 ridge_ft=0.5598 random_ft=-0.3444
+[ridge_ft] wrote v1b_ridge/ridge_ft.json
+===== ridge_ft.json =====
 {
-  "5": {
-    "v0_delta": 0.6230111122131348,
-    "A1_recovery": 0.8741,
-    "best_lambda": 0.001,
-    "context_delta_A1": 0.0784,
-    "variants": {
-      "r16_cap0": {
-        "ce": 2.1725,
-        "R_total": 0.9121,
-        "R_context": 0.3021
-      },
-      "r16_cap0.15": {
-        "ce": 2.1789,
-        "R_total": 0.9018,
-        "R_context": 0.22
-      },
-      "r16_cap0.3": {
-        "ce": 2.1725,
-        "R_total": 0.9121,
-        "R_context": 0.3019
-      },
-      "r16_cap0.5": {
-        "ce": 2.1725,
-        "R_total": 0.9121,
-        "R_context": 0.3021
-      },
-      "r64_cap0": {
-        "ce": 2.1543,
-        "R_total": 0.9413,
-        "R_context": 0.5338
-      },
-      "r64_cap0.15": {
-        "ce": 2.172,
-        "R_total": 0.9129,
-        "R_context": 0.3083
-      },
-      "r64_cap0.3": {
-        "ce": 2.1582,
-        "R_total": 0.9352,
-        "R_context": 0.485
-      },
-      "r64_cap0.5": {
-        "ce": 2.1543,
-        "R_total": 0.9413,
-        "R_context": 0.5338
-      },
-      "r256_cap0": {
-        "ce": 2.1379,
-        "R_total": 0.9676,
-        "R_context": 0.7429
-      },
-      "r256_cap0.15": {
-        "ce": 2.1663,
-        "R_total": 0.9221,
-        "R_context": 0.3814
-      },
-      "r256_cap0.3": {
-        "ce": 2.1484,
-        "R_total": 0.9508,
-        "R_context": 0.609
-      },
-      "r256_cap0.5": {
-        "ce": 2.138,
-        "R_total": 0.9676,
-        "R_context": 0.7424
-      }
-    }
-  },
   "6": {
-    "v0_delta": 0.3235793113708496,
-    "A1_recovery": 0.2344,
-    "best_lambda": 0.1,
-    "context_delta_A1": 0.2477,
-    "variants": {
-      "r16_cap0": {
-        "ce": 2.1855,
-        "R_total": 0.7905,
-        "R_context": 0.7264
-      },
-      "r16_cap0.15": {
-        "ce": 2.2283,
-        "R_total": 0.6583,
-        "R_context": 0.5537
-      },
-      "r16_cap0.3": {
-        "ce": 2.187,
-        "R_total": 0.786,
-        "R_context": 0.7205
-      },
-      "r16_cap0.5": {
-        "ce": 2.1855,
-        "R_total": 0.7905,
-        "R_context": 0.7264
-      },
-      "r64_cap0": {
-        "ce": 2.1713,
-        "R_total": 0.8345,
-        "R_context": 0.7839
-      },
-      "r64_cap0.15": {
-        "ce": 2.2419,
-        "R_total": 0.6163,
-        "R_context": 0.4989
-      },
-      "r64_cap0.3": {
-        "ce": 2.1909,
-        "R_total": 0.7739,
-        "R_context": 0.7047
-      },
-      "r64_cap0.5": {
-        "ce": 2.1713,
-        "R_total": 0.8345,
-        "R_context": 0.7839
-      },
-      "r256_cap0": {
-        "ce": 2.1583,
-        "R_total": 0.8748,
-        "R_context": 0.8364
-      },
-      "r256_cap0.15": {
-        "ce": 2.2502,
-        "R_total": 0.5906,
-        "R_context": 0.4653
-      },
-      "r256_cap0.3": {
-        "ce": 2.1941,
-        "R_total": 0.7642,
-        "R_context": 0.692
-      },
-      "r256_cap0.5": {
-        "ce": 2.1626,
-        "R_total": 0.8614,
-        "R_context": 0.819
-      }
-    }
+    "A1_recovery": 0.2342,
+    "best_lambda": 0.001,
+    "ridge_init_notrain": 0.7833,
+    "ridge_init_ft": 0.7835,
+    "random_init_ft": 0.3173
   },
   "7": {
-    "v0_delta": 0.26508402824401855,
-    "A1_recovery": 0.2192,
+    "A1_recovery": 0.2194,
     "best_lambda": 1,
-    "context_delta_A1": 0.207,
-    "variants": {
-      "r16_cap0": {
-        "ce": 2.1851,
-        "R_total": 0.7459,
-        "R_context": 0.6746
-      },
-      "r16_cap0.15": {
-        "ce": 2.2278,
-        "R_total": 0.5849,
-        "R_context": 0.4684
-      },
-      "r16_cap0.3": {
-        "ce": 2.1863,
-        "R_total": 0.7413,
-        "R_context": 0.6687
-      },
-      "r16_cap0.5": {
-        "ce": 2.1851,
-        "R_total": 0.7459,
-        "R_context": 0.6746
-      },
-      "r64_cap0": {
-        "ce": 2.1702,
-        "R_total": 0.8021,
-        "R_context": 0.7466
-      },
-      "r64_cap0.15": {
-        "ce": 2.2384,
-        "R_total": 0.545,
-        "R_context": 0.4173
-      },
-      "r64_cap0.3": {
-        "ce": 2.19,
-        "R_total": 0.7276,
-        "R_context": 0.6512
-      },
-      "r64_cap0.5": {
-        "ce": 2.1702,
-        "R_total": 0.8021,
-        "R_context": 0.7466
-      },
-      "r256_cap0": {
-        "ce": 2.1551,
-        "R_total": 0.8592,
-        "R_context": 0.8196
-      },
-      "r256_cap0.15": {
-        "ce": 2.2447,
-        "R_total": 0.5212,
-        "R_context": 0.3867
-      },
-      "r256_cap0.3": {
-        "ce": 2.1936,
-        "R_total": 0.714,
-        "R_context": 0.6337
-      },
-      "r256_cap0.5": {
-        "ce": 2.1606,
-        "R_total": 0.8383,
-        "R_context": 0.7929
-      }
-    }
+    "ridge_init_notrain": 0.7462,
+    "ridge_init_ft": 0.7443,
+    "random_init_ft": 0.0603
   },
   "11": {
-    "v0_delta": 0.45355939865112305,
-    "A1_recovery": 0.5874,
-    "best_lambda": 0.1,
-    "context_delta_A1": 0.1871,
-    "variants": {
-      "r16_cap0": {
-        "ce": 2.2192,
-        "R_total": 0.7764,
-        "R_context": 0.458
-      },
-      "r16_cap0.15": {
-        "ce": 2.2502,
-        "R_total": 0.708,
-        "R_context": 0.2922
-      },
-      "r16_cap0.3": {
-        "ce": 2.2192,
-        "R_total": 0.7764,
-        "R_context": 0.4579
-      },
-      "r16_cap0.5": {
-        "ce": 2.2192,
-        "R_total": 0.7764,
-        "R_context": 0.458
-      },
-      "r64_cap0": {
-        "ce": 2.1973,
-        "R_total": 0.8247,
-        "R_context": 0.5751
-      },
-      "r64_cap0.15": {
-        "ce": 2.254,
-        "R_total": 0.6997,
-        "R_context": 0.2721
-      },
-      "r64_cap0.3": {
-        "ce": 2.218,
-        "R_total": 0.7789,
-        "R_context": 0.4641
-      },
-      "r64_cap0.5": {
-        "ce": 2.1973,
-        "R_total": 0.8247,
-        "R_context": 0.5751
-      },
-      "r256_cap0": {
-        "ce": 2.1737,
-        "R_total": 0.8768,
-        "R_context": 0.7013
-      },
-      "r256_cap0.15": {
-        "ce": 2.252,
-        "R_total": 0.7039,
-        "R_context": 0.2823
-      },
-      "r256_cap0.3": {
-        "ce": 2.2132,
-        "R_total": 0.7895,
-        "R_context": 0.4897
-      },
-      "r256_cap0.5": {
-        "ce": 2.1817,
-        "R_total": 0.8589,
-        "R_context": 0.658
-      }
-    }
+    "A1_recovery": 0.5873,
+    "best_lambda": 0.001,
+    "ridge_init_notrain": 0.5747,
+    "ridge_init_ft": 0.5598,
+    "random_init_ft": -0.3444
   }
-}[claude/zen-allen-7Y8Bx e425e24] v1b ridge-init zero-shot results
- 2 files changed, 275 insertions(+)
- create mode 100644 outputs/v1a/ridgeinit.done
- create mode 100644 outputs/v1b_ridge/ridge_init_zeroshot.json
+}[claude/zen-allen-7Y8Bx b9bcfa8] v1b ridge finetune results
+ 2 files changed, 24 insertions(+)
+ create mode 100644 outputs/v1a/ridgeft.done
+ create mode 100644 outputs/v1b_ridge/ridge_ft.json
 SELFPUSH_OK
 ----- END (rc=0) -----
