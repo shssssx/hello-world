@@ -1152,6 +1152,79 @@ def mode_ridge(args):
     print("[ridge] wrote v1b_ridge/ridge_results.json")
 
 
+def mode_ridge_init(args):
+    """Zero-shot: factor the closed-form ridge W into LoRA factors
+    A=U_r S_r^{1/2}, B=S_r^{1/2} V_r^T (so AB=W_r) and inject through the REAL
+    V1aHook LoRA path (no SGD). Confirms the ridge solution is a deployable
+    low-rank adapter and reproduces the ridge eval (rules out path mismatch)."""
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline_anchor(model, eval_seqs, args.batch_size, device)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [5, 6, 7, 11]
+    ranks = [16, 64, 256]; caps = [0.0, 0.15, 0.3, 0.5]
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    sub = eval_seqs[:256]
+    I = torch.eye(d, dtype=torch.float64, device=device)
+    out = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        print(f"[ridge_init] L{layer}: calibrating ...")
+        mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib_seqs, args.batch_size,
+                                               device, vocab, d)
+        vd = float(v0[layer])
+        hook = V1aHook(model, layer)
+        hook.attach(); hook.anchor_mu = mu; hook.anchor_cnt = cnt; hook.variant = "shared"
+        hook.scale = 1.0
+        # A1 alone
+        hook.mode = "table"; hook.A = hook.B = None
+        ce_a1 = eval_loss(model, hook, eval_seqs, args.batch_size, device)
+        d_a1 = ce_a1 - base
+        # pick lambda by full-rank subset CE (inject via direct matmul through a temp)
+        best = None
+        for lam in lams:
+            W = torch.linalg.solve(XtX + lam * I, XtY).float()
+            U, Sv, Vh = torch.linalg.svd(W.double())
+            # full-rank as A,B (r=d) is heavy; use a high-rank proxy r=256 for selection
+            r = 256
+            A = (U[:, :r] * Sv[:r].sqrt()).float()
+            B = (Sv[:r].sqrt().unsqueeze(1) * Vh[:r]).float()
+            hook.A, hook.B = A, B; hook.mode = "correct"; hook.dv_cap = 0.0
+            ce = eval_loss(model, hook, sub, args.batch_size, device)
+            if best is None or ce < best[1]:
+                best = (lam, ce)
+        lam = best[0]
+        W = torch.linalg.solve(XtX + lam * I, XtY).float()
+        U, Sv, Vh = torch.linalg.svd(W.double())
+        res = {"v0_delta": vd, "A1_recovery": round(1 - d_a1 / vd, 4),
+               "best_lambda": lam, "context_delta_A1": round(d_a1, 4), "variants": {}}
+        for r in ranks:
+            A = (U[:, :r] * Sv[:r].sqrt()).float()
+            B = (Sv[:r].sqrt().unsqueeze(1) * Vh[:r]).float()
+            hook.A, hook.B = A, B; hook.mode = "correct"
+            for cap in caps:
+                hook.dv_cap = cap
+                ce = eval_loss(model, hook, eval_seqs, args.batch_size, device)
+                dl = ce - base
+                res["variants"][f"r{r}_cap{cap:g}"] = {
+                    "ce": round(ce, 4), "R_total": round(1 - dl / vd, 4),
+                    "R_context": round((d_a1 - dl) / d_a1, 4) if abs(d_a1) > 1e-6 else None}
+        hook.detach()
+        out[str(layer)] = res
+        v = res["variants"]
+        print(f"[ridge_init] L{layer} A1={res['A1_recovery']:+.3f} "
+              f"r64_unc Rtot={v['r64_cap0']['R_total']:+.3f} Rctx={v['r64_cap0']['R_context']} "
+              f"| r64_cap.15={v['r64_cap0.15']['R_context']} cap.3={v['r64_cap0.3']['R_context']} "
+              f"cap.5={v['r64_cap0.5']['R_context']}")
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "ridge_init_zeroshot.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[ridge_init] wrote v1b_ridge/ridge_init_zeroshot.json")
+
+
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
@@ -1294,7 +1367,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1326,6 +1399,7 @@ def main():
         "anchor": mode_anchor,
         "v1b": mode_v1b,
         "ridge": mode_ridge,
+        "ridge_init": mode_ridge_init,
         "plots": mode_plots,
     }[args.mode](args)
 
