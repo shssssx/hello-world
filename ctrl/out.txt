@@ -1,9 +1,9 @@
-### seq=39  2026-05-25T13:30:02Z
+### seq=40  2026-05-25T13:54:52Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9363.79it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9775.84it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
@@ -11,312 +11,292 @@
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
 [anchor] baseline CE = 2.1178 (v0 2.1178)
-[ridge] L5: calibrating ...
-[ridge] L5 A1=+0.874 full_unc R_total=+0.976 R_context=0.8053 | full_cap R_ctx=0.4106 (lam=1000)
-[ridge] L6: calibrating ...
-[ridge] L6 A1=+0.234 full_unc R_total=+0.894 R_context=0.8621 | full_cap R_ctx=0.4625 (lam=0.0001)
-[ridge] L7: calibrating ...
-[ridge] L7 A1=+0.220 full_unc R_total=+0.889 R_context=0.8579 | full_cap R_ctx=0.3805 (lam=0.001)
-[ridge] L11: calibrating ...
-[ridge] L11 A1=+0.587 full_unc R_total=+0.905 R_context=0.77 | full_cap R_ctx=0.3171 (lam=0.1)
-[ridge] L20: calibrating ...
-[ridge] L20 A1=+0.845 full_unc R_total=+0.955 R_context=0.7081 | full_cap R_ctx=0.3204 (lam=1000)
-[ridge] wrote v1b_ridge/ridge_results.json
-===== ridge_results.json =====
+[ridge_init] L5: calibrating ...
+[ridge_init] L5 A1=+0.874 r64_unc Rtot=+0.941 Rctx=0.5338 | r64_cap.15=0.3083 cap.3=0.485 cap.5=0.5338
+[ridge_init] L6: calibrating ...
+[ridge_init] L6 A1=+0.234 r64_unc Rtot=+0.835 Rctx=0.7839 | r64_cap.15=0.4989 cap.3=0.7047 cap.5=0.7839
+[ridge_init] L7: calibrating ...
+[ridge_init] L7 A1=+0.219 r64_unc Rtot=+0.802 Rctx=0.7466 | r64_cap.15=0.4173 cap.3=0.6512 cap.5=0.7466
+[ridge_init] L11: calibrating ...
+[ridge_init] L11 A1=+0.587 r64_unc Rtot=+0.825 Rctx=0.5751 | r64_cap.15=0.2721 cap.3=0.4641 cap.5=0.5751
+[ridge_init] wrote v1b_ridge/ridge_init_zeroshot.json
+===== ridge_init_zeroshot.json =====
 {
   "5": {
     "v0_delta": 0.6230111122131348,
-    "baseline": 2.1177585876405183,
-    "A1_ce": 2.1961,
-    "A1_recovery": 0.8742,
-    "best_lambda": 1000,
+    "A1_recovery": 0.8741,
+    "best_lambda": 0.001,
     "context_delta_A1": 0.0784,
     "variants": {
-      "full_uncapped": {
-        "ce": 2.133,
-        "delta": 0.0153,
-        "R_total": 0.9755,
-        "R_context": 0.8053
-      },
-      "r16_uncapped": {
-        "ce": 2.1726,
-        "delta": 0.0548,
-        "R_total": 0.912,
-        "R_context": 0.3008
-      },
-      "r64_uncapped": {
-        "ce": 2.1544,
-        "delta": 0.0367,
-        "R_total": 0.9411,
-        "R_context": 0.5319
-      },
-      "r256_uncapped": {
-        "ce": 2.138,
-        "delta": 0.0202,
-        "R_total": 0.9676,
-        "R_context": 0.7422
-      },
-      "full_cap0.15": {
-        "ce": 2.164,
-        "delta": 0.0462,
-        "R_total": 0.9259,
-        "R_context": 0.4106
+      "r16_cap0": {
+        "ce": 2.1725,
+        "R_total": 0.9121,
+        "R_context": 0.3021
       },
       "r16_cap0.15": {
-        "ce": 2.179,
-        "delta": 0.0613,
-        "R_total": 0.9016,
-        "R_context": 0.2181
+        "ce": 2.1789,
+        "R_total": 0.9018,
+        "R_context": 0.22
+      },
+      "r16_cap0.3": {
+        "ce": 2.1725,
+        "R_total": 0.9121,
+        "R_context": 0.3019
+      },
+      "r16_cap0.5": {
+        "ce": 2.1725,
+        "R_total": 0.9121,
+        "R_context": 0.3021
+      },
+      "r64_cap0": {
+        "ce": 2.1543,
+        "R_total": 0.9413,
+        "R_context": 0.5338
       },
       "r64_cap0.15": {
-        "ce": 2.1722,
-        "delta": 0.0545,
-        "R_total": 0.9126,
-        "R_context": 0.3051
+        "ce": 2.172,
+        "R_total": 0.9129,
+        "R_context": 0.3083
+      },
+      "r64_cap0.3": {
+        "ce": 2.1582,
+        "R_total": 0.9352,
+        "R_context": 0.485
+      },
+      "r64_cap0.5": {
+        "ce": 2.1543,
+        "R_total": 0.9413,
+        "R_context": 0.5338
+      },
+      "r256_cap0": {
+        "ce": 2.1379,
+        "R_total": 0.9676,
+        "R_context": 0.7429
       },
       "r256_cap0.15": {
         "ce": 2.1663,
-        "delta": 0.0486,
         "R_total": 0.9221,
-        "R_context": 0.3804
+        "R_context": 0.3814
+      },
+      "r256_cap0.3": {
+        "ce": 2.1484,
+        "R_total": 0.9508,
+        "R_context": 0.609
+      },
+      "r256_cap0.5": {
+        "ce": 2.138,
+        "R_total": 0.9676,
+        "R_context": 0.7424
       }
     }
   },
   "6": {
     "v0_delta": 0.3235793113708496,
-    "baseline": 2.1177585876405183,
-    "A1_ce": 2.3655,
     "A1_recovery": 0.2344,
-    "best_lambda": 0.0001,
+    "best_lambda": 0.1,
     "context_delta_A1": 0.2477,
     "variants": {
-      "full_uncapped": {
-        "ce": 2.1519,
-        "delta": 0.0342,
-        "R_total": 0.8945,
-        "R_context": 0.8621
-      },
-      "r16_uncapped": {
+      "r16_cap0": {
         "ce": 2.1855,
-        "delta": 0.0677,
-        "R_total": 0.7907,
-        "R_context": 0.7266
-      },
-      "r64_uncapped": {
-        "ce": 2.1714,
-        "delta": 0.0536,
-        "R_total": 0.8342,
-        "R_context": 0.7834
-      },
-      "r256_uncapped": {
-        "ce": 2.1583,
-        "delta": 0.0406,
-        "R_total": 0.8746,
-        "R_context": 0.8363
-      },
-      "full_cap0.15": {
-        "ce": 2.2509,
-        "delta": 0.1332,
-        "R_total": 0.5885,
-        "R_context": 0.4625
+        "R_total": 0.7905,
+        "R_context": 0.7264
       },
       "r16_cap0.15": {
         "ce": 2.2283,
-        "delta": 0.1106,
         "R_total": 0.6583,
-        "R_context": 0.5536
+        "R_context": 0.5537
+      },
+      "r16_cap0.3": {
+        "ce": 2.187,
+        "R_total": 0.786,
+        "R_context": 0.7205
+      },
+      "r16_cap0.5": {
+        "ce": 2.1855,
+        "R_total": 0.7905,
+        "R_context": 0.7264
+      },
+      "r64_cap0": {
+        "ce": 2.1713,
+        "R_total": 0.8345,
+        "R_context": 0.7839
       },
       "r64_cap0.15": {
         "ce": 2.2419,
-        "delta": 0.1242,
-        "R_total": 0.6162,
-        "R_context": 0.4987
+        "R_total": 0.6163,
+        "R_context": 0.4989
+      },
+      "r64_cap0.3": {
+        "ce": 2.1909,
+        "R_total": 0.7739,
+        "R_context": 0.7047
+      },
+      "r64_cap0.5": {
+        "ce": 2.1713,
+        "R_total": 0.8345,
+        "R_context": 0.7839
+      },
+      "r256_cap0": {
+        "ce": 2.1583,
+        "R_total": 0.8748,
+        "R_context": 0.8364
       },
       "r256_cap0.15": {
-        "ce": 2.2503,
-        "delta": 0.1325,
-        "R_total": 0.5905,
-        "R_context": 0.4652
+        "ce": 2.2502,
+        "R_total": 0.5906,
+        "R_context": 0.4653
+      },
+      "r256_cap0.3": {
+        "ce": 2.1941,
+        "R_total": 0.7642,
+        "R_context": 0.692
+      },
+      "r256_cap0.5": {
+        "ce": 2.1626,
+        "R_total": 0.8614,
+        "R_context": 0.819
       }
     }
   },
   "7": {
     "v0_delta": 0.26508402824401855,
-    "baseline": 2.1177585876405183,
-    "A1_ce": 2.3247,
-    "A1_recovery": 0.2195,
-    "best_lambda": 0.001,
-    "context_delta_A1": 0.2069,
+    "A1_recovery": 0.2192,
+    "best_lambda": 1,
+    "context_delta_A1": 0.207,
     "variants": {
-      "full_uncapped": {
-        "ce": 2.1472,
-        "delta": 0.0294,
-        "R_total": 0.8891,
-        "R_context": 0.8579
-      },
-      "r16_uncapped": {
+      "r16_cap0": {
         "ce": 2.1851,
-        "delta": 0.0673,
-        "R_total": 0.7461,
-        "R_context": 0.6747
-      },
-      "r64_uncapped": {
-        "ce": 2.1702,
-        "delta": 0.0525,
-        "R_total": 0.802,
-        "R_context": 0.7463
-      },
-      "r256_uncapped": {
-        "ce": 2.1552,
-        "delta": 0.0374,
-        "R_total": 0.8588,
-        "R_context": 0.8191
-      },
-      "full_cap0.15": {
-        "ce": 2.2459,
-        "delta": 0.1282,
-        "R_total": 0.5165,
-        "R_context": 0.3805
+        "R_total": 0.7459,
+        "R_context": 0.6746
       },
       "r16_cap0.15": {
-        "ce": 2.2277,
-        "delta": 0.1099,
-        "R_total": 0.5852,
-        "R_context": 0.4686
+        "ce": 2.2278,
+        "R_total": 0.5849,
+        "R_context": 0.4684
+      },
+      "r16_cap0.3": {
+        "ce": 2.1863,
+        "R_total": 0.7413,
+        "R_context": 0.6687
+      },
+      "r16_cap0.5": {
+        "ce": 2.1851,
+        "R_total": 0.7459,
+        "R_context": 0.6746
+      },
+      "r64_cap0": {
+        "ce": 2.1702,
+        "R_total": 0.8021,
+        "R_context": 0.7466
       },
       "r64_cap0.15": {
-        "ce": 2.2383,
-        "delta": 0.1205,
-        "R_total": 0.5453,
-        "R_context": 0.4175
+        "ce": 2.2384,
+        "R_total": 0.545,
+        "R_context": 0.4173
+      },
+      "r64_cap0.3": {
+        "ce": 2.19,
+        "R_total": 0.7276,
+        "R_context": 0.6512
+      },
+      "r64_cap0.5": {
+        "ce": 2.1702,
+        "R_total": 0.8021,
+        "R_context": 0.7466
+      },
+      "r256_cap0": {
+        "ce": 2.1551,
+        "R_total": 0.8592,
+        "R_context": 0.8196
       },
       "r256_cap0.15": {
         "ce": 2.2447,
-        "delta": 0.1269,
         "R_total": 0.5212,
-        "R_context": 0.3866
+        "R_context": 0.3867
+      },
+      "r256_cap0.3": {
+        "ce": 2.1936,
+        "R_total": 0.714,
+        "R_context": 0.6337
+      },
+      "r256_cap0.5": {
+        "ce": 2.1606,
+        "R_total": 0.8383,
+        "R_context": 0.7929
       }
     }
   },
   "11": {
     "v0_delta": 0.45355939865112305,
-    "baseline": 2.1177585876405183,
-    "A1_ce": 2.305,
-    "A1_recovery": 0.5872,
+    "A1_recovery": 0.5874,
     "best_lambda": 0.1,
-    "context_delta_A1": 0.1872,
+    "context_delta_A1": 0.1871,
     "variants": {
-      "full_uncapped": {
-        "ce": 2.1608,
-        "delta": 0.0431,
-        "R_total": 0.905,
-        "R_context": 0.77
-      },
-      "r16_uncapped": {
+      "r16_cap0": {
         "ce": 2.2192,
-        "delta": 0.1014,
         "R_total": 0.7764,
-        "R_context": 0.4582
-      },
-      "r64_uncapped": {
-        "ce": 2.1972,
-        "delta": 0.0794,
-        "R_total": 0.8249,
-        "R_context": 0.5757
-      },
-      "r256_uncapped": {
-        "ce": 2.1736,
-        "delta": 0.0558,
-        "R_total": 0.8769,
-        "R_context": 0.7018
-      },
-      "full_cap0.15": {
-        "ce": 2.2456,
-        "delta": 0.1278,
-        "R_total": 0.7181,
-        "R_context": 0.3171
+        "R_context": 0.458
       },
       "r16_cap0.15": {
         "ce": 2.2502,
-        "delta": 0.1325,
-        "R_total": 0.7079,
-        "R_context": 0.2924
+        "R_total": 0.708,
+        "R_context": 0.2922
+      },
+      "r16_cap0.3": {
+        "ce": 2.2192,
+        "R_total": 0.7764,
+        "R_context": 0.4579
+      },
+      "r16_cap0.5": {
+        "ce": 2.2192,
+        "R_total": 0.7764,
+        "R_context": 0.458
+      },
+      "r64_cap0": {
+        "ce": 2.1973,
+        "R_total": 0.8247,
+        "R_context": 0.5751
       },
       "r64_cap0.15": {
         "ce": 2.254,
-        "delta": 0.1363,
-        "R_total": 0.6995,
-        "R_context": 0.272
+        "R_total": 0.6997,
+        "R_context": 0.2721
+      },
+      "r64_cap0.3": {
+        "ce": 2.218,
+        "R_total": 0.7789,
+        "R_context": 0.4641
+      },
+      "r64_cap0.5": {
+        "ce": 2.1973,
+        "R_total": 0.8247,
+        "R_context": 0.5751
+      },
+      "r256_cap0": {
+        "ce": 2.1737,
+        "R_total": 0.8768,
+        "R_context": 0.7013
       },
       "r256_cap0.15": {
         "ce": 2.252,
-        "delta": 0.1343,
-        "R_total": 0.704,
-        "R_context": 0.2828
-      }
-    }
-  },
-  "20": {
-    "v0_delta": 0.16788911819458008,
-    "baseline": 2.1177585876405183,
-    "A1_ce": 2.1439,
-    "A1_recovery": 0.8445,
-    "best_lambda": 1000,
-    "context_delta_A1": 0.0261,
-    "variants": {
-      "full_uncapped": {
-        "ce": 2.1254,
-        "delta": 0.0076,
-        "R_total": 0.9546,
-        "R_context": 0.7081
+        "R_total": 0.7039,
+        "R_context": 0.2823
       },
-      "r16_uncapped": {
-        "ce": 2.133,
-        "delta": 0.0152,
-        "R_total": 0.9093,
-        "R_context": 0.4169
+      "r256_cap0.3": {
+        "ce": 2.2132,
+        "R_total": 0.7895,
+        "R_context": 0.4897
       },
-      "r64_uncapped": {
-        "ce": 2.1308,
-        "delta": 0.013,
-        "R_total": 0.9224,
-        "R_context": 0.501
-      },
-      "r256_uncapped": {
-        "ce": 2.1274,
-        "delta": 0.0097,
-        "R_total": 0.9423,
-        "R_context": 0.629
-      },
-      "full_cap0.15": {
-        "ce": 2.1355,
-        "delta": 0.0177,
-        "R_total": 0.8943,
-        "R_context": 0.3204
-      },
-      "r16_cap0.15": {
-        "ce": 2.1371,
-        "delta": 0.0193,
-        "R_total": 0.8849,
-        "R_context": 0.2598
-      },
-      "r64_cap0.15": {
-        "ce": 2.1364,
-        "delta": 0.0187,
-        "R_total": 0.8887,
-        "R_context": 0.2843
-      },
-      "r256_cap0.15": {
-        "ce": 2.1359,
-        "delta": 0.0181,
-        "R_total": 0.8922,
-        "R_context": 0.3068
+      "r256_cap0.5": {
+        "ce": 2.1817,
+        "R_total": 0.8589,
+        "R_context": 0.658
       }
     }
   }
-}[claude/zen-allen-7Y8Bx f6c4e5e] v1b ridge results
- 2 files changed, 293 insertions(+)
- create mode 100644 outputs/v1a/ridge.done
- create mode 100644 outputs/v1b_ridge/ridge_results.json
+}[claude/zen-allen-7Y8Bx e425e24] v1b ridge-init zero-shot results
+ 2 files changed, 275 insertions(+)
+ create mode 100644 outputs/v1a/ridgeinit.done
+ create mode 100644 outputs/v1b_ridge/ridge_init_zeroshot.json
 SELFPUSH_OK
 ----- END (rc=0) -----
