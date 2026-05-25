@@ -43,6 +43,18 @@
 > correction off LN_l(h) is a dead end; the precise open question is *which
 > representation* makes the (oracle-recoverable) residual learnable.
 >
+> ### Full-depth profile (layers 1–23, `depth_profile.png`, `anchor_audit_full24.json`)
+> A1 token-determinability is **U-shaped in depth**, not flat: high at early
+> (L1–5: 0.78–0.97) and late (L17–21: 0.85–0.91) layers, but **drops sharply in
+> mid layers L6–L11, minimum at L6/L7 (A1≈0.22)**. So genuine context-dependent V
+> is concentrated mid-stack (peak ~0.25 nats at L6), not at the v0-coarse maxima.
+> The 4-layer snapshot (L5/11/17/23) had *missed* the L6/L7 trough (L5 looks
+> token-determined at 0.87, but L6/L7 right after are the most contextual). This
+> also decomposes v0's mid-layer inverted-U: at L5 the cost is mostly weak-anchor
+> (A1 fixes 87%), but at L6/L7 it is genuinely contextual (A1 only ~22%). Oracle
+> r256 stays high (0.89–0.98) at every layer → the residual is always low-rank
+> recoverable *from real V*, just not learnable from LN_l(h).
+>
 > Everything below is the diagnostic chain that led here; read it as method, with
 > the L11 conclusions superseded by this box.
 
