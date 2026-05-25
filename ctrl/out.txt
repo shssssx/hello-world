@@ -1,9 +1,9 @@
-### seq=27  2026-05-25T05:15:33Z
+### seq=28  2026-05-25T05:59:34Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 17359.59it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9362.86it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
@@ -11,271 +11,173 @@
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
 [baseline] recomputed eval CE = 2.1177 (v0=2.1178)
-    [train L5 shared r2] step   0 loss 3.1629
-    [train L5 shared r2] step  50 loss 2.8071
-    [train L5 shared r2] step 100 loss 2.5952
-    [train L5 shared r2] step 150 loss 2.1419
-    [train L5 shared r2] step 200 loss 2.9744
-    [train L5 shared r2] step 250 loss 3.1942
-    [train L5 shared r2] step 300 loss 3.1326
-    [train L5 shared r2] step 350 loss 2.3580
-    [train L5 shared r2] step 400 loss 3.0392
-    [train L5 shared r2] step 450 loss 2.7859
-    [train L5 shared r2] step 499 loss 2.9202
-[run] L5 shared r2: eval=2.6972 resid=+0.5796 recovery=0.070 params=0.0041M rec/M=17.029 (72.3s)
-    [train L5 shared r4] step   0 loss 2.7598
-    [train L5 shared r4] step  50 loss 2.8797
-    [train L5 shared r4] step 100 loss 2.7151
-    [train L5 shared r4] step 150 loss 2.2968
-    [train L5 shared r4] step 200 loss 2.7681
-    [train L5 shared r4] step 250 loss 2.6896
-    [train L5 shared r4] step 300 loss 2.9314
-    [train L5 shared r4] step 350 loss 2.6451
-    [train L5 shared r4] step 400 loss 1.8700
-    [train L5 shared r4] step 450 loss 2.7073
-    [train L5 shared r4] step 499 loss 2.4843
-    [warn] L5 shared r4: train loss still falling at step 500 (last two: 2.7073->2.4843); using final checkpoint anyway
-[run] L5 shared r4: eval=2.6703 resid=+0.5526 recovery=0.113 params=0.0082M rec/M=13.796 (72.6s)
-    [train L5 shared r8] step   0 loss 2.4823
-    [train L5 shared r8] step  50 loss 2.6476
-    [train L5 shared r8] step 100 loss 2.1207
-    [train L5 shared r8] step 150 loss 2.4766
-    [train L5 shared r8] step 200 loss 2.7906
-    [train L5 shared r8] step 250 loss 2.8534
-    [train L5 shared r8] step 300 loss 2.8303
-    [train L5 shared r8] step 350 loss 2.8003
-    [train L5 shared r8] step 400 loss 2.5138
-    [train L5 shared r8] step 450 loss 2.6193
-    [train L5 shared r8] step 499 loss 3.1038
-[run] L5 shared r8: eval=2.6293 resid=+0.5116 recovery=0.179 params=0.0164M rec/M=10.914 (72.7s)
-    [train L5 shared r16] step   0 loss 2.7716
-    [train L5 shared r16] step  50 loss 2.9114
-    [train L5 shared r16] step 100 loss 1.8947
-    [train L5 shared r16] step 150 loss 3.1505
-    [train L5 shared r16] step 200 loss 2.8010
-    [train L5 shared r16] step 250 loss 2.4922
-    [train L5 shared r16] step 300 loss 2.5137
-    [train L5 shared r16] step 350 loss 2.8917
-    [train L5 shared r16] step 400 loss 2.4039
-    [train L5 shared r16] step 450 loss 2.2389
-    [train L5 shared r16] step 499 loss 2.2792
-[run] L5 shared r16: eval=2.6159 resid=+0.4982 recovery=0.200 params=0.0328M rec/M=6.113 (72.8s)
-    [train L5 shared r32] step   0 loss 2.6397
-    [train L5 shared r32] step  50 loss 2.5937
-    [train L5 shared r32] step 100 loss 2.9428
-    [train L5 shared r32] step 150 loss 3.1351
-    [train L5 shared r32] step 200 loss 2.9655
-    [train L5 shared r32] step 250 loss 2.4209
-    [train L5 shared r32] step 300 loss 2.5937
-    [train L5 shared r32] step 350 loss 2.5865
-    [train L5 shared r32] step 400 loss 2.0597
-    [train L5 shared r32] step 450 loss 2.6945
-    [train L5 shared r32] step 499 loss 2.9444
-[run] L5 shared r32: eval=2.5959 resid=+0.4782 recovery=0.232 params=0.0655M rec/M=3.546 (72.8s)
-    [train L5 perhead r2] step   0 loss 3.1624
-    [train L5 perhead r2] step  50 loss 2.2887
-    [train L5 perhead r2] step 100 loss 2.7189
-    [train L5 perhead r2] step 150 loss 2.9548
-    [train L5 perhead r2] step 200 loss 2.8119
-    [train L5 perhead r2] step 250 loss 2.5560
-    [train L5 perhead r2] step 300 loss 2.9926
-    [train L5 perhead r2] step 350 loss 2.8433
-    [train L5 perhead r2] step 400 loss 3.1051
-    [train L5 perhead r2] step 450 loss 2.1647
-    [train L5 perhead r2] step 499 loss 2.5148
-[run] L5 perhead r2: eval=2.6912 resid=+0.5735 recovery=0.079 params=0.0348M rec/M=2.281 (73.1s)
-    [train L5 perhead r4] step   0 loss 3.0854
-    [train L5 perhead r4] step  50 loss 3.1326
-    [train L5 perhead r4] step 100 loss 2.8826
-    [train L5 perhead r4] step 150 loss 2.9898
-    [train L5 perhead r4] step 200 loss 2.5119
-    [train L5 perhead r4] step 250 loss 2.7843
-    [train L5 perhead r4] step 300 loss 2.6130
-    [train L5 perhead r4] step 350 loss 2.6987
-    [train L5 perhead r4] step 400 loss 3.0541
-    [train L5 perhead r4] step 450 loss 2.4245
-    [train L5 perhead r4] step 499 loss 2.9598
-[run] L5 perhead r4: eval=2.6657 resid=+0.5480 recovery=0.120 params=0.0696M rec/M=1.728 (73.2s)
-    [train L5 perhead r8] step   0 loss 2.1004
-    [train L5 perhead r8] step  50 loss 3.4421
-    [train L5 perhead r8] step 100 loss 2.6062
-    [train L5 perhead r8] step 150 loss 3.2036
-    [train L5 perhead r8] step 200 loss 2.4786
-    [train L5 perhead r8] step 250 loss 3.0840
-    [train L5 perhead r8] step 300 loss 2.2732
-    [train L5 perhead r8] step 350 loss 2.5857
-    [train L5 perhead r8] step 400 loss 2.7614
-    [train L5 perhead r8] step 450 loss 2.9201
-    [train L5 perhead r8] step 499 loss 2.6075
-[run] L5 perhead r8: eval=2.6269 resid=+0.5092 recovery=0.183 params=0.1393M rec/M=1.311 (73.1s)
-    [train L5 perhead r16] step   0 loss 2.8505
-    [train L5 perhead r16] step  50 loss 2.1628
-    [train L5 perhead r16] step 100 loss 3.1713
-    [train L5 perhead r16] step 150 loss 2.5670
-    [train L5 perhead r16] step 200 loss 2.1520
-    [train L5 perhead r16] step 250 loss 2.6690
-    [train L5 perhead r16] step 300 loss 2.5440
-    [train L5 perhead r16] step 350 loss 2.5130
-    [train L5 perhead r16] step 400 loss 2.6749
-    [train L5 perhead r16] step 450 loss 2.8834
-    [train L5 perhead r16] step 499 loss 2.4064
-    [warn] L5 perhead r16: train loss still falling at step 500 (last two: 2.8834->2.4064); using final checkpoint anyway
-[run] L5 perhead r16: eval=2.5936 resid=+0.4759 recovery=0.236 params=0.2785M rec/M=0.848 (73.2s)
-    [train L5 perhead r32] step   0 loss 2.5395
-    [train L5 perhead r32] step  50 loss 2.6940
-    [train L5 perhead r32] step 100 loss 3.0057
-    [train L5 perhead r32] step 150 loss 2.6006
-    [train L5 perhead r32] step 200 loss 2.8874
-    [train L5 perhead r32] step 250 loss 2.5409
-    [train L5 perhead r32] step 300 loss 2.6548
-    [train L5 perhead r32] step 350 loss 2.7793
-    [train L5 perhead r32] step 400 loss 3.1719
-    [train L5 perhead r32] step 450 loss 2.1482
-    [train L5 perhead r32] step 499 loss 2.7804
-[run] L5 perhead r32: eval=2.6041 resid=+0.4865 recovery=0.219 params=0.5571M rec/M=0.393 (73.3s)
-    [train L11 shared r2] step   0 loss 2.5418
-    [train L11 shared r2] step  50 loss 2.4017
-    [train L11 shared r2] step 100 loss 2.7311
-    [train L11 shared r2] step 150 loss 2.9152
-    [train L11 shared r2] step 200 loss 1.8137
-    [train L11 shared r2] step 250 loss 2.4942
-    [train L11 shared r2] step 300 loss 2.5091
-    [train L11 shared r2] step 350 loss 2.4040
-    [train L11 shared r2] step 400 loss 2.8671
-    [train L11 shared r2] step 450 loss 2.4195
-    [train L11 shared r2] step 499 loss 2.7224
-[run] L11 shared r2: eval=2.5624 resid=+0.4447 recovery=0.019 params=0.0041M rec/M=4.749 (65.2s)
-    [train L11 shared r4] step   0 loss 2.7413
-    [train L11 shared r4] step  50 loss 2.5239
-    [train L11 shared r4] step 100 loss 2.3462
-    [train L11 shared r4] step 150 loss 1.9886
-    [train L11 shared r4] step 200 loss 2.7703
-    [train L11 shared r4] step 250 loss 3.0342
-    [train L11 shared r4] step 300 loss 2.3201
-    [train L11 shared r4] step 350 loss 2.4355
-    [train L11 shared r4] step 400 loss 2.3243
-    [train L11 shared r4] step 450 loss 2.5943
-    [train L11 shared r4] step 499 loss 2.5519
-    [warn] L11 shared r4: train loss still falling at step 500 (last two: 2.5943->2.5519); using final checkpoint anyway
-[run] L11 shared r4: eval=2.5591 resid=+0.4415 recovery=0.027 params=0.0082M rec/M=3.255 (65.2s)
-    [train L11 shared r8] step   0 loss 2.8847
-    [train L11 shared r8] step  50 loss 2.3619
-    [train L11 shared r8] step 100 loss 2.6001
-    [train L11 shared r8] step 150 loss 3.3971
-    [train L11 shared r8] step 200 loss 2.6654
-    [train L11 shared r8] step 250 loss 2.4102
-    [train L11 shared r8] step 300 loss 2.8058
-    [train L11 shared r8] step 350 loss 2.7695
-    [train L11 shared r8] step 400 loss 2.7472
-    [train L11 shared r8] step 450 loss 2.2592
-    [train L11 shared r8] step 499 loss 2.8559
-[run] L11 shared r8: eval=2.5566 resid=+0.4389 recovery=0.032 params=0.0164M rec/M=1.976 (65.2s)
-    [train L11 shared r16] step   0 loss 2.6626
-    [train L11 shared r16] step  50 loss 2.4299
-    [train L11 shared r16] step 100 loss 2.6892
-    [train L11 shared r16] step 150 loss 2.4671
-    [train L11 shared r16] step 200 loss 2.6100
-    [train L11 shared r16] step 250 loss 2.7061
-    [train L11 shared r16] step 300 loss 2.4094
-    [train L11 shared r16] step 350 loss 2.7995
-    [train L11 shared r16] step 400 loss 2.6720
-    [train L11 shared r16] step 450 loss 2.4381
-    [train L11 shared r16] step 499 loss 2.6644
-[run] L11 shared r16: eval=2.5498 resid=+0.4321 recovery=0.047 params=0.0328M rec/M=1.444 (65.2s)
-    [train L11 shared r32] step   0 loss 2.4626
-    [train L11 shared r32] step  50 loss 2.9161
-    [train L11 shared r32] step 100 loss 2.8067
-    [train L11 shared r32] step 150 loss 2.5620
-    [train L11 shared r32] step 200 loss 2.3915
-    [train L11 shared r32] step 250 loss 2.4850
-    [train L11 shared r32] step 300 loss 2.7436
-    [train L11 shared r32] step 350 loss 2.9461
-    [train L11 shared r32] step 400 loss 1.9659
-    [train L11 shared r32] step 450 loss 2.1693
-    [train L11 shared r32] step 499 loss 2.4161
-[run] L11 shared r32: eval=2.5988 resid=+0.4811 recovery=-0.061 params=0.0655M rec/M=-0.928 (65.2s)
-    [train L11 perhead r2] step   0 loss 2.7540
-    [train L11 perhead r2] step  50 loss 2.4509
-    [train L11 perhead r2] step 100 loss 2.6382
-    [train L11 perhead r2] step 150 loss 2.4479
-    [train L11 perhead r2] step 200 loss 2.3113
-    [train L11 perhead r2] step 250 loss 2.4755
-    [train L11 perhead r2] step 300 loss 2.1631
-    [train L11 perhead r2] step 350 loss 2.8468
-    [train L11 perhead r2] step 400 loss 2.5380
-    [train L11 perhead r2] step 450 loss 2.0023
-    [train L11 perhead r2] step 499 loss 2.6171
-[run] L11 perhead r2: eval=2.5652 resid=+0.4476 recovery=0.013 params=0.0348M rec/M=0.380 (65.6s)
-    [train L11 perhead r4] step   0 loss 2.5658
-    [train L11 perhead r4] step  50 loss 2.5294
-    [train L11 perhead r4] step 100 loss 2.6555
-    [train L11 perhead r4] step 150 loss 2.7805
-    [train L11 perhead r4] step 200 loss 2.6932
-    [train L11 perhead r4] step 250 loss 2.3001
-    [train L11 perhead r4] step 300 loss 2.2955
-    [train L11 perhead r4] step 350 loss 2.8269
-    [train L11 perhead r4] step 400 loss 2.3763
-    [train L11 perhead r4] step 450 loss 2.3957
-    [train L11 perhead r4] step 499 loss 2.6932
-[run] L11 perhead r4: eval=2.5595 resid=+0.4419 recovery=0.026 params=0.0696M rec/M=0.370 (65.6s)
-    [train L11 perhead r8] step   0 loss 2.4216
-    [train L11 perhead r8] step  50 loss 2.4809
-    [train L11 perhead r8] step 100 loss 2.7241
-    [train L11 perhead r8] step 150 loss 2.5054
-    [train L11 perhead r8] step 200 loss 2.3823
-    [train L11 perhead r8] step 250 loss 2.3740
-    [train L11 perhead r8] step 300 loss 2.7447
-    [train L11 perhead r8] step 350 loss 1.9956
-    [train L11 perhead r8] step 400 loss 1.9642
-    [train L11 perhead r8] step 450 loss 2.0833
-    [train L11 perhead r8] step 499 loss 2.6477
-[run] L11 perhead r8: eval=2.5525 resid=+0.4348 recovery=0.041 params=0.1393M rec/M=0.297 (65.6s)
-    [train L11 perhead r16] step   0 loss 2.1744
-    [train L11 perhead r16] step  50 loss 2.4143
-    [train L11 perhead r16] step 100 loss 2.7652
-    [train L11 perhead r16] step 150 loss 1.9721
-    [train L11 perhead r16] step 200 loss 2.7971
-    [train L11 perhead r16] step 250 loss 2.8390
-    [train L11 perhead r16] step 300 loss 2.4908
-    [train L11 perhead r16] step 350 loss 2.3735
-    [train L11 perhead r16] step 400 loss 2.3994
-    [train L11 perhead r16] step 450 loss 2.3265
-    [train L11 perhead r16] step 499 loss 2.2086
-[run] L11 perhead r16: eval=2.5554 resid=+0.4377 recovery=0.035 params=0.2785M rec/M=0.125 (65.7s)
-    [train L11 perhead r32] step   0 loss 2.5854
-    [train L11 perhead r32] step  50 loss 2.3774
-    [train L11 perhead r32] step 100 loss 2.4543
-    [train L11 perhead r32] step 150 loss 2.1355
-    [train L11 perhead r32] step 200 loss 2.6136
-    [train L11 perhead r32] step 250 loss 1.9892
-    [train L11 perhead r32] step 300 loss 2.8735
-    [train L11 perhead r32] step 350 loss 2.6807
-    [train L11 perhead r32] step 400 loss 2.5865
-    [train L11 perhead r32] step 450 loss 2.7951
-    [train L11 perhead r32] step 499 loss 3.0091
-[run] L11 perhead r32: eval=2.5930 resid=+0.4753 recovery=-0.048 params=0.5571M rec/M=-0.086 (65.8s)
-[all] completed 20 runs
-[claude/zen-allen-7Y8Bx 405c6e1] v1a results L5,L11 @lr3e-5
- 21 files changed, 342 insertions(+), 321 deletions(-)
- create mode 100644 outputs/v1a/chunk_5_11.done
-L11_perhead_r16.json   lr=3e-05 rec=+0.035 resid=+0.438
-L11_perhead_r2.json    lr=3e-05 rec=+0.013 resid=+0.448
-L11_perhead_r32.json   lr=3e-05 rec=-0.048 resid=+0.475
-L11_perhead_r4.json    lr=3e-05 rec=+0.026 resid=+0.442
-L11_perhead_r8.json    lr=3e-05 rec=+0.041 resid=+0.435
-L11_shared_r16.json    lr=3e-05 rec=+0.047 resid=+0.432
-L11_shared_r2.json     lr=3e-05 rec=+0.019 resid=+0.445
-L11_shared_r32.json    lr=3e-05 rec=-0.061 resid=+0.481
-L11_shared_r4.json     lr=3e-05 rec=+0.027 resid=+0.441
-L11_shared_r8.json     lr=3e-05 rec=+0.032 resid=+0.439
-L5_perhead_r16.json    lr=3e-05 rec=+0.236 resid=+0.476
-L5_perhead_r2.json     lr=3e-05 rec=+0.079 resid=+0.574
-L5_perhead_r32.json    lr=3e-05 rec=+0.219 resid=+0.486
-L5_perhead_r4.json     lr=3e-05 rec=+0.120 resid=+0.548
-L5_perhead_r8.json     lr=3e-05 rec=+0.183 resid=+0.509
-L5_shared_r16.json     lr=3e-05 rec=+0.200 resid=+0.498
-L5_shared_r2.json      lr=3e-05 rec=+0.070 resid=+0.580
-L5_shared_r32.json     lr=3e-05 rec=+0.232 resid=+0.478
-L5_shared_r4.json      lr=3e-05 rec=+0.113 resid=+0.553
-L5_shared_r8.json      lr=3e-05 rec=+0.179 resid=+0.512
+[probe] base_small(64 seq) = 2.2068
+  [L11_shared_r8_lr3e-05_s500_c0] s   0 tr=2.546 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.003 gB=4.2852
+  [L11_shared_r8_lr3e-05_s500_c0] s  50 tr=2.770 held=2.673 rec=-0.027 dV/V=0.002 |B|=0.026 gB=4.8567
+  [L11_shared_r8_lr3e-05_s500_c0] s 100 tr=3.085 held=2.672 rec=-0.025 dV/V=0.004 |B|=0.043 gB=3.9034
+  [L11_shared_r8_lr3e-05_s500_c0] s 150 tr=2.497 held=2.671 rec=-0.023 dV/V=0.007 |B|=0.062 gB=7.1872
+  [L11_shared_r8_lr3e-05_s500_c0] s 200 tr=2.443 held=2.669 rec=-0.019 dV/V=0.015 |B|=0.088 gB=8.9833
+  [L11_shared_r8_lr3e-05_s500_c0] s 250 tr=2.839 held=2.667 rec=-0.014 dV/V=0.024 |B|=0.110 gB=6.4943
+  [L11_shared_r8_lr3e-05_s500_c0] s 300 tr=2.759 held=2.663 rec=-0.006 dV/V=0.038 |B|=0.136 gB=10.8297
+  [L11_shared_r8_lr3e-05_s500_c0] s 350 tr=2.441 held=2.661 rec=-0.001 dV/V=0.050 |B|=0.158 gB=11.7281
+  [L11_shared_r8_lr3e-05_s500_c0] s 400 tr=2.877 held=2.659 rec=+0.003 dV/V=0.070 |B|=0.182 gB=12.3466
+  [L11_shared_r8_lr3e-05_s500_c0] s 450 tr=2.859 held=2.659 rec=+0.004 dV/V=0.084 |B|=0.204 gB=12.8228
+  [L11_shared_r8_lr3e-05_s500_c0] s 499 tr=2.411 held=2.658 rec=+0.006 dV/V=0.107 |B|=0.223 gB=17.3384
+[probe] L11_shared_r8_lr3e-05_s500_c0: final eval=2.5525 resid=+0.4348 recovery=+0.041 (70.4s)
+  [L11_shared_r8_lr3e-05_s2000_c0] s   0 tr=2.572 held=2.673 rec=-0.028 dV/V=0.000 |B|=0.003 gB=3.3196
+  [L11_shared_r8_lr3e-05_s2000_c0] s  50 tr=2.514 held=2.673 rec=-0.028 dV/V=0.002 |B|=0.027 gB=4.2619
+  [L11_shared_r8_lr3e-05_s2000_c0] s 100 tr=2.628 held=2.672 rec=-0.026 dV/V=0.003 |B|=0.043 gB=5.0309
+  [L11_shared_r8_lr3e-05_s2000_c0] s 150 tr=2.434 held=2.670 rec=-0.021 dV/V=0.007 |B|=0.063 gB=7.0929
+  [L11_shared_r8_lr3e-05_s2000_c0] s 200 tr=2.111 held=2.669 rec=-0.019 dV/V=0.013 |B|=0.084 gB=10.1902
+  [L11_shared_r8_lr3e-05_s2000_c0] s 250 tr=2.716 held=2.667 rec=-0.015 dV/V=0.022 |B|=0.105 gB=7.6342
+  [L11_shared_r8_lr3e-05_s2000_c0] s 300 tr=2.818 held=2.665 rec=-0.009 dV/V=0.033 |B|=0.127 gB=8.5053
+  [L11_shared_r8_lr3e-05_s2000_c0] s 350 tr=2.487 held=2.663 rec=-0.005 dV/V=0.050 |B|=0.158 gB=11.3048
+  [L11_shared_r8_lr3e-05_s2000_c0] s 400 tr=2.804 held=2.660 rec=-0.000 dV/V=0.065 |B|=0.180 gB=9.6391
+  [L11_shared_r8_lr3e-05_s2000_c0] s 450 tr=2.667 held=2.658 rec=+0.004 dV/V=0.090 |B|=0.205 gB=15.9076
+  [L11_shared_r8_lr3e-05_s2000_c0] s 500 tr=2.511 held=2.659 rec=+0.002 dV/V=0.116 |B|=0.228 gB=18.1244
+  [L11_shared_r8_lr3e-05_s2000_c0] s 550 tr=2.467 held=2.662 rec=-0.004 dV/V=0.137 |B|=0.252 gB=17.8337
+  [L11_shared_r8_lr3e-05_s2000_c0] s 600 tr=2.498 held=2.664 rec=-0.008 dV/V=0.161 |B|=0.273 gB=17.5677
+  [L11_shared_r8_lr3e-05_s2000_c0] s 650 tr=2.228 held=2.672 rec=-0.025 dV/V=0.199 |B|=0.298 gB=28.4464
+  [L11_shared_r8_lr3e-05_s2000_c0] s 700 tr=2.872 held=2.688 rec=-0.061 dV/V=0.227 |B|=0.323 gB=20.0915
+  [L11_shared_r8_lr3e-05_s2000_c0] s 750 tr=2.710 held=2.691 rec=-0.067 dV/V=0.252 |B|=0.337 gB=20.3984
+  [L11_shared_r8_lr3e-05_s2000_c0] s 800 tr=2.533 held=2.697 rec=-0.082 dV/V=0.283 |B|=0.352 gB=26.2642
+  [L11_shared_r8_lr3e-05_s2000_c0] s 850 tr=2.506 held=2.706 rec=-0.101 dV/V=0.313 |B|=0.368 gB=32.8381
+  [L11_shared_r8_lr3e-05_s2000_c0] s 900 tr=2.598 held=2.716 rec=-0.123 dV/V=0.339 |B|=0.386 gB=27.5049
+  [L11_shared_r8_lr3e-05_s2000_c0] s 950 tr=2.657 held=2.725 rec=-0.142 dV/V=0.370 |B|=0.401 gB=25.5880
+  [L11_shared_r8_lr3e-05_s2000_c0] s1000 tr=2.204 held=2.740 rec=-0.176 dV/V=0.399 |B|=0.416 gB=44.3371
+  [L11_shared_r8_lr3e-05_s2000_c0] s1050 tr=2.398 held=2.756 rec=-0.211 dV/V=0.418 |B|=0.431 gB=31.0690
+  [L11_shared_r8_lr3e-05_s2000_c0] s1100 tr=2.849 held=2.773 rec=-0.249 dV/V=0.454 |B|=0.448 gB=29.1075
+  [L11_shared_r8_lr3e-05_s2000_c0] s1150 tr=2.837 held=2.816 rec=-0.343 dV/V=0.501 |B|=0.470 gB=36.3210
+  [L11_shared_r8_lr3e-05_s2000_c0] s1200 tr=2.964 held=2.846 rec=-0.409 dV/V=0.561 |B|=0.488 gB=48.3343
+  [L11_shared_r8_lr3e-05_s2000_c0] s1250 tr=2.404 held=2.883 rec=-0.490 dV/V=0.603 |B|=0.505 gB=44.6087
+  [L11_shared_r8_lr3e-05_s2000_c0] s1300 tr=2.874 held=2.901 rec=-0.531 dV/V=0.638 |B|=0.520 gB=41.7067
+  [L11_shared_r8_lr3e-05_s2000_c0] s1350 tr=2.605 held=2.911 rec=-0.552 dV/V=0.647 |B|=0.530 gB=48.1364
+  [L11_shared_r8_lr3e-05_s2000_c0] s1400 tr=2.662 held=2.919 rec=-0.571 dV/V=0.640 |B|=0.540 gB=40.7956
+  [L11_shared_r8_lr3e-05_s2000_c0] s1450 tr=2.661 held=2.958 rec=-0.656 dV/V=0.738 |B|=0.557 gB=80.0984
+  [L11_shared_r8_lr3e-05_s2000_c0] s1500 tr=2.643 held=2.958 rec=-0.656 dV/V=0.748 |B|=0.567 gB=47.7841
+  [L11_shared_r8_lr3e-05_s2000_c0] s1550 tr=2.893 held=2.971 rec=-0.684 dV/V=0.776 |B|=0.575 gB=61.1795
+  [L11_shared_r8_lr3e-05_s2000_c0] s1600 tr=3.330 held=2.968 rec=-0.679 dV/V=0.767 |B|=0.577 gB=46.4018
+  [L11_shared_r8_lr3e-05_s2000_c0] s1650 tr=2.810 held=2.966 rec=-0.674 dV/V=0.793 |B|=0.581 gB=58.4665
+  [L11_shared_r8_lr3e-05_s2000_c0] s1700 tr=2.939 held=2.959 rec=-0.658 dV/V=0.801 |B|=0.583 gB=49.8432
+  [L11_shared_r8_lr3e-05_s2000_c0] s1750 tr=2.996 held=2.947 rec=-0.633 dV/V=0.804 |B|=0.585 gB=64.9176
+  [L11_shared_r8_lr3e-05_s2000_c0] s1800 tr=2.893 held=2.952 rec=-0.643 dV/V=0.787 |B|=0.590 gB=37.8876
+  [L11_shared_r8_lr3e-05_s2000_c0] s1850 tr=3.056 held=2.971 rec=-0.686 dV/V=0.815 |B|=0.597 gB=45.1365
+  [L11_shared_r8_lr3e-05_s2000_c0] s1900 tr=3.225 held=2.957 rec=-0.654 dV/V=0.809 |B|=0.600 gB=39.0219
+  [L11_shared_r8_lr3e-05_s2000_c0] s1950 tr=2.428 held=2.971 rec=-0.684 dV/V=0.819 |B|=0.605 gB=47.3281
+  [L11_shared_r8_lr3e-05_s2000_c0] s1999 tr=2.871 held=2.975 rec=-0.693 dV/V=0.850 |B|=0.608 gB=57.6116
+[probe] L11_shared_r8_lr3e-05_s2000_c0: final eval=2.8446 resid=+0.7269 recovery=-0.603 (258.6s)
+  [L11_shared_r8_lr0.0001_s500_c1] s   0 tr=2.718 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.009 gB=4.1778
+  [L11_shared_r8_lr0.0001_s500_c1] s  50 tr=2.280 held=2.670 rec=-0.022 dV/V=0.013 |B|=0.092 gB=8.0974
+  [L11_shared_r8_lr0.0001_s500_c1] s 100 tr=2.760 held=2.667 rec=-0.014 dV/V=0.034 |B|=0.147 gB=8.9286
+  [L11_shared_r8_lr0.0001_s500_c1] s 150 tr=2.924 held=2.661 rec=-0.002 dV/V=0.067 |B|=0.192 gB=10.7960
+  [L11_shared_r8_lr0.0001_s500_c1] s 200 tr=2.462 held=2.660 rec=+0.002 dV/V=0.111 |B|=0.241 gB=16.3420
+  [L11_shared_r8_lr0.0001_s500_c1] s 250 tr=2.183 held=2.658 rec=+0.004 dV/V=0.170 |B|=0.294 gB=22.5131
+  [L11_shared_r8_lr0.0001_s500_c1] s 300 tr=2.129 held=2.669 rec=-0.019 dV/V=0.241 |B|=0.344 gB=37.2021
+  [L11_shared_r8_lr0.0001_s500_c1] s 350 tr=2.430 held=2.698 rec=-0.083 dV/V=0.321 |B|=0.393 gB=26.4104
+  [L11_shared_r8_lr0.0001_s500_c1] s 400 tr=2.639 held=2.721 rec=-0.133 dV/V=0.378 |B|=0.424 gB=40.8227
+  [L11_shared_r8_lr0.0001_s500_c1] s 450 tr=3.159 held=2.746 rec=-0.189 dV/V=0.446 |B|=0.458 gB=24.0924
+  [L11_shared_r8_lr0.0001_s500_c1] s 499 tr=2.414 held=2.787 rec=-0.280 dV/V=0.527 |B|=0.495 gB=72.9898
+[probe] L11_shared_r8_lr0.0001_s500_c1: final eval=2.6711 resid=+0.5535 recovery=-0.220 (70.8s)
+  [L11_shared_r8_lr5e-05_s500_c0] s   0 tr=2.497 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.005 gB=4.0386
+  [L11_shared_r8_lr5e-05_s500_c0] s  50 tr=2.642 held=2.672 rec=-0.026 dV/V=0.004 |B|=0.043 gB=3.6731
+  [L11_shared_r8_lr5e-05_s500_c0] s 100 tr=2.632 held=2.671 rec=-0.024 dV/V=0.011 |B|=0.072 gB=6.5297
+  [L11_shared_r8_lr5e-05_s500_c0] s 150 tr=2.394 held=2.669 rec=-0.019 dV/V=0.025 |B|=0.107 gB=12.1725
+  [L11_shared_r8_lr5e-05_s500_c0] s 200 tr=2.231 held=2.667 rec=-0.015 dV/V=0.050 |B|=0.145 gB=16.3565
+  [L11_shared_r8_lr5e-05_s500_c0] s 250 tr=2.882 held=2.663 rec=-0.006 dV/V=0.081 |B|=0.187 gB=13.5878
+  [L11_shared_r8_lr5e-05_s500_c0] s 300 tr=2.556 held=2.662 rec=-0.004 dV/V=0.121 |B|=0.224 gB=18.0814
+  [L11_shared_r8_lr5e-05_s500_c0] s 350 tr=2.040 held=2.668 rec=-0.018 dV/V=0.160 |B|=0.257 gB=43.1744
+  [L11_shared_r8_lr5e-05_s500_c0] s 400 tr=2.707 held=2.677 rec=-0.038 dV/V=0.210 |B|=0.296 gB=26.4979
+  [L11_shared_r8_lr5e-05_s500_c0] s 450 tr=2.884 held=2.684 rec=-0.053 dV/V=0.255 |B|=0.323 gB=23.8215
+  [L11_shared_r8_lr5e-05_s500_c0] s 499 tr=2.500 held=2.700 rec=-0.087 dV/V=0.305 |B|=0.350 gB=31.7231
+[probe] L11_shared_r8_lr5e-05_s500_c0: final eval=2.5899 resid=+0.4722 recovery=-0.041 (70.8s)
+  [L11_shared_r32_lr3e-05_s500_c0] s   0 tr=2.703 held=2.673 rec=-0.029 dV/V=0.000 |B|=0.005 gB=5.9452
+  [L11_shared_r32_lr3e-05_s500_c0] s  50 tr=2.589 held=2.672 rec=-0.025 dV/V=0.004 |B|=0.047 gB=8.5625
+  [L11_shared_r32_lr3e-05_s500_c0] s 100 tr=2.008 held=2.670 rec=-0.021 dV/V=0.011 |B|=0.076 gB=13.9280
+  [L11_shared_r32_lr3e-05_s500_c0] s 150 tr=2.676 held=2.667 rec=-0.015 dV/V=0.024 |B|=0.113 gB=8.3353
+  [L11_shared_r32_lr3e-05_s500_c0] s 200 tr=2.517 held=2.663 rec=-0.006 dV/V=0.044 |B|=0.152 gB=16.9084
+  [L11_shared_r32_lr3e-05_s500_c0] s 250 tr=2.811 held=2.658 rec=+0.005 dV/V=0.081 |B|=0.196 gB=12.7981
+  [L11_shared_r32_lr3e-05_s500_c0] s 300 tr=2.669 held=2.662 rec=-0.003 dV/V=0.125 |B|=0.240 gB=18.8905
+  [L11_shared_r32_lr3e-05_s500_c0] s 350 tr=3.026 held=2.666 rec=-0.012 dV/V=0.174 |B|=0.282 gB=15.5466
+  [L11_shared_r32_lr3e-05_s500_c0] s 400 tr=2.367 held=2.680 rec=-0.043 dV/V=0.228 |B|=0.319 gB=27.1355
+  [L11_shared_r32_lr3e-05_s500_c0] s 450 tr=2.685 held=2.703 rec=-0.094 dV/V=0.294 |B|=0.363 gB=28.5953
+  [L11_shared_r32_lr3e-05_s500_c0] s 499 tr=2.329 held=2.726 rec=-0.144 dV/V=0.362 |B|=0.397 gB=38.2845
+[probe] L11_shared_r32_lr3e-05_s500_c0: final eval=2.6121 resid=+0.4945 recovery=-0.090 (70.7s)
+  [L11_shared_r32_lr3e-05_s2000_c0] s   0 tr=2.413 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.005 gB=10.3461
+  [L11_shared_r32_lr3e-05_s2000_c0] s  50 tr=2.264 held=2.670 rec=-0.022 dV/V=0.005 |B|=0.051 gB=10.2036
+  [L11_shared_r32_lr3e-05_s2000_c0] s 100 tr=2.718 held=2.667 rec=-0.015 dV/V=0.014 |B|=0.086 gB=12.8622
+  [L11_shared_r32_lr3e-05_s2000_c0] s 150 tr=2.809 held=2.663 rec=-0.007 dV/V=0.029 |B|=0.123 gB=13.1624
+  [L11_shared_r32_lr3e-05_s2000_c0] s 200 tr=2.629 held=2.661 rec=-0.001 dV/V=0.049 |B|=0.158 gB=11.6455
+  [L11_shared_r32_lr3e-05_s2000_c0] s 250 tr=2.289 held=2.660 rec=+0.002 dV/V=0.081 |B|=0.196 gB=30.0933
+  [L11_shared_r32_lr3e-05_s2000_c0] s 300 tr=2.430 held=2.661 rec=-0.002 dV/V=0.122 |B|=0.239 gB=24.0702
+  [L11_shared_r32_lr3e-05_s2000_c0] s 350 tr=2.530 held=2.675 rec=-0.031 dV/V=0.180 |B|=0.287 gB=19.0508
+  [L11_shared_r32_lr3e-05_s2000_c0] s 400 tr=2.530 held=2.708 rec=-0.105 dV/V=0.235 |B|=0.335 gB=21.2592
+  [L11_shared_r32_lr3e-05_s2000_c0] s 450 tr=2.238 held=2.718 rec=-0.126 dV/V=0.313 |B|=0.368 gB=41.3436
+  [L11_shared_r32_lr3e-05_s2000_c0] s 500 tr=2.401 held=2.745 rec=-0.186 dV/V=0.344 |B|=0.402 gB=39.7229
+  [L11_shared_r32_lr3e-05_s2000_c0] s 550 tr=2.941 held=2.805 rec=-0.319 dV/V=0.446 |B|=0.441 gB=56.8227
+  [L11_shared_r32_lr3e-05_s2000_c0] s 600 tr=2.695 held=2.868 rec=-0.458 dV/V=0.517 |B|=0.478 gB=41.6842
+  [L11_shared_r32_lr3e-05_s2000_c0] s 650 tr=2.727 held=2.932 rec=-0.600 dV/V=0.575 |B|=0.506 gB=63.6601
+  [L11_shared_r32_lr3e-05_s2000_c0] s 700 tr=2.149 held=2.962 rec=-0.665 dV/V=0.600 |B|=0.524 gB=75.4095
+  [L11_shared_r32_lr3e-05_s2000_c0] s 750 tr=2.829 held=3.013 rec=-0.777 dV/V=0.650 |B|=0.548 gB=48.5188
+  [L11_shared_r32_lr3e-05_s2000_c0] s 800 tr=2.478 held=2.998 rec=-0.745 dV/V=0.688 |B|=0.557 gB=62.6926
+  [L11_shared_r32_lr3e-05_s2000_c0] s 850 tr=2.891 held=3.016 rec=-0.784 dV/V=0.703 |B|=0.570 gB=51.3860
+  [L11_shared_r32_lr3e-05_s2000_c0] s 900 tr=2.345 held=3.028 rec=-0.810 dV/V=0.719 |B|=0.579 gB=103.6396
+  [L11_shared_r32_lr3e-05_s2000_c0] s 950 tr=3.203 held=3.050 rec=-0.859 dV/V=0.770 |B|=0.589 gB=60.9575
+  [L11_shared_r32_lr3e-05_s2000_c0] s1000 tr=2.712 held=3.030 rec=-0.815 dV/V=0.761 |B|=0.598 gB=85.9915
+  [L11_shared_r32_lr3e-05_s2000_c0] s1050 tr=3.152 held=3.024 rec=-0.802 dV/V=0.784 |B|=0.608 gB=48.1869
+  [L11_shared_r32_lr3e-05_s2000_c0] s1100 tr=3.428 held=3.029 rec=-0.813 dV/V=0.783 |B|=0.616 gB=56.2359
+  [L11_shared_r32_lr3e-05_s2000_c0] s1150 tr=3.217 held=2.989 rec=-0.726 dV/V=0.839 |B|=0.621 gB=52.7954
+  [L11_shared_r32_lr3e-05_s2000_c0] s1200 tr=3.097 held=2.999 rec=-0.747 dV/V=0.840 |B|=0.630 gB=53.7050
+  [L11_shared_r32_lr3e-05_s2000_c0] s1250 tr=3.454 held=2.991 rec=-0.729 dV/V=0.852 |B|=0.635 gB=45.9050
+  [L11_shared_r32_lr3e-05_s2000_c0] s1300 tr=2.170 held=2.952 rec=-0.643 dV/V=0.854 |B|=0.637 gB=72.8241
+  [L11_shared_r32_lr3e-05_s2000_c0] s1350 tr=2.835 held=2.952 rec=-0.642 dV/V=0.854 |B|=0.643 gB=64.8536
+  [L11_shared_r32_lr3e-05_s2000_c0] s1400 tr=2.973 held=2.942 rec=-0.621 dV/V=0.864 |B|=0.645 gB=56.4253
+  [L11_shared_r32_lr3e-05_s2000_c0] s1450 tr=2.996 held=2.950 rec=-0.638 dV/V=0.871 |B|=0.651 gB=57.8188
+  [L11_shared_r32_lr3e-05_s2000_c0] s1500 tr=2.730 held=2.972 rec=-0.688 dV/V=0.881 |B|=0.659 gB=60.8157
+  [L11_shared_r32_lr3e-05_s2000_c0] s1550 tr=2.475 held=2.977 rec=-0.697 dV/V=0.923 |B|=0.664 gB=66.1739
+  [L11_shared_r32_lr3e-05_s2000_c0] s1600 tr=2.848 held=2.969 rec=-0.680 dV/V=0.866 |B|=0.667 gB=46.3966
+  [L11_shared_r32_lr3e-05_s2000_c0] s1650 tr=2.678 held=2.960 rec=-0.661 dV/V=0.899 |B|=0.670 gB=58.1014
+  [L11_shared_r32_lr3e-05_s2000_c0] s1700 tr=2.378 held=2.978 rec=-0.700 dV/V=0.937 |B|=0.675 gB=64.7801
+  [L11_shared_r32_lr3e-05_s2000_c0] s1750 tr=2.547 held=2.956 rec=-0.652 dV/V=0.949 |B|=0.676 gB=61.0936
+  [L11_shared_r32_lr3e-05_s2000_c0] s1800 tr=2.899 held=2.978 rec=-0.700 dV/V=0.968 |B|=0.683 gB=75.5680
+  [L11_shared_r32_lr3e-05_s2000_c0] s1850 tr=3.051 held=2.975 rec=-0.694 dV/V=0.918 |B|=0.686 gB=51.6662
+  [L11_shared_r32_lr3e-05_s2000_c0] s1900 tr=3.135 held=2.997 rec=-0.742 dV/V=0.937 |B|=0.691 gB=44.5585
+  [L11_shared_r32_lr3e-05_s2000_c0] s1950 tr=2.719 held=2.993 rec=-0.733 dV/V=0.970 |B|=0.694 gB=61.9661
+  [L11_shared_r32_lr3e-05_s2000_c0] s1999 tr=2.564 held=3.031 rec=-0.817 dV/V=0.966 |B|=0.699 gB=76.7641
+[probe] L11_shared_r32_lr3e-05_s2000_c0: final eval=2.9055 resid=+0.7878 recovery=-0.737 (259.0s)
+  [L11_shared_r32_lr0.0001_s500_c1] s   0 tr=2.432 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.018 gB=10.8222
+  [L11_shared_r32_lr0.0001_s500_c1] s  50 tr=2.678 held=2.663 rec=-0.005 dV/V=0.039 |B|=0.177 gB=12.7565
+  [L11_shared_r32_lr0.0001_s500_c1] s 100 tr=2.468 held=2.669 rec=-0.020 dV/V=0.079 |B|=0.253 gB=16.6676
+  [L11_shared_r32_lr0.0001_s500_c1] s 150 tr=2.383 held=2.700 rec=-0.087 dV/V=0.206 |B|=0.366 gB=29.3042
+  [L11_shared_r32_lr0.0001_s500_c1] s 200 tr=2.438 held=2.754 rec=-0.207 dV/V=0.338 |B|=0.444 gB=33.7598
+  [L11_shared_r32_lr0.0001_s500_c1] s 250 tr=2.843 held=2.934 rec=-0.603 dV/V=0.497 |B|=0.533 gB=35.6747
+  [L11_shared_r32_lr0.0001_s500_c1] s 300 tr=2.672 held=3.008 rec=-0.766 dV/V=0.612 |B|=0.588 gB=39.4787
+  [L11_shared_r32_lr0.0001_s500_c1] s 350 tr=3.165 held=3.077 rec=-0.918 dV/V=0.680 |B|=0.630 gB=50.0008
+  [L11_shared_r32_lr0.0001_s500_c1] s 400 tr=2.462 held=3.037 rec=-0.830 dV/V=0.779 |B|=0.663 gB=97.7910
+  [L11_shared_r32_lr0.0001_s500_c1] s 450 tr=2.995 held=2.998 rec=-0.743 dV/V=0.761 |B|=0.678 gB=38.6095
+  [L11_shared_r32_lr0.0001_s500_c1] s 499 tr=2.851 held=3.012 rec=-0.776 dV/V=0.827 |B|=0.696 gB=66.9350
+[probe] L11_shared_r32_lr0.0001_s500_c1: final eval=2.8842 resid=+0.7665 recovery=-0.690 (70.8s)
+  [L11_shared_r32_lr5e-05_s500_c0] s   0 tr=1.941 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.009 gB=16.2309
+  [L11_shared_r32_lr5e-05_s500_c0] s  50 tr=2.923 held=2.671 rec=-0.024 dV/V=0.009 |B|=0.082 gB=8.1635
+  [L11_shared_r32_lr5e-05_s500_c0] s 100 tr=2.693 held=2.663 rec=-0.005 dV/V=0.030 |B|=0.140 gB=11.2506
+  [L11_shared_r32_lr5e-05_s500_c0] s 150 tr=2.852 held=2.663 rec=-0.005 dV/V=0.078 |B|=0.211 gB=15.0227
+  [L11_shared_r32_lr5e-05_s500_c0] s 200 tr=2.466 held=2.669 rec=-0.018 dV/V=0.130 |B|=0.272 gB=17.3679
+  [L11_shared_r32_lr5e-05_s500_c0] s 250 tr=2.762 held=2.670 rec=-0.021 dV/V=0.183 |B|=0.323 gB=16.3637
+  [L11_shared_r32_lr5e-05_s500_c0] s 300 tr=2.927 held=2.695 rec=-0.077 dV/V=0.265 |B|=0.387 gB=22.2732
+  [L11_shared_r32_lr5e-05_s500_c0] s 350 tr=2.423 held=2.728 rec=-0.150 dV/V=0.386 |B|=0.445 gB=42.9947
+  [L11_shared_r32_lr5e-05_s500_c0] s 400 tr=2.517 held=2.781 rec=-0.267 dV/V=0.460 |B|=0.502 gB=46.4882
+  [L11_shared_r32_lr5e-05_s500_c0] s 450 tr=2.381 held=2.902 rec=-0.532 dV/V=0.626 |B|=0.565 gB=64.2799
+  [L11_shared_r32_lr5e-05_s500_c0] s 499 tr=3.076 held=3.011 rec=-0.772 dV/V=0.716 |B|=0.609 gB=48.7064
+[probe] L11_shared_r32_lr5e-05_s500_c0: final eval=2.8798 resid=+0.7621 recovery=-0.680 (70.8s)
+[claude/zen-allen-7Y8Bx f7eae48] v1a stability probe results
+ 9 files changed, 1913 insertions(+)
+ create mode 100644 outputs/v1a/probe.done
+ create mode 100644 outputs/v1a/probe_L11_shared_r32_lr0.0001_s500_c1.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r32_lr3e-05_s2000_c0.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r32_lr3e-05_s500_c0.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r32_lr5e-05_s500_c0.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r8_lr0.0001_s500_c1.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r8_lr3e-05_s2000_c0.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r8_lr3e-05_s500_c0.json
+ create mode 100644 outputs/v1a/probe_L11_shared_r8_lr5e-05_s500_c0.json
+SELFPUSH_OK
 ----- END (rc=0) -----
