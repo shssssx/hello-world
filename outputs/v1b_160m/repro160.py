@@ -49,25 +49,33 @@ def main():
     calib = cpool[:1000]
     print(f"[160m] eval={eval_seqs.shape[0]} val={val_seqs.shape[0]} calib={calib.shape[0]}")
 
+    def clear_hooks():
+        for l in model.gpt_neox.layers:
+            l.attention.query_key_value._forward_hooks.clear()
+
     def base_ce(seqs):
+        clear_hooks()
         h = V.V1aHook(model, 0); h.attach(); h.mode = "off"
-        ce = V.eval_loss(model, h, seqs, BS, DEV); h.detach(); return ce
+        ce = V.eval_loss(model, h, seqs, BS, DEV); h.detach(); clear_hooks(); return ce
     base = base_ce(eval_seqs)
     print(f"[160m] baseline CE = {base:.4f}")
 
-    # ---- Step 1+2: coarse (A0) and A1 recovery profile, all layers ----
-    prof = {}
-    mus = {}
+    # ---- Phase 1: calibrate ALL layers (no intervention hook anywhere) ----
+    cal = {}
     for L in range(Ln):
-        # calibrate FIRST (no intervention hook attached, avoids stale-ids interference)
-        mu, cnt, XtX, XtY, _ = V._ridge_calibrate(model, model.gpt_neox.layers[L],
-                                                 calib, BS, DEV, vocab, d)
-        h = V.V1aHook(model, L); h.attach()
-        h.mode = "table"; h.anchor_mu = None
+        clear_hooks()
+        cal[L] = V._ridge_calibrate(model, model.gpt_neox.layers[L], calib, BS, DEV, vocab, d)
+    clear_hooks()
+    # ---- Phase 2: A0 / A1 recovery profile (attach-eval-detach per layer) ----
+    prof = {}; mus = {}
+    for L in range(Ln):
+        mu, cnt, XtX, XtY, _ = cal[L]
+        clear_hooks()
+        h = V.V1aHook(model, L); h.attach(); h.mode = "table"; h.anchor_mu = None
         d_a0 = V.eval_loss(model, h, eval_seqs, BS, DEV) - base          # = coarse delta
         h.anchor_mu, h.anchor_cnt = mu, cnt
         d_a1 = V.eval_loss(model, h, eval_seqs, BS, DEV) - base
-        h.detach()
+        h.detach(); clear_hooks()
         a1rec = (1 - d_a1 / d_a0) if abs(d_a0) > 1e-6 else float("nan")
         prof[L] = {"coarse_delta": round(d_a0, 4), "A1_recovery": round(a1rec, 4),
                    "ctx_residual": round(1 - a1rec, 4) if d_a0 > 1e-6 else None}
@@ -88,6 +96,7 @@ def main():
     res = {"baseline": round(base, 4), "profile": prof, "selected": sel, "layers": {}}
     for L in sel:
         mu, cnt, XtX, XtY, d_a0, d_a1 = mus[L]
+        clear_hooks()
         h = V.V1aHook(model, L); h.attach()
         h.anchor_mu, h.anchor_cnt = mu, cnt; h.variant = "shared"; h.scale = 1.0
         # lambda on validation (r64)
@@ -117,6 +126,7 @@ def main():
     # ---- Step 5: random-init CE finetune on the most context-heavy layer ----
     Lc = mids[0]
     mu, cnt, XtX, XtY, d_a0, d_a1 = mus[Lc]
+    clear_hooks()
     h = V.V1aHook(model, Lc); h.attach()
     h.anchor_mu, h.anchor_cnt = mu, cnt; h.variant = "shared"; h.scale = 1.0; h.dv_cap = 0.3
     # ridge-init (notrain) reference at this layer
