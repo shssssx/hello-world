@@ -1,0 +1,292 @@
+{
+  "5": {
+    "v0_delta": 0.6230111122131348,
+    "baseline": 2.1177585876405183,
+    "A1_ce": 2.1961,
+    "A1_recovery": 0.8742,
+    "best_lambda": 1000,
+    "context_delta_A1": 0.0784,
+    "variants": {
+      "full_uncapped": {
+        "ce": 2.133,
+        "delta": 0.0153,
+        "R_total": 0.9755,
+        "R_context": 0.8053
+      },
+      "r16_uncapped": {
+        "ce": 2.1726,
+        "delta": 0.0548,
+        "R_total": 0.912,
+        "R_context": 0.3008
+      },
+      "r64_uncapped": {
+        "ce": 2.1544,
+        "delta": 0.0367,
+        "R_total": 0.9411,
+        "R_context": 0.5319
+      },
+      "r256_uncapped": {
+        "ce": 2.138,
+        "delta": 0.0202,
+        "R_total": 0.9676,
+        "R_context": 0.7422
+      },
+      "full_cap0.15": {
+        "ce": 2.164,
+        "delta": 0.0462,
+        "R_total": 0.9259,
+        "R_context": 0.4106
+      },
+      "r16_cap0.15": {
+        "ce": 2.179,
+        "delta": 0.0613,
+        "R_total": 0.9016,
+        "R_context": 0.2181
+      },
+      "r64_cap0.15": {
+        "ce": 2.1722,
+        "delta": 0.0545,
+        "R_total": 0.9126,
+        "R_context": 0.3051
+      },
+      "r256_cap0.15": {
+        "ce": 2.1663,
+        "delta": 0.0486,
+        "R_total": 0.9221,
+        "R_context": 0.3804
+      }
+    }
+  },
+  "6": {
+    "v0_delta": 0.3235793113708496,
+    "baseline": 2.1177585876405183,
+    "A1_ce": 2.3655,
+    "A1_recovery": 0.2344,
+    "best_lambda": 0.0001,
+    "context_delta_A1": 0.2477,
+    "variants": {
+      "full_uncapped": {
+        "ce": 2.1519,
+        "delta": 0.0342,
+        "R_total": 0.8945,
+        "R_context": 0.8621
+      },
+      "r16_uncapped": {
+        "ce": 2.1855,
+        "delta": 0.0677,
+        "R_total": 0.7907,
+        "R_context": 0.7266
+      },
+      "r64_uncapped": {
+        "ce": 2.1714,
+        "delta": 0.0536,
+        "R_total": 0.8342,
+        "R_context": 0.7834
+      },
+      "r256_uncapped": {
+        "ce": 2.1583,
+        "delta": 0.0406,
+        "R_total": 0.8746,
+        "R_context": 0.8363
+      },
+      "full_cap0.15": {
+        "ce": 2.2509,
+        "delta": 0.1332,
+        "R_total": 0.5885,
+        "R_context": 0.4625
+      },
+      "r16_cap0.15": {
+        "ce": 2.2283,
+        "delta": 0.1106,
+        "R_total": 0.6583,
+        "R_context": 0.5536
+      },
+      "r64_cap0.15": {
+        "ce": 2.2419,
+        "delta": 0.1242,
+        "R_total": 0.6162,
+        "R_context": 0.4987
+      },
+      "r256_cap0.15": {
+        "ce": 2.2503,
+        "delta": 0.1325,
+        "R_total": 0.5905,
+        "R_context": 0.4652
+      }
+    }
+  },
+  "7": {
+    "v0_delta": 0.26508402824401855,
+    "baseline": 2.1177585876405183,
+    "A1_ce": 2.3247,
+    "A1_recovery": 0.2195,
+    "best_lambda": 0.001,
+    "context_delta_A1": 0.2069,
+    "variants": {
+      "full_uncapped": {
+        "ce": 2.1472,
+        "delta": 0.0294,
+        "R_total": 0.8891,
+        "R_context": 0.8579
+      },
+      "r16_uncapped": {
+        "ce": 2.1851,
+        "delta": 0.0673,
+        "R_total": 0.7461,
+        "R_context": 0.6747
+      },
+      "r64_uncapped": {
+        "ce": 2.1702,
+        "delta": 0.0525,
+        "R_total": 0.802,
+        "R_context": 0.7463
+      },
+      "r256_uncapped": {
+        "ce": 2.1552,
+        "delta": 0.0374,
+        "R_total": 0.8588,
+        "R_context": 0.8191
+      },
+      "full_cap0.15": {
+        "ce": 2.2459,
+        "delta": 0.1282,
+        "R_total": 0.5165,
+        "R_context": 0.3805
+      },
+      "r16_cap0.15": {
+        "ce": 2.2277,
+        "delta": 0.1099,
+        "R_total": 0.5852,
+        "R_context": 0.4686
+      },
+      "r64_cap0.15": {
+        "ce": 2.2383,
+        "delta": 0.1205,
+        "R_total": 0.5453,
+        "R_context": 0.4175
+      },
+      "r256_cap0.15": {
+        "ce": 2.2447,
+        "delta": 0.1269,
+        "R_total": 0.5212,
+        "R_context": 0.3866
+      }
+    }
+  },
+  "11": {
+    "v0_delta": 0.45355939865112305,
+    "baseline": 2.1177585876405183,
+    "A1_ce": 2.305,
+    "A1_recovery": 0.5872,
+    "best_lambda": 0.1,
+    "context_delta_A1": 0.1872,
+    "variants": {
+      "full_uncapped": {
+        "ce": 2.1608,
+        "delta": 0.0431,
+        "R_total": 0.905,
+        "R_context": 0.77
+      },
+      "r16_uncapped": {
+        "ce": 2.2192,
+        "delta": 0.1014,
+        "R_total": 0.7764,
+        "R_context": 0.4582
+      },
+      "r64_uncapped": {
+        "ce": 2.1972,
+        "delta": 0.0794,
+        "R_total": 0.8249,
+        "R_context": 0.5757
+      },
+      "r256_uncapped": {
+        "ce": 2.1736,
+        "delta": 0.0558,
+        "R_total": 0.8769,
+        "R_context": 0.7018
+      },
+      "full_cap0.15": {
+        "ce": 2.2456,
+        "delta": 0.1278,
+        "R_total": 0.7181,
+        "R_context": 0.3171
+      },
+      "r16_cap0.15": {
+        "ce": 2.2502,
+        "delta": 0.1325,
+        "R_total": 0.7079,
+        "R_context": 0.2924
+      },
+      "r64_cap0.15": {
+        "ce": 2.254,
+        "delta": 0.1363,
+        "R_total": 0.6995,
+        "R_context": 0.272
+      },
+      "r256_cap0.15": {
+        "ce": 2.252,
+        "delta": 0.1343,
+        "R_total": 0.704,
+        "R_context": 0.2828
+      }
+    }
+  },
+  "20": {
+    "v0_delta": 0.16788911819458008,
+    "baseline": 2.1177585876405183,
+    "A1_ce": 2.1439,
+    "A1_recovery": 0.8445,
+    "best_lambda": 1000,
+    "context_delta_A1": 0.0261,
+    "variants": {
+      "full_uncapped": {
+        "ce": 2.1254,
+        "delta": 0.0076,
+        "R_total": 0.9546,
+        "R_context": 0.7081
+      },
+      "r16_uncapped": {
+        "ce": 2.133,
+        "delta": 0.0152,
+        "R_total": 0.9093,
+        "R_context": 0.4169
+      },
+      "r64_uncapped": {
+        "ce": 2.1308,
+        "delta": 0.013,
+        "R_total": 0.9224,
+        "R_context": 0.501
+      },
+      "r256_uncapped": {
+        "ce": 2.1274,
+        "delta": 0.0097,
+        "R_total": 0.9423,
+        "R_context": 0.629
+      },
+      "full_cap0.15": {
+        "ce": 2.1355,
+        "delta": 0.0177,
+        "R_total": 0.8943,
+        "R_context": 0.3204
+      },
+      "r16_cap0.15": {
+        "ce": 2.1371,
+        "delta": 0.0193,
+        "R_total": 0.8849,
+        "R_context": 0.2598
+      },
+      "r64_cap0.15": {
+        "ce": 2.1364,
+        "delta": 0.0187,
+        "R_total": 0.8887,
+        "R_context": 0.2843
+      },
+      "r256_cap0.15": {
+        "ce": 2.1359,
+        "delta": 0.0181,
+        "R_total": 0.8922,
+        "R_context": 0.3068
+      }
+    }
+  }
+}
