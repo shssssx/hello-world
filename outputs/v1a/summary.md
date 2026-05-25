@@ -124,6 +124,21 @@ is not at L11. (That L5 recovery saturates at ~0.26 by r16 while the V-differenc
 needs ~330 dims for 90% variance also shows most of the high-rank V-difference is
 loss-irrelevant; only a low-rank, learnable slice matters — at L5.)
 
+## Overfitting ruled out (train vs eval recovery, capped)
+
+| config (capped, stable) | eval rec | train rec | gap |
+|---|---|---|---|
+| L5 shared r16 | 0.227 | 0.264 | 0.04 |
+| L11 shared r16 | 0.026 | 0.065 | 0.04 |
+| L11 shared r64 | 0.023 | 0.064 | 0.04 |
+
+Under norm-cap the train–eval gap is small for **both** layers, and crucially
+**L11 recovers only ~6% even on the training set.** So L11 is not an
+overfitting/data problem — a reasonable-magnitude correction simply cannot *fit*
+the loss-bearing V-contextualization at L11, even on train. (The large train-CE
+drop seen in the *uncapped* probe was ΔV/V→0.85 memorization that does not
+generalize.) L5, with the same small gap, fits and generalizes to ~0.23–0.26.
+
 ## Answers
 
 **Q1 — Reading A vs B (for recoverable layers, i.e. L5):**
