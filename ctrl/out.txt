@@ -1,112 +1,58 @@
-### seq=32  2026-05-25T07:04:29Z
+### seq=33  2026-05-25T07:08:28Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9356.78it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9102.47it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
+/root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  seqs = torch.load(cache)
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
-[svd] L5: var(dV)=552.73 var(realV)=278.68 PR=73.6 ranks@var={'50%': 56, '90%': 334, '95%': 449, '99%': 666}
-[svd] L11: var(dV)=1288.41 var(realV)=639.52 PR=77.9 ranks@var={'50%': 57, '90%': 326, '95%': 440, '99%': 657}
-[svd] wrote svd_diff.json
-===== svd_diff.json =====
-{
-  "5": {
-    "ranks_for_variance": {
-      "50%": 56,
-      "90%": 334,
-      "95%": 449,
-      "99%": 666
-    },
-    "participation_ratio": 73.6,
-    "total_var_diff": 552.7291375029309,
-    "total_var_realV": 278.6819011106561,
-    "cumvar_first32": [
-      0.093,
-      0.118,
-      0.138,
-      0.156,
-      0.173,
-      0.188,
-      0.202,
-      0.215,
-      0.227,
-      0.239,
-      0.249,
-      0.259,
-      0.269,
-      0.278,
-      0.286,
-      0.294,
-      0.302,
-      0.31,
-      0.317,
-      0.324,
-      0.331,
-      0.338,
-      0.345,
-      0.351,
-      0.357,
-      0.363,
-      0.369,
-      0.375,
-      0.381,
-      0.386,
-      0.392,
-      0.397
-    ]
-  },
-  "11": {
-    "ranks_for_variance": {
-      "50%": 57,
-      "90%": 326,
-      "95%": 440,
-      "99%": 657
-    },
-    "participation_ratio": 77.9,
-    "total_var_diff": 1288.4110180371526,
-    "total_var_realV": 639.5183439660794,
-    "cumvar_first32": [
-      0.091,
-      0.111,
-      0.129,
-      0.145,
-      0.161,
-      0.175,
-      0.189,
-      0.201,
-      0.212,
-      0.223,
-      0.233,
-      0.243,
-      0.253,
-      0.262,
-      0.271,
-      0.279,
-      0.287,
-      0.295,
-      0.303,
-      0.31,
-      0.318,
-      0.325,
-      0.332,
-      0.339,
-      0.345,
-      0.352,
-      0.359,
-      0.365,
-      0.371,
-      0.377,
-      0.383,
-      0.388
-    ]
-  }
-}[claude/zen-allen-7Y8Bx fd367ba] v1a svd_diff results
- 4 files changed, 93 insertions(+)
- create mode 100644 outputs/v1a/diff_eig_L11.npy
- create mode 100644 outputs/v1a/diff_eig_L5.npy
- create mode 100644 outputs/v1a/svd.done
- create mode 100644 outputs/v1a/svd_diff.json
+[data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
+[baseline] recomputed eval CE = 2.1177 (v0=2.1178)
+[probe] base_small(64)=2.2068 base_train(200)=1.8653
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=2.419 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.013 gB=7.3910
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=2.673 held=2.666 rec=-0.011 dV/V=0.018 |B|=0.127 gB=7.6223
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.765 held=2.652 rec=+0.018 dV/V=0.073 |B|=0.227 gB=13.7367
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=2.675 held=2.655 rec=+0.012 dV/V=0.150 |B|=0.323 gB=15.3102
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=2.385 held=2.661 rec=-0.000 dV/V=0.150 |B|=0.411 gB=12.0615
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=2.227 held=2.661 rec=-0.000 dV/V=0.150 |B|=0.475 gB=13.8246
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=2.450 held=2.664 rec=-0.009 dV/V=0.150 |B|=0.539 gB=9.0492
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.919 held=2.666 rec=-0.012 dV/V=0.150 |B|=0.599 gB=7.8406
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.629 held=2.666 rec=-0.013 dV/V=0.150 |B|=0.646 gB=5.4807
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.377 held=2.667 rec=-0.014 dV/V=0.150 |B|=0.697 gB=6.4960
+  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=2.932 held=2.667 rec=-0.015 dV/V=0.150 |B|=0.744 gB=4.7193
+[probe] L11_shared_r16_lr0.0001_s500_c0_cap0.15: eval_rec=+0.026 train_rec=0.065 (gap=0.04) (71.9s)
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s   0 tr=2.947 held=2.674 rec=-0.031 dV/V=0.000 |B|=0.026 gB=9.6883
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s  50 tr=2.650 held=2.656 rec=+0.010 dV/V=0.073 |B|=0.256 gB=19.7432
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 100 tr=2.755 held=2.680 rec=-0.042 dV/V=0.150 |B|=0.430 gB=13.9175
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 150 tr=2.387 held=2.670 rec=-0.022 dV/V=0.150 |B|=0.534 gB=12.0410
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 200 tr=2.323 held=2.672 rec=-0.026 dV/V=0.150 |B|=0.610 gB=9.7741
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 250 tr=2.749 held=2.670 rec=-0.022 dV/V=0.150 |B|=0.718 gB=9.0118
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 300 tr=2.693 held=2.669 rec=-0.019 dV/V=0.150 |B|=0.811 gB=6.6061
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 350 tr=2.936 held=2.670 rec=-0.021 dV/V=0.150 |B|=0.888 gB=5.6830
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 400 tr=2.214 held=2.671 rec=-0.023 dV/V=0.150 |B|=0.960 gB=6.5987
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 450 tr=1.885 held=2.668 rec=-0.016 dV/V=0.150 |B|=1.036 gB=7.4234
+  [L11_shared_r64_lr0.0001_s500_c0_cap0.15] s 499 tr=2.559 held=2.667 rec=-0.014 dV/V=0.150 |B|=1.113 gB=5.7456
+[probe] L11_shared_r64_lr0.0001_s500_c0_cap0.15: eval_rec=+0.023 train_rec=0.064 (gap=0.041) (72.2s)
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=3.244 held=2.893 rec=-0.101 dV/V=0.000 |B|=0.013 gB=5.6618
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=3.223 held=2.839 rec=-0.014 dV/V=0.018 |B|=0.128 gB=5.7863
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.444 held=2.787 rec=+0.069 dV/V=0.038 |B|=0.220 gB=7.1292
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=2.935 held=2.732 rec=+0.156 dV/V=0.068 |B|=0.303 gB=12.0786
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=2.904 held=2.727 rec=+0.166 dV/V=0.088 |B|=0.356 gB=9.9160
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=1.986 held=2.704 rec=+0.201 dV/V=0.112 |B|=0.414 gB=11.2258
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=2.802 held=2.681 rec=+0.239 dV/V=0.143 |B|=0.463 gB=12.5592
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.563 held=2.688 rec=+0.228 dV/V=0.150 |B|=0.513 gB=12.6198
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.977 held=2.712 rec=+0.189 dV/V=0.150 |B|=0.545 gB=14.0339
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.602 held=2.702 rec=+0.206 dV/V=0.150 |B|=0.609 gB=7.4479
+  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=3.083 held=2.704 rec=+0.203 dV/V=0.150 |B|=0.647 gB=7.8621
+[probe] L5_shared_r16_lr0.0001_s500_c0_cap0.15: eval_rec=+0.227 train_rec=0.264 (gap=0.036) (79.9s)
+[claude/zen-allen-7Y8Bx a49a1a7] v1a overfit test results
+ 4 files changed, 457 insertions(+), 450 deletions(-)
+ create mode 100644 outputs/v1a/overfit.done
+ rewrite outputs/v1a/probe_L11_shared_r16_lr0.0001_s500_c0_cap0.15.json (70%)
+ rewrite outputs/v1a/probe_L11_shared_r64_lr0.0001_s500_c0_cap0.15.json (70%)
+ rewrite outputs/v1a/probe_L5_shared_r16_lr0.0001_s500_c0_cap0.15.json (74%)
 SELFPUSH_OK
 ----- END (rc=0) -----
