@@ -102,6 +102,28 @@ recovery is pinned at ~0.03 across rank 2–256, linear and nonlinear, under sta
 capped training** — a robust wall, not tunable away by capacity, nonlinearity,
 lr, steps, or clipping.
 
+## Is it intrinsic rank? (no — SVD refutes the tempting explanation)
+
+Covariance spectrum of `V_real − V_table` over 200K tokens (`diff_spectrum.png`,
+`svd_diff.json`):
+
+| | L5 | L11 |
+|---|---|---|
+| rank for 50% var | 56 | 57 |
+| rank for 90% var | 334 | 326 |
+| participation ratio | 73.6 | 77.9 |
+| var(dV) | 553 | 1288 |
+
+**The V-difference is high-rank at BOTH layers, and the spectra are nearly
+identical.** So L11's recovery failure is *not* because its V-difference is
+higher-rank than L5's — they have the same spectral structure, yet a rank-16
+adapter recovers 26% at L5 and 3% at L11. The discriminator is therefore **not
+the dimensionality of the V-difference** but whether its *loss-bearing* part is a
+**learnable, generalizing low-rank function of LN_l(h)** — which it is at L5 and
+is not at L11. (That L5 recovery saturates at ~0.26 by r16 while the V-difference
+needs ~330 dims for 90% variance also shows most of the high-rank V-difference is
+loss-irrelevant; only a low-rank, learnable slice matters — at L5.)
+
 ## Answers
 
 **Q1 — Reading A vs B (for recoverable layers, i.e. L5):**
@@ -118,11 +140,13 @@ heterogeneous one. (Tentative: one recoverable layer.)
   useful V-contextualization at L11 is essentially **not recoverable by any trained
   read-out of the current layer's post-LN hidden state LN_l(h)** under this setup.
 
-This mirrors v0's "distributed redundancy": deeper layers carry V-contextualization
-in a form a per-layer adapter on LN_l(h) cannot reconstruct. Candidate reasons
-(not disambiguated here): the token-table is a fundamentally lossy anchor deep in
-the stack; or the needed signal lives in information not linearly/compactly present
-in LN_l(h); or deep-layer V-contextualization is irreducibly distributed.
+The SVD (below) refutes the simplest explanation: the V-difference is high-rank at
+BOTH layers (identical spectra), so it is **not** that L11's V-difference is higher
+rank. The discriminator is whether the *loss-bearing* slice of the correction is a
+learnable, generalizing low-rank function of LN_l(h). Candidate reasons (not
+disambiguated here): at deep layers the needed signal is not compactly/learnably
+present in the current post-LN hidden state, or the token-table is a fundamentally
+lossy anchor deep in the stack.
 
 ## Caveats
 
