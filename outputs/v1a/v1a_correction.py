@@ -575,9 +575,18 @@ HIGHRANK_MATRIX = [
     (5, "shared", 64, 1e-4, 500, 0.0, 0.15),
 ]
 
+# overfit test: report train-recovery vs eval-recovery (is L11 a data/generalization
+# problem rather than architecture?)
+OVERFIT_MATRIX = [
+    (11, "shared", 16, 1e-4, 500, 0.0, 0.15),
+    (11, "shared", 64, 1e-4, 500, 0.0, 0.15),
+    (5, "shared", 16, 1e-4, 500, 0.0, 0.15),
+]
+
 
 def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
-              layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0):
+              layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0,
+              base_train=None):
     tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}_cap{dv_cap:g}"
     hook = V1aHook(model, layer)
     hook.attach()
@@ -632,16 +641,21 @@ def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
     hook.mode = "correct"
     with torch.no_grad():
         final = eval_loss(model, hook, eval_seqs, bs, device)
+        train_final = eval_loss(model, hook, train_seqs[:200], bs, device)
     resid = final - base
+    train_rec = 1.0 - (train_final - base_train) / v0d if base_train else None
     rec = {"tag": tag, "layer": layer, "variant": variant, "rank": rank, "lr": lr,
            "steps": steps, "grad_clip": grad_clip, "dv_cap": dv_cap, "eval_loss": final,
+           "train_loss_200": train_final, "train_recovery": train_rec,
            "baseline": base, "v0_coarse_delta": v0d, "residual_delta": resid,
            "recovery_ratio": 1.0 - resid / v0d, "seconds": round(time.time() - t0, 1),
            "series": series}
     with open(os.path.join(HERE, f"probe_{tag}.json"), "w") as f:
         json.dump(rec, f, indent=2)
-    print(f"[probe] {tag}: final eval={final:.4f} resid={resid:+.4f} "
-          f"recovery={rec['recovery_ratio']:+.3f} ({rec['seconds']}s)")
+    print(f"[probe] {tag}: eval_rec={rec['recovery_ratio']:+.3f} "
+          f"train_rec={train_rec if train_rec is None else round(train_rec,3)} "
+          f"(gap={'NA' if train_rec is None else round(train_rec-rec['recovery_ratio'],3)}) "
+          f"({rec['seconds']}s)")
     hook.detach()
     hook.A = hook.B = None
     return rec
@@ -657,8 +671,15 @@ def mode_probe(args):
     small = eval_seqs[:64]
     # baseline on the 64-seq heldout (for mid-training recovery estimate)
     h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
-    base_small = eval_loss(model, h0, small, args.batch_size, device); h0.detach()
-    print(f"[probe] base_small(64 seq) = {base_small:.4f}")
+    base_small = eval_loss(model, h0, small, args.batch_size, device)
+    base_train = eval_loss(model, h0, train_seqs[:200], args.batch_size, device); h0.detach()
+    print(f"[probe] base_small(64)={base_small:.4f} base_train(200)={base_train:.4f}")
+    if args.overfit_matrix:
+        for (layer, variant, rank, lr, steps, clip, cap) in OVERFIT_MATRIX:
+            run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                      layer, variant, rank, lr, steps, clip, args.batch_size, device,
+                      dv_cap=cap, base_train=base_train)
+        return
     if args.highrank_matrix:
         for (layer, variant, rank, lr, steps, clip, cap) in HIGHRANK_MATRIX:
             run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
@@ -903,6 +924,7 @@ def main():
     p.add_argument("--cap_matrix", action="store_true")
     p.add_argument("--mlp_matrix", action="store_true")
     p.add_argument("--highrank_matrix", action="store_true")
+    p.add_argument("--overfit_matrix", action="store_true")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     args = p.parse_args()
     {
