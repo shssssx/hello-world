@@ -122,6 +122,20 @@ artifact of ~1M calibration tokens fitting ~1M parameters — it generalizes fro
 hundred sequences and saturates. λ is selected on a disjoint validation set, so it is not
 tuned on the reported eval. (cap0.3 follows the same shape, ~0.06–0.07 lower.)
 
+## Cross-scale replication on Pythia-160M
+
+*(placeholder — to be filled from `v1b_160m/repro160.json`.) Minimal replication of the
+three core claims on pythia-160m-deduped (12 layers, d=768), same Pile token blocks
+(shared tokenizer), λ selected on a disjoint validation set:*
+1. *A1 token anchor recovers much of the per-layer V-path loss;*
+2. *a mid-layer context residual remains (depth profile of A1 recovery);*
+3. *closed-form ridge (r64) recovers the residual from LN_l(h), reproduced zero-shot by a
+   ridge-init LoRA adapter, while random-init SGD is much weaker.*
+
+*Verdict to record: full replication (→ "observed across Pythia scales"), partial
+(→ "decomposition reproduces, depth profile shifts with scale"), or failure
+(→ scale-dependent emergence; downgrade to 410M case study).*
+
 ## Limitations
 
 - Single model (pythia-410m), single corpus (Pile). No cross-model / cross-dataset check.
