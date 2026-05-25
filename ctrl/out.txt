@@ -1,108 +1,377 @@
-### seq=4  2026-05-25T05:34:14Z
+### seq=5  2026-05-25T05:35:57Z
 ### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
 ----- BEGIN -----
-'/root/hello-world/option_b/scripts/01_bootstrap_capacity_ci.py' -> '/root/autodl-tmp/option_b_analyses/scripts/01_bootstrap_capacity_ci.py'
-'/root/hello-world/option_b/scripts/02_multilayer_cka.py' -> '/root/autodl-tmp/option_b_analyses/scripts/02_multilayer_cka.py'
-'/root/hello-world/option_b/scripts/02a_extract_qwen_hidden_states.py' -> '/root/autodl-tmp/option_b_analyses/scripts/02a_extract_qwen_hidden_states.py'
-'/root/hello-world/option_b/scripts/03_linear_probe_assumption1.py' -> '/root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py'
-'/root/hello-world/option_b/scripts/04_learning_curve_fits.py' -> '/root/autodl-tmp/option_b_analyses/scripts/04_learning_curve_fits.py'
-'/root/hello-world/option_b/scripts/05_closed_api_proxy_nano.py' -> '/root/autodl-tmp/option_b_analyses/scripts/05_closed_api_proxy_nano.py'
---- delivered scripts ---
-total 56
-drwxr-xr-x 2 root root 4096 May 25 13:34 .
-drwxr-xr-x 3 root root   29 May 25 13:34 ..
--rw-r--r-- 1 root root 5100 May 25 13:34 01_bootstrap_capacity_ci.py
--rw-r--r-- 1 root root 7669 May 25 13:34 02_multilayer_cka.py
--rw-r--r-- 1 root root 9454 May 25 13:34 02a_extract_qwen_hidden_states.py
--rw-r--r-- 1 root root 5115 May 25 13:34 03_linear_probe_assumption1.py
--rw-r--r-- 1 root root 6824 May 25 13:34 04_learning_curve_fits.py
--rw-r--r-- 1 root root 5804 May 25 13:34 05_closed_api_proxy_nano.py
---- python syntax check (compile only) ---
-OK /root/autodl-tmp/option_b_analyses/scripts/01_bootstrap_capacity_ci.py
-OK /root/autodl-tmp/option_b_analyses/scripts/02_multilayer_cka.py
-OK /root/autodl-tmp/option_b_analyses/scripts/02a_extract_qwen_hidden_states.py
-OK /root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py
-OK /root/autodl-tmp/option_b_analyses/scripts/04_learning_curve_fits.py
-OK /root/autodl-tmp/option_b_analyses/scripts/05_closed_api_proxy_nano.py
---- re-inspect seed dirs ---
-========== seed0 ==========
-total 20
-drwxr-xr-x 2 root root 120 Apr 29 14:00 .
-drwxr-xr-x 6 root root  78 Apr 29 09:14 ..
--rw-r--r-- 1 root root  58 Apr 29 00:06 step0.json
--rw-r--r-- 1 root root  86 Apr 29 00:25 step1.json
--rw-r--r-- 1 root root 171 Apr 29 00:26 step2.json
--rw-r--r-- 1 root root  58 Apr 29 04:21 step3.json
--rw-r--r-- 1 root root 233 Apr 29 08:56 step4.json
-[MISSING] teacher_model/
-[MISSING] student_model/
-/root/autodl-tmp/artifacts_llama/seed0/step0.json
-/root/autodl-tmp/artifacts_llama/seed0/step1.json
-/root/autodl-tmp/artifacts_llama/seed0/step2.json
-/root/autodl-tmp/artifacts_llama/seed0/step3.json
-/root/autodl-tmp/artifacts_llama/seed0/step4.json
-20K	/root/autodl-tmp/artifacts_llama/seed0
-========== seed1 ==========
-total 8320
-drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
-drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
--rw-r--r-- 1 root root 3728677 Apr 29 14:01 filtered_train.jsonl
--rw-r--r-- 1 root root 4753235 Apr 29 09:18 raw_number_corpus.jsonl
--rw-r--r-- 1 root root      58 Apr 29 00:19 step0.json
--rw-r--r-- 1 root root      86 Apr 29 09:18 step1.json
--rw-r--r-- 1 root root     172 Apr 29 14:01 step2.json
--rw-r--r-- 1 root root      58 Apr 29 17:47 step3.json
--rw-r--r-- 1 root root     218 Apr 29 18:25 step4.json
-drwxr-xr-x 2 root root    4096 Apr 29 17:47 student_model
-drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
-[OK] teacher_model/
-[OK] student_model/
-/root/autodl-tmp/artifacts_llama/seed1/step0.json
-/root/autodl-tmp/artifacts_llama/seed1/step1.json
-/root/autodl-tmp/artifacts_llama/seed1/step2.json
-/root/autodl-tmp/artifacts_llama/seed1/step3.json
-/root/autodl-tmp/artifacts_llama/seed1/step4.json
-29G	/root/autodl-tmp/artifacts_llama/seed1
-========== seed2 ==========
-total 7692
-drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
-drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
--rw-r--r-- 1 root root 3473941 Apr 29 14:01 filtered_train.jsonl
--rw-r--r-- 1 root root 4363599 Apr 29 09:17 raw_number_corpus.jsonl
--rw-r--r-- 1 root root      58 Apr 29 00:19 step0.json
--rw-r--r-- 1 root root      86 Apr 29 09:17 step1.json
--rw-r--r-- 1 root root     171 Apr 29 14:01 step2.json
--rw-r--r-- 1 root root      58 Apr 29 17:29 step3.json
--rw-r--r-- 1 root root     232 Apr 29 18:25 step4.json
-drwxr-xr-x 2 root root    4096 Apr 29 17:29 student_model
-drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
-[OK] teacher_model/
-[OK] student_model/
-/root/autodl-tmp/artifacts_llama/seed2/step0.json
-/root/autodl-tmp/artifacts_llama/seed2/step1.json
-/root/autodl-tmp/artifacts_llama/seed2/step2.json
-/root/autodl-tmp/artifacts_llama/seed2/step3.json
-/root/autodl-tmp/artifacts_llama/seed2/step4.json
-29G	/root/autodl-tmp/artifacts_llama/seed2
-========== seed3 ==========
-total 7680
-drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
-drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
--rw-r--r-- 1 root root 3472978 Apr 29 14:09 filtered_train.jsonl
--rw-r--r-- 1 root root 4356643 Apr 29 14:09 raw_number_corpus.jsonl
--rw-r--r-- 1 root root      58 Apr 29 09:16 step0.json
--rw-r--r-- 1 root root      86 Apr 29 14:09 step1.json
--rw-r--r-- 1 root root     170 Apr 29 14:09 step2.json
--rw-r--r-- 1 root root      58 Apr 29 17:41 step3.json
--rw-r--r-- 1 root root     202 Apr 29 18:25 step4.json
-drwxr-xr-x 2 root root    4096 Apr 29 17:41 student_model
-drwxr-xr-x 2 root root    4096 Apr 29 09:16 teacher_model
-[OK] teacher_model/
-[OK] student_model/
-/root/autodl-tmp/artifacts_llama/seed3/step0.json
-/root/autodl-tmp/artifacts_llama/seed3/step1.json
-/root/autodl-tmp/artifacts_llama/seed3/step2.json
-/root/autodl-tmp/artifacts_llama/seed3/step3.json
-/root/autodl-tmp/artifacts_llama/seed3/step4.json
-29G	/root/autodl-tmp/artifacts_llama/seed3
------ END (rc=0) -----
+=== launch 02a extraction: seed1->gpu0, seed2->gpu1, seed3->gpu2 ===
+pids: 4324 4325 4326 ; waiting...
+extract rc: seed1=0 seed2=0 seed3=0
+--- tail extract1.log ---
+  probe 75/100
+  probe 100/100
+  teacher shape: (29, 100, 3584)
+[seed_dir=/root/autodl-tmp/artifacts_llama/seed1] extracting student hidden states (n=100 probes)...
+  loading /root/autodl-tmp/artifacts_llama/seed1/student_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  5.31it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  4.87it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  4.93it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  5.86it/s]
+  probe 25/100
+  probe 50/100
+  probe 75/100
+  probe 100/100
+  student shape: (29, 100, 3584)
+[saved] /root/autodl-tmp/artifacts_llama/seed1/qwen_hidden_states.npz  (37.4 MB)
+--- tail extract2.log ---
+  probe 75/100
+  probe 100/100
+  teacher shape: (29, 100, 3584)
+[seed_dir=/root/autodl-tmp/artifacts_llama/seed2] extracting student hidden states (n=100 probes)...
+  loading /root/autodl-tmp/artifacts_llama/seed2/student_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  4.78it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  4.63it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  4.73it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  5.53it/s]
+  probe 25/100
+  probe 50/100
+  probe 75/100
+  probe 100/100
+  student shape: (29, 100, 3584)
+[saved] /root/autodl-tmp/artifacts_llama/seed2/qwen_hidden_states.npz  (37.4 MB)
+--- tail extract3.log ---
+  probe 75/100
+  probe 100/100
+  teacher shape: (29, 100, 3584)
+[seed_dir=/root/autodl-tmp/artifacts_llama/seed3] extracting student hidden states (n=100 probes)...
+  loading /root/autodl-tmp/artifacts_llama/seed3/student_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  5.16it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  4.94it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  5.04it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  5.91it/s]
+  probe 25/100
+  probe 50/100
+  probe 75/100
+  probe 100/100
+  student shape: (29, 100, 3584)
+[saved] /root/autodl-tmp/artifacts_llama/seed3/qwen_hidden_states.npz  (37.4 MB)
+=== npz produced? ===
+-rw-r--r-- 1 root root 37429878 May 25 13:36 /root/autodl-tmp/artifacts_llama/seed1/qwen_hidden_states.npz
+-rw-r--r-- 1 root root 37436909 May 25 13:36 /root/autodl-tmp/artifacts_llama/seed2/qwen_hidden_states.npz
+-rw-r--r-- 1 root root 37435226 May 25 13:36 /root/autodl-tmp/artifacts_llama/seed3/qwen_hidden_states.npz
+=== per-seed CKA ===
+[seed=seed1] 29 layers, 50 trait + 50 neutral probes
+  max global CKA: layer 1, 0.999
+  max trait CKA:  layer 1, 0.999
+  saved: multilayer_cka.csv, multilayer_cka_summary.json
+[seed=seed2] 29 layers, 50 trait + 50 neutral probes
+  max global CKA: layer 1, 0.999
+  max trait CKA:  layer 1, 0.999
+  saved: multilayer_cka.csv, multilayer_cka_summary.json
+[seed=seed3] 29 layers, 50 trait + 50 neutral probes
+  max global CKA: layer 1, 0.999
+  max trait CKA:  layer 1, 0.999
+  saved: multilayer_cka.csv, multilayer_cka_summary.json
+=== aggregate (seeds 1 2 3) ===
+
+[aggregate over 3 seeds]
+
+=== AGGREGATE (n=3 seeds) ===
+  max_global_cka_value              0.9994  (std 0.0001)
+  max_trait_cka_value               0.9993  (std 0.0002)
+  mean_global_cka                   0.9488  (std 0.0012)
+  mean_trait_cka                    0.9360  (std 0.0030)
+  median_trait_uplift               0.9876  (std 0.0013)
+  rho2_trait_at_max_layer           0.9993  (std 0.0002)
+
+=== Per-layer trait-subspace CKA (rho^2 proxy) ===
+   layer   trait_mean   trait_std   global_mean
+       0       0.0000      0.0000        0.0000
+       1       0.9993      0.0002        0.9994
+       2       0.9965      0.0011        0.9967
+       3       0.9931      0.0017        0.9928
+       4       0.9894      0.0036        0.9871
+       5       0.9673      0.0044        0.9627
+       6       0.9772      0.0020        0.9793
+       7       0.9765      0.0006        0.9798
+       8       0.9798      0.0016        0.9828
+       9       0.9767      0.0008        0.9837
+      10       0.9757      0.0010        0.9809
+      11       0.9730      0.0023        0.9768
+      12       0.9742      0.0009        0.9803
+      13       0.9711      0.0019        0.9833
+      14       0.9680      0.0034        0.9833
+      15       0.9606      0.0047        0.9825
+      16       0.9597      0.0037        0.9823
+      17       0.9686      0.0046        0.9876
+      18       0.9699      0.0040        0.9881
+      19       0.9790      0.0026        0.9908
+      20       0.9781      0.0047        0.9885
+      21       0.9730      0.0053        0.9884
+      22       0.9682      0.0074        0.9867
+      23       0.9676      0.0069        0.9861
+      24       0.9598      0.0078        0.9833
+      25       0.9434      0.0109        0.9772
+      26       0.9369      0.0127        0.9714
+      27       0.9335      0.0122        0.9709
+      28       0.9279      0.0087        0.9640
+
+Saved: /root/autodl-tmp/artifacts_llama/multilayer_cka_aggregate.json
+=== aggregate json dump ===
+{
+  "n_seeds": 3,
+  "seeds": [
+    "seed1",
+    "seed2",
+    "seed3"
+  ],
+  "summary_stats": {
+    "max_global_cka_value": {
+      "mean": 0.9993791158815414,
+      "std": 9.428577349522155e-05,
+      "values": [
+        0.9993869495420988,
+        0.9992811576646008,
+        0.9994692404379246
+      ]
+    },
+    "max_trait_cka_value": {
+      "mean": 0.9992880310745673,
+      "std": 0.00016950176543853432,
+      "values": [
+        0.9991777475217414,
+        0.9992031407047821,
+        0.9994832049971784
+      ]
+    },
+    "mean_global_cka": {
+      "mean": 0.9488490047470899,
+      "std": 0.001179058289472322,
+      "values": [
+        0.9476009683486223,
+        0.9490018729584765,
+        0.9499441729341709
+      ]
+    },
+    "mean_trait_cka": {
+      "mean": 0.9359953747831584,
+      "std": 0.0029657778715455893,
+      "values": [
+        0.9325888837894623,
+        0.938003091486773,
+        0.9373941490732399
+      ]
+    },
+    "median_trait_uplift": {
+      "mean": 0.9875816645700329,
+      "std": 0.001259870427446129,
+      "values": [
+        0.9865026999332608,
+        0.9889662208368991,
+        0.9872760729399392
+      ]
+    },
+    "rho2_trait_at_max_layer": {
+      "mean": 0.9992880310745673,
+      "std": 0.00016950176543853432,
+      "values": [
+        0.9991777475217414,
+        0.9992031407047821,
+        0.9994832049971784
+      ]
+    }
+  },
+  "per_layer_aggregate": [
+    {
+      "layer": 0,
+      "cka_global_mean": 0.0,
+      "cka_global_std": 0.0,
+      "cka_trait_mean": 0.0,
+      "cka_trait_std": 0.0
+    },
+    {
+      "layer": 1,
+      "cka_global_mean": 0.9993791158815414,
+      "cka_global_std": 9.428577349522155e-05,
+      "cka_trait_mean": 0.9992880310745673,
+      "cka_trait_std": 0.00016950176543853432
+    },
+    {
+      "layer": 2,
+      "cka_global_mean": 0.9966953672503678,
+      "cka_global_std": 0.0009727103473154653,
+      "cka_trait_mean": 0.9965167707251634,
+      "cka_trait_std": 0.0010715455617634994
+    },
+    {
+      "layer": 3,
+      "cka_global_mean": 0.9928277374724895,
+      "cka_global_std": 0.0014331388677855752,
+      "cka_trait_mean": 0.9930618156450993,
+      "cka_trait_std": 0.0017459457204576168
+    },
+    {
+      "layer": 4,
+      "cka_global_mean": 0.9871088830424108,
+      "cka_global_std": 0.0022871640124227577,
+      "cka_trait_mean": 0.9894059038190749,
+      "cka_trait_std": 0.003630423824405198
+    },
+    {
+      "layer": 5,
+      "cka_global_mean": 0.962745568156488,
+      "cka_global_std": 0.0046981772599717225,
+      "cka_trait_mean": 0.9672731753373833,
+      "cka_trait_std": 0.0044094800201889325
+    },
+    {
+      "layer": 6,
+      "cka_global_mean": 0.9792677847426362,
+      "cka_global_std": 0.0031484664703899687,
+      "cka_trait_mean": 0.9771932871522985,
+      "cka_trait_std": 0.001962559059083632
+    },
+    {
+      "layer": 7,
+      "cka_global_mean": 0.9798214909312971,
+      "cka_global_std": 0.0017898837055332277,
+      "cka_trait_mean": 0.976544464934804,
+      "cka_trait_std": 0.0005982110156640045
+    },
+    {
+      "layer": 8,
+      "cka_global_mean": 0.9827829791092427,
+      "cka_global_std": 0.001193819189987898,
+      "cka_trait_mean": 0.9797892189075116,
+      "cka_trait_std": 0.0016258817871003175
+    },
+    {
+      "layer": 9,
+      "cka_global_mean": 0.9836536789722494,
+      "cka_global_std": 0.00014510795456051576,
+      "cka_trait_mean": 0.976692881037056,
+      "cka_trait_std": 0.0008256083019827229
+    },
+    {
+      "layer": 10,
+      "cka_global_mean": 0.9809087051254589,
+      "cka_global_std": 0.0003239027225097291,
+      "cka_trait_mean": 0.9756674458067499,
+      "cka_trait_std": 0.000953510373030885
+    },
+    {
+      "layer": 11,
+      "cka_global_mean": 0.97682242332435,
+      "cka_global_std": 0.003908531864496144,
+      "cka_trait_mean": 0.9729677542436005,
+      "cka_trait_std": 0.002263608400894528
+    },
+    {
+      "layer": 12,
+      "cka_global_mean": 0.9802920910542751,
+      "cka_global_std": 0.002190118283862841,
+      "cka_trait_mean": 0.9742437799921312,
+      "cka_trait_std": 0.0008554763155946946
+    },
+    {
+      "layer": 13,
+      "cka_global_mean": 0.9832626128889745,
+      "cka_global_std": 0.0017432555601101193,
+      "cka_trait_mean": 0.9711375111385712,
+      "cka_trait_std": 0.0018700571513447723
+    },
+    {
+      "layer": 14,
+      "cka_global_mean": 0.9832675156136514,
+      "cka_global_std": 0.00045936107462155853,
+      "cka_trait_mean": 0.9679767794986446,
+      "cka_trait_std": 0.0033568912740425255
+    },
+    {
+      "layer": 15,
+      "cka_global_mean": 0.9824656940999758,
+      "cka_global_std": 0.0011669250374610187,
+      "cka_trait_mean": 0.9605509485402575,
+      "cka_trait_std": 0.004657374622782136
+    },
+    {
+      "layer": 16,
+      "cka_global_mean": 0.9822803720954063,
+      "cka_global_std": 0.0006171364924064276,
+      "cka_trait_mean": 0.9597261170238794,
+      "cka_trait_std": 0.003735358781812014
+    },
+    {
+      "layer": 17,
+      "cka_global_mean": 0.9875656369762854,
+      "cka_global_std": 0.0021997761468289844,
+      "cka_trait_mean": 0.9686155440312753,
+      "cka_trait_std": 0.004646139170819235
+    },
+    {
+      "layer": 18,
+      "cka_global_mean": 0.98813969017455,
+      "cka_global_std": 0.00182885204266629,
+      "cka_trait_mean": 0.9698848335501785,
+      "cka_trait_std": 0.003950887798157202
+    },
+    {
+      "layer": 19,
+      "cka_global_mean": 0.9907644534209109,
+      "cka_global_std": 0.0028334011216700063,
+      "cka_trait_mean": 0.9790174458927091,
+      "cka_trait_std": 0.0026106545907649244
+    },
+    {
+      "layer": 20,
+      "cka_global_mean": 0.9884608227443432,
+      "cka_global_std": 0.004665334382786636,
+      "cka_trait_mean": 0.9781075116541714,
+      "cka_trait_std": 0.0046660554438640615
+    },
+    {
+      "layer": 21,
+      "cka_global_mean": 0.9884399221549919,
+      "cka_global_std": 0.0044251305617975835,
+      "cka_trait_mean": 0.9729542132469176,
+      "cka_trait_std": 0.005253351242800828
+    },
+    {
+      "layer": 22,
+      "cka_global_mean": 0.9867366210447894,
+      "cka_global_std": 0.0038781811501460185,
+      "cka_trait_mean": 0.9681899237081963,
+      "cka_trait_std": 0.007365747940991511
+    },
+    {
+      "layer": 23,
+      "cka_global_mean": 0.9861109529331501,
+      "cka_global_std": 0.003585589246762956,
+      "cka_trait_mean": 0.9675675552449602,
+      "cka_trait_std": 0.006867030409542223
+    },
+    {
+      "layer": 24,
+      "cka_global_mean": 0.9832654629523327,
+      "cka_global_std": 0.0034960700336846592,
+      "cka_trait_mean": 0.9598424223542791,
+      "cka_trait_std": 0.007842261043556701
+    },
+    {
+      "layer": 25,
+      "cka_global_mean": 0.9771944925074453,
+      "cka_global_std": 0.005442795812644202,
+      "cka_trait_mean": 0.9433664013494109,
+      "cka_trait_std": 0.010921088786902847
+    },
+    {
+      "layer": 26,
+      "cka_global_mean": 0.9713862520792241,
+      "cka_global_std": 0.005922019717460401,
+      "cka_trait_mean": 0.9369347968656824,
+      "cka_trait_std": 0.012654324755131627
+    },
+    {
+      "layer": 27,
+      "cka_global_mean": 0.9709341164657133,
+      "cka_global_std": 0.0049790302982205,
+      "cka_trait_mean": 0.933468802970954,
+      "cka_trait_std": 0.012169640129043553
+    },
+    {
+      "layer": 28,
+      "cka_global_mean": 0.9640406944510568,
+      "cka_global_std": 0.003592580945788013,
+      "cka_trait_mean": 0.9278805329660668,
+      "cka_trait_std": 0.008690051597959285
+    }
+  ]
+}----- END (rc=0) -----
