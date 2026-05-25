@@ -130,6 +130,8 @@ class V1aHook:
         self.last_dv_ratio = 0.0      # ||corr|| / ||V_orig||  (diagnostic)
         self.last_dv_maxabs = 0.0
         self.dv_cap = 0.0             # >0: hard-cap ||corr|| <= dv_cap * ||V_orig||
+        self.anchor_mu = None         # [vocab,d] fitted per-token base (A1) if set
+        self.anchor_cnt = None
 
     def attach(self):
         self.detach()
@@ -141,12 +143,20 @@ class V1aHook:
             self._handle = None
 
     def _token_table_V(self):
-        """[B,S,nh,hd] token-table V = W_V . LN_l(E[x]); optionally rescaled."""
+        """[B,S,nh,hd] base V the correction is added to. Default = token-table
+        A0 = W_V.LN_l(E[x]); if anchor_mu is set, use the fitted per-token table
+        A1 (fallback to A0 for unseen tokens)."""
         emb = self.gpt_neox.embed_in(self.current_ids)
         normed = self.layer.input_layernorm(emb)
         tg = F.linear(normed, self.qkv.weight, self.qkv.bias)      # [B,S,3d]
         B, S, _ = tg.shape
         tgv = tg.view(B, S, self.nh, 3 * self.hd)[..., 2 * self.hd:]   # [B,S,nh,hd]
+        if self.anchor_mu is not None:
+            mu = self.anchor_mu[self.current_ids]                     # [B,S,d] float
+            seen = (self.anchor_cnt[self.current_ids] > 0).unsqueeze(-1)
+            a0flat = tgv.reshape(B, S, self.d).float()
+            base = torch.where(seen, mu, a0flat).to(tgv.dtype)
+            return base.view(B, S, self.nh, self.hd).detach()
         if self.rescale is not None:
             r = self.rescale
             flat = tgv.reshape(B, S, self.d).float()
@@ -586,11 +596,14 @@ OVERFIT_MATRIX = [
 
 def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
               layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0,
-              base_train=None):
-    tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}_cap{dv_cap:g}"
+              base_train=None, anchor_mu=None, anchor_cnt=None):
+    abase = "A1" if anchor_mu is not None else "A0"
+    tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}_cap{dv_cap:g}_{abase}"
     hook = V1aHook(model, layer)
     hook.attach()
     hook.dv_cap = dv_cap
+    hook.anchor_mu = anchor_mu
+    hook.anchor_cnt = anchor_cnt
     params = hook.init_lora(variant, rank, device)
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
     hook.mode = "correct"
@@ -956,6 +969,47 @@ def _recompute_baseline_anchor(model, seqs, bs, device):
     return b
 
 
+def mode_v1b(args):
+    """v1b pilot: fitted per-token anchor (A1) + small trained correction.
+    Does training a small corrector on the A1 residual (the genuine-context
+    part) recover MORE than A1 alone, esp. at L11?"""
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    train_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size
+    vocab = model.config.vocab_size
+    base = _recompute_baseline(model, eval_seqs, device, args)
+    small = eval_seqs[:64]
+    h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
+    base_small = eval_loss(model, h0, small, args.batch_size, device)
+    base_train = eval_loss(model, h0, train_seqs[:200], args.batch_size, device); h0.detach()
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [11, 5]
+    ranks = [int(x) for x in args.ranks.split(",")] if args.ranks else [16, 64]
+    summary = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        print(f"[v1b] L{layer}: calibrating A1 table ...")
+        mu, cnt, _, _, _ = _calibrate(model, lyr, train_seqs, args.batch_size, device, vocab, d)
+        # A1 alone (no correction)
+        ha = V1aHook(model, layer); ha.attach()
+        ha.anchor_mu = mu; ha.anchor_cnt = cnt; ha.mode = "table"
+        a1ce = eval_loss(model, ha, eval_seqs, args.batch_size, device); ha.detach()
+        a1rec = 1.0 - (a1ce - base) / float(v0[layer])
+        print(f"[v1b] L{layer} A1-alone: ce={a1ce:.4f} recovery={a1rec:+.3f}")
+        summary[str(layer)] = {"A1_alone": round(a1rec, 4)}
+        for rank in ranks:
+            rec = run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                            layer, "shared", rank, args.lr, args.steps, 0.0,
+                            args.batch_size, device, dv_cap=0.15, base_train=base_train,
+                            anchor_mu=mu, anchor_cnt=cnt)
+            summary[str(layer)][f"A1+corr_r{rank}"] = round(rec["recovery_ratio"], 4)
+    with open(os.path.join(HERE, "v1b_anchor_plus_corr.json"), "w") as f:
+        json.dump(summary, f, indent=2)
+    print("[v1b] summary:", json.dumps(summary))
+
+
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
@@ -1098,7 +1152,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1128,6 +1182,7 @@ def main():
         "probe": mode_probe,
         "svd_diff": mode_svd_diff,
         "anchor": mode_anchor,
+        "v1b": mode_v1b,
         "plots": mode_plots,
     }[args.mode](args)
 
