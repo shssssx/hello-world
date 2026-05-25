@@ -1,0 +1,246 @@
+{
+  "seed": "seed1",
+  "n_layers": 29,
+  "max_global_cka_layer": 1,
+  "max_global_cka_value": 0.9993869495420988,
+  "max_trait_cka_layer": 1,
+  "max_trait_cka_value": 0.9991777475217414,
+  "mean_global_cka": 0.9476009683486223,
+  "mean_trait_cka": 0.9325888837894623,
+  "median_trait_uplift": 0.9865026999332608,
+  "rho2_trait_at_max_layer": 0.9991777475217414,
+  "per_layer_rows": [
+    {
+      "layer": 0,
+      "cka_global": 0.0,
+      "cka_trait_subspace": 0.0,
+      "cka_trait_neutral": 0.0,
+      "trait_uplift": 0.0,
+      "rho2_trait_proxy": 0.0
+    },
+    {
+      "layer": 1,
+      "cka_global": 0.9993869495420988,
+      "cka_trait_subspace": 0.9991777475217414,
+      "cka_trait_neutral": 0.9996005227294763,
+      "trait_uplift": 0.9997906696495754,
+      "rho2_trait_proxy": 0.9991777475217414
+    },
+    {
+      "layer": 2,
+      "cka_global": 0.9965439724388636,
+      "cka_trait_subspace": 0.9968322679752568,
+      "cka_trait_neutral": 0.9984166337310544,
+      "trait_uplift": 1.000289295349093,
+      "rho2_trait_proxy": 0.9968322679752568
+    },
+    {
+      "layer": 3,
+      "cka_global": 0.992179632460972,
+      "cka_trait_subspace": 0.9925377686610354,
+      "cka_trait_neutral": 0.9950639238822743,
+      "trait_uplift": 1.000360959032363,
+      "rho2_trait_proxy": 0.9925377686610354
+    },
+    {
+      "layer": 4,
+      "cka_global": 0.9868393081173483,
+      "cka_trait_subspace": 0.988801169066341,
+      "cka_trait_neutral": 0.9893194005129492,
+      "trait_uplift": 1.0019880247299182,
+      "rho2_trait_proxy": 0.988801169066341
+    },
+    {
+      "layer": 5,
+      "cka_global": 0.9643481754122541,
+      "cka_trait_subspace": 0.9631679011833881,
+      "cka_trait_neutral": 0.9681890006526035,
+      "trait_uplift": 0.9987760911888889,
+      "rho2_trait_proxy": 0.9631679011833881
+    },
+    {
+      "layer": 6,
+      "cka_global": 0.9805361281757972,
+      "cka_trait_subspace": 0.9791349151304882,
+      "cka_trait_neutral": 0.9884204164722339,
+      "trait_uplift": 0.9985709725475228,
+      "rho2_trait_proxy": 0.9791349151304882
+    },
+    {
+      "layer": 7,
+      "cka_global": 0.9818696200559061,
+      "cka_trait_subspace": 0.9764757619062565,
+      "cka_trait_neutral": 0.9840083521067321,
+      "trait_uplift": 0.9945065433948935,
+      "rho2_trait_proxy": 0.9764757619062565
+    },
+    {
+      "layer": 8,
+      "cka_global": 0.9816950756969962,
+      "cka_trait_subspace": 0.9781815029638145,
+      "cka_trait_neutral": 0.9838375077884572,
+      "trait_uplift": 0.9964209123380933,
+      "rho2_trait_proxy": 0.9781815029638145
+    },
+    {
+      "layer": 9,
+      "cka_global": 0.9837291025838834,
+      "cka_trait_subspace": 0.9759512863636403,
+      "cka_trait_neutral": 0.9901467291104529,
+      "trait_uplift": 0.9920935385566882,
+      "rho2_trait_proxy": 0.9759512863636403
+    },
+    {
+      "layer": 10,
+      "cka_global": 0.9808608273667444,
+      "cka_trait_subspace": 0.9748830173534487,
+      "cka_trait_neutral": 0.9861606888297016,
+      "trait_uplift": 0.9939055472025079,
+      "rho2_trait_proxy": 0.9748830173534487
+    },
+    {
+      "layer": 11,
+      "cka_global": 0.9759509948591605,
+      "cka_trait_subspace": 0.9720530388441174,
+      "cka_trait_neutral": 0.982253711618029,
+      "trait_uplift": 0.9960059920676595,
+      "rho2_trait_proxy": 0.9720530388441174
+    },
+    {
+      "layer": 12,
+      "cka_global": 0.9812480752672168,
+      "cka_trait_subspace": 0.9751332411855386,
+      "cka_trait_neutral": 0.9815100767017428,
+      "trait_uplift": 0.9937683097314478,
+      "rho2_trait_proxy": 0.9751332411855386
+    },
+    {
+      "layer": 13,
+      "cka_global": 0.9843645739919415,
+      "cka_trait_subspace": 0.9710783099617044,
+      "cka_trait_neutral": 0.985796369902885,
+      "trait_uplift": 0.9865026999332608,
+      "rho2_trait_proxy": 0.9710783099617044
+    },
+    {
+      "layer": 14,
+      "cka_global": 0.9829639404894841,
+      "cka_trait_subspace": 0.9680850166766733,
+      "cka_trait_neutral": 0.9820395537709768,
+      "trait_uplift": 0.9848632048441152,
+      "rho2_trait_proxy": 0.9680850166766733
+    },
+    {
+      "layer": 15,
+      "cka_global": 0.9816802394972939,
+      "cka_trait_subspace": 0.9569929563770082,
+      "cka_trait_neutral": 0.9828944124882567,
+      "trait_uplift": 0.974852011757996,
+      "rho2_trait_proxy": 0.9569929563770082
+    },
+    {
+      "layer": 16,
+      "cka_global": 0.9822662667503054,
+      "cka_trait_subspace": 0.95647314513645,
+      "cka_trait_neutral": 0.9831091693800184,
+      "trait_uplift": 0.973741212045092,
+      "rho2_trait_proxy": 0.95647314513645
+    },
+    {
+      "layer": 17,
+      "cka_global": 0.9869483835223117,
+      "cka_trait_subspace": 0.9657566269186025,
+      "cka_trait_neutral": 0.988931840799518,
+      "trait_uplift": 0.9785279990752119,
+      "rho2_trait_proxy": 0.9657566269186025
+    },
+    {
+      "layer": 18,
+      "cka_global": 0.9876904577227816,
+      "cka_trait_subspace": 0.9657576507253942,
+      "cka_trait_neutral": 0.9914458610687455,
+      "trait_uplift": 0.9777938454037962,
+      "rho2_trait_proxy": 0.9657576507253942
+    },
+    {
+      "layer": 19,
+      "cka_global": 0.9888561544072285,
+      "cka_trait_subspace": 0.976029937179145,
+      "cka_trait_neutral": 0.9907062903772615,
+      "trait_uplift": 0.987029238609763,
+      "rho2_trait_proxy": 0.976029937179145
+    },
+    {
+      "layer": 20,
+      "cka_global": 0.9840033677143688,
+      "cka_trait_subspace": 0.9727198903721883,
+      "cka_trait_neutral": 0.9803606280244567,
+      "trait_uplift": 0.9885330907267222,
+      "rho2_trait_proxy": 0.9727198903721883
+    },
+    {
+      "layer": 21,
+      "cka_global": 0.9844069751232835,
+      "cka_trait_subspace": 0.9669774662940839,
+      "cka_trait_neutral": 0.9822613801176928,
+      "trait_uplift": 0.9822944074253265,
+      "rho2_trait_proxy": 0.9669774662940839
+    },
+    {
+      "layer": 22,
+      "cka_global": 0.9825449435983156,
+      "cka_trait_subspace": 0.9598625704066932,
+      "cka_trait_neutral": 0.9832682100248075,
+      "trait_uplift": 0.9769146710902057,
+      "rho2_trait_proxy": 0.9598625704066932
+    },
+    {
+      "layer": 23,
+      "cka_global": 0.9820647985553583,
+      "cka_trait_subspace": 0.9600496760691367,
+      "cka_trait_neutral": 0.9796892242729672,
+      "trait_uplift": 0.9775828208906312,
+      "rho2_trait_proxy": 0.9600496760691367
+    },
+    {
+      "layer": 24,
+      "cka_global": 0.9792370175788294,
+      "cka_trait_subspace": 0.9517233418567506,
+      "cka_trait_neutral": 0.9767153994928702,
+      "trait_uplift": 0.9719029456319915,
+      "rho2_trait_proxy": 0.9517233418567506
+    },
+    {
+      "layer": 25,
+      "cka_global": 0.9727708717928543,
+      "cka_trait_subspace": 0.933916357008284,
+      "cka_trait_neutral": 0.9792672259873498,
+      "trait_uplift": 0.9600578965599988,
+      "rho2_trait_proxy": 0.933916357008284
+    },
+    {
+      "layer": 26,
+      "cka_global": 0.966261930830151,
+      "cka_trait_subspace": 0.926001822007932,
+      "cka_trait_neutral": 0.9737636976624563,
+      "trait_uplift": 0.9583341664018264,
+      "rho2_trait_proxy": 0.926001822007932
+    },
+    {
+      "layer": 27,
+      "cka_global": 0.9666697165732009,
+      "cka_trait_subspace": 0.9211924545220369,
+      "cka_trait_neutral": 0.9720770463019451,
+      "trait_uplift": 0.9529547049302644,
+      "rho2_trait_proxy": 0.9211924545220369
+    },
+    {
+      "layer": 28,
+      "cka_global": 0.9625105819850982,
+      "cka_trait_subspace": 0.920130790227254,
+      "cka_trait_neutral": 0.9528221229451354,
+      "trait_uplift": 0.9559695316071857,
+      "rho2_trait_proxy": 0.920130790227254
+    }
+  ]
+}
