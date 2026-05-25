@@ -1,0 +1,23 @@
+{
+  "6": {
+    "A1_recovery": 0.2342,
+    "best_lambda": 0.001,
+    "ridge_init_notrain": 0.7833,
+    "ridge_init_ft": 0.7835,
+    "random_init_ft": 0.3173
+  },
+  "7": {
+    "A1_recovery": 0.2194,
+    "best_lambda": 1,
+    "ridge_init_notrain": 0.7462,
+    "ridge_init_ft": 0.7443,
+    "random_init_ft": 0.0603
+  },
+  "11": {
+    "A1_recovery": 0.5873,
+    "best_lambda": 0.001,
+    "ridge_init_notrain": 0.5747,
+    "ridge_init_ft": 0.5598,
+    "random_init_ft": -0.3444
+  }
+}
