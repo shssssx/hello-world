@@ -1,6 +1,30 @@
-### seq=3  2026-05-25T05:24:22Z
+### seq=4  2026-05-25T05:34:14Z
 ### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
 ----- BEGIN -----
+'/root/hello-world/option_b/scripts/01_bootstrap_capacity_ci.py' -> '/root/autodl-tmp/option_b_analyses/scripts/01_bootstrap_capacity_ci.py'
+'/root/hello-world/option_b/scripts/02_multilayer_cka.py' -> '/root/autodl-tmp/option_b_analyses/scripts/02_multilayer_cka.py'
+'/root/hello-world/option_b/scripts/02a_extract_qwen_hidden_states.py' -> '/root/autodl-tmp/option_b_analyses/scripts/02a_extract_qwen_hidden_states.py'
+'/root/hello-world/option_b/scripts/03_linear_probe_assumption1.py' -> '/root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py'
+'/root/hello-world/option_b/scripts/04_learning_curve_fits.py' -> '/root/autodl-tmp/option_b_analyses/scripts/04_learning_curve_fits.py'
+'/root/hello-world/option_b/scripts/05_closed_api_proxy_nano.py' -> '/root/autodl-tmp/option_b_analyses/scripts/05_closed_api_proxy_nano.py'
+--- delivered scripts ---
+total 56
+drwxr-xr-x 2 root root 4096 May 25 13:34 .
+drwxr-xr-x 3 root root   29 May 25 13:34 ..
+-rw-r--r-- 1 root root 5100 May 25 13:34 01_bootstrap_capacity_ci.py
+-rw-r--r-- 1 root root 7669 May 25 13:34 02_multilayer_cka.py
+-rw-r--r-- 1 root root 9454 May 25 13:34 02a_extract_qwen_hidden_states.py
+-rw-r--r-- 1 root root 5115 May 25 13:34 03_linear_probe_assumption1.py
+-rw-r--r-- 1 root root 6824 May 25 13:34 04_learning_curve_fits.py
+-rw-r--r-- 1 root root 5804 May 25 13:34 05_closed_api_proxy_nano.py
+--- python syntax check (compile only) ---
+OK /root/autodl-tmp/option_b_analyses/scripts/01_bootstrap_capacity_ci.py
+OK /root/autodl-tmp/option_b_analyses/scripts/02_multilayer_cka.py
+OK /root/autodl-tmp/option_b_analyses/scripts/02a_extract_qwen_hidden_states.py
+OK /root/autodl-tmp/option_b_analyses/scripts/03_linear_probe_assumption1.py
+OK /root/autodl-tmp/option_b_analyses/scripts/04_learning_curve_fits.py
+OK /root/autodl-tmp/option_b_analyses/scripts/05_closed_api_proxy_nano.py
+--- re-inspect seed dirs ---
 ========== seed0 ==========
 total 20
 drwxr-xr-x 2 root root 120 Apr 29 14:00 .
@@ -10,16 +34,13 @@ drwxr-xr-x 6 root root  78 Apr 29 09:14 ..
 -rw-r--r-- 1 root root 171 Apr 29 00:26 step2.json
 -rw-r--r-- 1 root root  58 Apr 29 04:21 step3.json
 -rw-r--r-- 1 root root 233 Apr 29 08:56 step4.json
--- subdir check --
 [MISSING] teacher_model/
 [MISSING] student_model/
--- step json files --
 /root/autodl-tmp/artifacts_llama/seed0/step0.json
 /root/autodl-tmp/artifacts_llama/seed0/step1.json
 /root/autodl-tmp/artifacts_llama/seed0/step2.json
 /root/autodl-tmp/artifacts_llama/seed0/step3.json
 /root/autodl-tmp/artifacts_llama/seed0/step4.json
--- du --
 20K	/root/autodl-tmp/artifacts_llama/seed0
 ========== seed1 ==========
 total 8320
@@ -34,44 +55,13 @@ drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
 -rw-r--r-- 1 root root     218 Apr 29 18:25 step4.json
 drwxr-xr-x 2 root root    4096 Apr 29 17:47 student_model
 drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
--- subdir check --
-[OK] teacher_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
-[OK] student_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
--- step json files --
+[OK] teacher_model/
+[OK] student_model/
 /root/autodl-tmp/artifacts_llama/seed1/step0.json
 /root/autodl-tmp/artifacts_llama/seed1/step1.json
 /root/autodl-tmp/artifacts_llama/seed1/step2.json
 /root/autodl-tmp/artifacts_llama/seed1/step3.json
 /root/autodl-tmp/artifacts_llama/seed1/step4.json
--- du --
 29G	/root/autodl-tmp/artifacts_llama/seed1
 ========== seed2 ==========
 total 7692
@@ -86,44 +76,13 @@ drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
 -rw-r--r-- 1 root root     232 Apr 29 18:25 step4.json
 drwxr-xr-x 2 root root    4096 Apr 29 17:29 student_model
 drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
--- subdir check --
-[OK] teacher_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
-[OK] student_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
--- step json files --
+[OK] teacher_model/
+[OK] student_model/
 /root/autodl-tmp/artifacts_llama/seed2/step0.json
 /root/autodl-tmp/artifacts_llama/seed2/step1.json
 /root/autodl-tmp/artifacts_llama/seed2/step2.json
 /root/autodl-tmp/artifacts_llama/seed2/step3.json
 /root/autodl-tmp/artifacts_llama/seed2/step4.json
--- du --
 29G	/root/autodl-tmp/artifacts_llama/seed2
 ========== seed3 ==========
 total 7680
@@ -138,43 +97,12 @@ drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
 -rw-r--r-- 1 root root     202 Apr 29 18:25 step4.json
 drwxr-xr-x 2 root root    4096 Apr 29 17:41 student_model
 drwxr-xr-x 2 root root    4096 Apr 29 09:16 teacher_model
--- subdir check --
-[OK] teacher_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
-[OK] student_model/ present:
-added_tokens.json
-config.json
-generation_config.json
-merges.txt
-model-00001-of-00004.safetensors
-model-00002-of-00004.safetensors
-model-00003-of-00004.safetensors
-model-00004-of-00004.safetensors
-model.safetensors.index.json
-special_tokens_map.json
-tokenizer.json
-tokenizer_config.json
-training_args.bin
-vocab.json
--- step json files --
+[OK] teacher_model/
+[OK] student_model/
 /root/autodl-tmp/artifacts_llama/seed3/step0.json
 /root/autodl-tmp/artifacts_llama/seed3/step1.json
 /root/autodl-tmp/artifacts_llama/seed3/step2.json
 /root/autodl-tmp/artifacts_llama/seed3/step3.json
 /root/autodl-tmp/artifacts_llama/seed3/step4.json
--- du --
 29G	/root/autodl-tmp/artifacts_llama/seed3
 ----- END (rc=0) -----
