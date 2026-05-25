@@ -1,5 +1,42 @@
 # v1a — single-layer low-rank V-path correction (summary)
 
+> ## REFRAMING (anchor audit, supersedes the trained-corrector conclusions below)
+>
+> The trained-corrector chain (below) concluded L11 was ~unrecoverable. An anchor
+> audit overturns the strong reading. A **fitted per-token-mean V table** A1(x) =
+> E[V_l^real | token=x] (estimated on a sequence-disjoint calibration set, 97%
+> eval coverage) recovers, vs the v0 token-table A0 = W_V·LN(E[x]):
+>
+> | layer | A0 | **A1 fitted token table** | oracle PCA r256 | genuine context residual (1−A1) |
+> |---|---|---|---|---|
+> | L5  | 0.00 | **0.87** | 0.98 | 0.13 |
+> | L11 | 0.00 | **0.59** | 0.92 | 0.41 |
+> | L17 | 0.00 | **0.87** | 0.95 | 0.13 |
+> | L23 | 0.00 | **0.76** | 0.89 | 0.24 |
+>
+> **Three corrections to the earlier conclusions:**
+> 1. **L11 is NOT incompressible.** A pure per-token table recovers 59% of its loss
+>    (L11/L5 ratio 0.67 ≥ 0.6 pre-registered threshold ⇒ "weak anchor", not
+>    "incompressible"). The trained low-rank corrector's ~3% was a *learning/
+>    parameterization* failure (the oracle, using real V, reaches 0.92 at L11) —
+>    not absence of recoverable signal.
+> 2. **v0's "V-contextualization cost" is mostly a weak-anchor artifact, not
+>    context.** A0 and A1 are *both* context-free per-token values, yet A0 recovers
+>    0% and A1 recovers 76–88% (L5/17/23). So most of v0's coarse delta is just that
+>    `W_V·LN(E[x])` is a poor stand-in for the per-token-average V — not genuine
+>    contextualization.
+> 3. **Genuine context-dependence (residual after A1) is small and depth-graded:**
+>    ~13% at L5/L17, ~24% at L23, ~41% at L11. It rises with depth but is far below
+>    v0's raw numbers, and the oracle shows it is largely low-rank.
+>
+> **v1b factorization:** stronger token anchor (fitted A1-style table) + a small
+> correction for the residual context part — NOT more rank on the A0-anchored
+> corrector. (`anchor_audit.png`, `anchor_audit.json`)
+>
+> Everything below is the diagnostic chain that led here; read it as method, with
+> the L11 conclusions superseded by this box.
+
+
 Pythia-410m-deduped, fp16, single RTX 4090. Eval = the exact 1000 Pile-train
 blocks (ctxlen 1024) used in v0; train = the *next* 1000 blocks (no overlap).
 Baseline next-token CE recomputed each run = **2.1177** (v0: 2.1178, assert |Δ|<0.005 ok).
