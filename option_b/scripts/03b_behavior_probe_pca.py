@@ -24,6 +24,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.linear_model import Ridge
 from sklearn.neural_network import MLPRegressor
+from sklearn.kernel_ridge import KernelRidge
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -35,7 +36,13 @@ def r_squared(y_true, y_pred):
 
 
 def probe_one_layer(X, y, n_pca, seed=42):
-    """PCA-reduce, then fit linear (Ridge) vs MLP regressor. Return test R²s."""
+    """
+    PCA-reduce hidden states, then fit:
+      - Linear (Ridge with light L2)
+      - MLP grid (small, regularized) — picked by validation R²
+      - Kernel Ridge RBF grid — picked by validation R²
+    Return test R² for each, plus the best nonlinear's ratio.
+    """
     X_tr, X_temp, y_tr, y_temp = train_test_split(
         X, y, test_size=0.4, random_state=seed)
     X_va, X_te, y_va, y_te = train_test_split(
@@ -53,21 +60,75 @@ def probe_one_layer(X, y, n_pca, seed=42):
     X_te_p = pca.transform(X_te_s)
     var_explained = float(pca.explained_variance_ratio_.sum())
 
-    # Linear (Ridge for numerical stability)
+    # === Linear baseline (Ridge) ===
     lin = Ridge(alpha=1.0).fit(X_tr_p, y_tr)
     r2_lin_te = r_squared(y_te, lin.predict(X_te_p))
 
-    # MLP
-    mlp = MLPRegressor(hidden_layer_sizes=(64, 64), max_iter=500,
-                       random_state=seed, early_stopping=True,
-                       validation_fraction=0.15).fit(X_tr_p, y_tr)
-    r2_mlp_te = r_squared(y_te, mlp.predict(X_te_p))
+    # === MLP grid: small + regularized, selected by validation R² ===
+    mlp_grid = [
+        {"hidden_layer_sizes": (8,),     "alpha": 1.0},
+        {"hidden_layer_sizes": (8,),     "alpha": 10.0},
+        {"hidden_layer_sizes": (16,),    "alpha": 1.0},
+        {"hidden_layer_sizes": (16,),    "alpha": 10.0},
+        {"hidden_layer_sizes": (32,),    "alpha": 10.0},
+    ]
+    best_mlp_va = -np.inf
+    best_mlp_te = -np.inf
+    best_mlp_cfg = None
+    for cfg in mlp_grid:
+        try:
+            mlp = MLPRegressor(
+                **cfg,
+                max_iter=5000,
+                random_state=seed,
+                early_stopping=False,   # n_val too small for stable early stop
+                solver="lbfgs",         # better for small n
+            ).fit(X_tr_p, y_tr)
+            va_r2 = r_squared(y_va, mlp.predict(X_va_p))
+            if va_r2 > best_mlp_va:
+                best_mlp_va = va_r2
+                best_mlp_te = r_squared(y_te, mlp.predict(X_te_p))
+                best_mlp_cfg = cfg
+        except Exception:
+            continue
+
+    # === Kernel Ridge (RBF) grid: more stable nonlinear baseline ===
+    kr_grid = [
+        {"alpha": 0.1, "gamma": 0.01},
+        {"alpha": 1.0, "gamma": 0.01},
+        {"alpha": 0.1, "gamma": 0.1},
+        {"alpha": 1.0, "gamma": 0.1},
+        {"alpha": 1.0, "gamma": 1.0},
+    ]
+    best_kr_va = -np.inf
+    best_kr_te = -np.inf
+    best_kr_cfg = None
+    for cfg in kr_grid:
+        try:
+            kr = KernelRidge(kernel="rbf", **cfg).fit(X_tr_p, y_tr)
+            va_r2 = r_squared(y_va, kr.predict(X_va_p))
+            if va_r2 > best_kr_va:
+                best_kr_va = va_r2
+                best_kr_te = r_squared(y_te, kr.predict(X_te_p))
+                best_kr_cfg = cfg
+        except Exception:
+            continue
+
+    # Best nonlinear baseline = better of (best MLP, best kernel ridge)
+    best_nl_te = max(best_mlp_te, best_kr_te)
+    best_nl_source = "mlp" if best_mlp_te >= best_kr_te else "kernel_ridge"
+
+    ratio = (r2_lin_te / max(best_nl_te, 1e-9)) if best_nl_te > 0 else float("nan")
 
     return {
         "r2_linear":         float(r2_lin_te),
-        "r2_mlp":            float(r2_mlp_te),
-        "linear_over_mlp":   float(r2_lin_te / max(r2_mlp_te, 1e-9))
-                              if r2_mlp_te > 0 else float("nan"),
+        "r2_mlp_best":       float(best_mlp_te),
+        "r2_mlp_cfg":        str(best_mlp_cfg),
+        "r2_kr_best":        float(best_kr_te),
+        "r2_kr_cfg":         str(best_kr_cfg),
+        "r2_best_nonlinear": float(best_nl_te),
+        "best_nl_source":    best_nl_source,
+        "linear_over_nonlinear": float(ratio) if not np.isnan(ratio) else None,
         "n_pca":             n_pca_eff,
         "pca_var_explained": var_explained,
     }
@@ -118,28 +179,29 @@ def main():
         res = probe_one_layer(X, y, n_pca=args.n_pca, seed=args.seed)
         res["layer"] = ell
         rows.append(res)
-        print(f"  layer {ell:2d}:  R²_linear={res['r2_linear']:+.3f}  "
-              f"R²_MLP={res['r2_mlp']:+.3f}  ratio={res['linear_over_mlp']:.3f}  "
-              f"(PCA explains {res['pca_var_explained']*100:.1f}%)")
+        print(f"  layer {ell:2d}:  R²_lin={res['r2_linear']:+.3f}  "
+              f"R²_NL={res['r2_best_nonlinear']:+.3f} ({res['best_nl_source']})  "
+              f"ratio={res['linear_over_nonlinear']}  "
+              f"(PCA {res['pca_var_explained']*100:.1f}%)")
 
-    # Pick best layer = max R²_MLP (the upper bound) AMONG layers with positive R²_MLP
-    positive_rows = [r for r in rows if r["r2_mlp"] > 0]
+    # Pick best layer = max R²_nonlinear (the upper bound) AMONG layers with positive R²_NL
+    positive_rows = [r for r in rows if r["r2_best_nonlinear"] > 0]
     if positive_rows:
-        best = max(positive_rows, key=lambda r: r["r2_mlp"])
+        best = max(positive_rows, key=lambda r: r["r2_best_nonlinear"])
         print(f"\n=== Best layer ({best['layer']}) ===")
-        print(f"  R² linear: {best['r2_linear']:.3f}")
-        print(f"  R² MLP:    {best['r2_mlp']:.3f}")
-        print(f"  Ratio:     {best['linear_over_mlp']:.3f}")
-        if best["linear_over_mlp"] > 0.7:
-            print(">> Assumption 1 SUPPORTED: linear regressor recovers ≥70% of MLP R²")
-        elif best["linear_over_mlp"] > 0.5:
+        print(f"  R² linear:        {best['r2_linear']:.3f}")
+        print(f"  R² best nonlinear:{best['r2_best_nonlinear']:.3f} ({best['best_nl_source']})")
+        print(f"  Ratio:            {best['linear_over_nonlinear']}")
+        if best["linear_over_nonlinear"] is not None and best["linear_over_nonlinear"] > 0.7:
+            print(">> Assumption 1 SUPPORTED: linear recovers ≥70% of nonlinear R²")
+        elif best["linear_over_nonlinear"] is not None and best["linear_over_nonlinear"] > 0.5:
             print(">> Assumption 1 PARTIALLY supported")
         else:
-            print(">> CAUTION: linear << MLP at best layer")
+            print(">> CAUTION: linear << nonlinear at best layer")
     else:
-        print("\nWARNING: no layer achieved R²_MLP > 0 -- behavior signal may be "
+        print("\nWARNING: no layer achieved R²_nonlinear > 0 -- behavior signal may be "
               "too sparse or labels too uninformative.")
-        best = max(rows, key=lambda r: r["r2_mlp"])
+        best = max(rows, key=lambda r: r["r2_best_nonlinear"])
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output, "w", newline="") as f:
@@ -157,8 +219,9 @@ def main():
             "score_std": float(all_scores.std(ddof=1)),
             "best_layer": best["layer"],
             "best_r2_linear": best["r2_linear"],
-            "best_r2_mlp": best["r2_mlp"],
-            "best_ratio": best["linear_over_mlp"],
+            "best_r2_nonlinear": best["r2_best_nonlinear"],
+            "best_nl_source": best["best_nl_source"],
+            "best_linear_over_nonlinear": best["linear_over_nonlinear"],
             "per_layer": rows,
         }, f, indent=2)
     print(f"\nSaved: {args.output}, {summary_path}")
