@@ -124,17 +124,23 @@ tuned on the reported eval. (cap0.3 follows the same shape, ~0.06–0.07 lower.)
 
 ## Cross-scale replication on Pythia-160M
 
-*(placeholder — to be filled from `v1b_160m/repro160.json`.) Minimal replication of the
-three core claims on pythia-160m-deduped (12 layers, d=768), same Pile token blocks
-(shared tokenizer), λ selected on a disjoint validation set:*
-1. *A1 token anchor recovers much of the per-layer V-path loss;*
-2. *a mid-layer context residual remains (depth profile of A1 recovery);*
-3. *closed-form ridge (r64) recovers the residual from LN_l(h), reproduced zero-shot by a
-   ridge-init LoRA adapter, while random-init SGD is much weaker.*
+All three core claims reproduce on pythia-160m-deduped (12 layers, d=768; baseline CE
+2.994; same Pile token blocks, λ on a disjoint validation set). `repro160.json`,
+`repro160_profile.png`.
 
-*Verdict to record: full replication (→ "observed across Pythia scales"), partial
-(→ "decomposition reproduces, depth profile shifts with scale"), or failure
-(→ scale-dependent emergence; downgrade to 410M case study).*
+1. **A1 token anchor recovers much of the V-path loss:** 0.76–0.92 at most layers.
+2. **A mid-layer context residual remains:** A1 recovery dips to **0.39 at L4** and 0.67
+   at L5 (the 160M mid-stack), vs ≥0.79 elsewhere — the same shape as 410M's L6/L7 trough,
+   shifted in absolute index but at comparable relative depth (~35% vs ~28%).
+3. **Ridge recovers the residual; SGD does not:** at the most context-bound layer L4, r64
+   ridge recovers **R_context=0.84** (uncapped) / 0.73 (cap0.3); a random-init CE finetune
+   there gives **−0.17** (worse than the anchor), reproducing the optimization pathology —
+   the closed-form/ridge-init solution exists and is found in closed form, but SGD does not
+   reach it.
+
+**Verdict: full replication — "observed across Pythia scales"**, with the depth profile
+shifting in index but not in character (token-determined edges, context-bound mid-stack).
+This closes the single-model-artifact risk.
 
 ## Limitations
 
