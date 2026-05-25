@@ -1,10 +1,3 @@
-### seq=11  2026-05-25T06:53:38Z
-### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
------ BEGIN -----
-=== deliver 04a ===
-'/root/hello-world/option_b/scripts/04a_trait_shift_geometry.py' -> '/root/autodl-tmp/option_b_analyses/scripts/04a_trait_shift_geometry.py'
-OK
-=== run trait-shift geometry ===
 layer  0:  ||δ||_trait/||δ||_neutral = 1.000  (MWU p=1.000e+00) | PC1 var = 100.0% | cross-seed cos = 1.000
 layer  1:  ||δ||_trait/||δ||_neutral = 0.986  (MWU p=9.946e-01) | PC1 var = 20.4% | cross-seed cos = 0.854
 layer  2:  ||δ||_trait/||δ||_neutral = 1.017  (MWU p=2.526e-04) | PC1 var = 28.7% | cross-seed cos = 0.920
@@ -36,16 +29,3 @@ layer 27:  ||δ||_trait/||δ||_neutral = 1.346  (MWU p=1.130e-14) | PC1 var = 27
 layer 28:  ||δ||_trait/||δ||_neutral = 1.196  (MWU p=1.026e-07) | PC1 var = 27.4% | cross-seed cos = 0.941
 
 Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.json
-=== round-trip into repo ===
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.json' -> '/root/hello-world/option_b/results/probe_assumption1/shift_geometry.json'
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.log' -> '/root/hello-world/option_b/results/probe_assumption1/shift_geometry.log'
-total 44
-drwxr-xr-x 2 root root   163 May 25 14:53 .
-drwxr-xr-x 5 root root    80 May 25 14:32 ..
--rw-r--r-- 1 root root   831 May 25 14:33 extract_base.log
--rw-r--r-- 1 root root  1971 May 25 14:33 probe.csv
--rw-r--r-- 1 root root  6035 May 25 14:33 probe.json
--rw-r--r-- 1 root root  2485 May 25 14:33 probe.log
--rw-r--r-- 1 root root 19128 May 25 14:53 shift_geometry.json
--rw-r--r-- 1 root root  3251 May 25 14:53 shift_geometry.log
------ END (rc=0) -----
