@@ -1,9 +1,9 @@
-### seq=29  2026-05-25T06:32:54Z
+### seq=30  2026-05-25T06:45:05Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8876.19it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 9085.85it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
@@ -12,92 +12,66 @@
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
 [baseline] recomputed eval CE = 2.1177 (v0=2.1178)
 [probe] base_small(64 seq) = 2.2068
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s   0 tr=2.095 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.009 gB=5.2826
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s  50 tr=2.511 held=2.671 rec=-0.023 dV/V=0.005 |B|=0.084 gB=5.8743
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 100 tr=2.436 held=2.665 rec=-0.011 dV/V=0.024 |B|=0.144 gB=10.8603
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 150 tr=2.688 held=2.661 rec=-0.002 dV/V=0.074 |B|=0.227 gB=11.5675
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 200 tr=2.589 held=2.667 rec=-0.015 dV/V=0.150 |B|=0.317 gB=21.2070
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 250 tr=2.690 held=2.664 rec=-0.007 dV/V=0.150 |B|=0.386 gB=16.2114
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 300 tr=2.423 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.449 gB=11.9339
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 350 tr=3.156 held=2.662 rec=-0.003 dV/V=0.150 |B|=0.500 gB=6.3041
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 400 tr=2.420 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.542 gB=8.1482
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 450 tr=2.251 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.581 gB=11.3239
-  [L11_shared_r8_lr0.0001_s500_c0_cap0.15] s 499 tr=2.414 held=2.663 rec=-0.005 dV/V=0.150 |B|=0.612 gB=11.9397
-[probe] L11_shared_r8_lr0.0001_s500_c0_cap0.15: final eval=2.5576 resid=+0.4400 recovery=+0.030 (70.3s)
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=2.464 held=2.674 rec=-0.030 dV/V=0.000 |B|=0.013 gB=5.6067
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=2.428 held=2.668 rec=-0.017 dV/V=0.012 |B|=0.118 gB=8.1710
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.844 held=2.662 rec=-0.004 dV/V=0.048 |B|=0.205 gB=11.6386
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=2.456 held=2.658 rec=+0.004 dV/V=0.130 |B|=0.311 gB=14.1792
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=1.916 held=2.657 rec=+0.008 dV/V=0.150 |B|=0.409 gB=18.0963
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=2.893 held=2.663 rec=-0.006 dV/V=0.150 |B|=0.480 gB=7.7795
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=2.712 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.539 gB=6.9058
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.719 held=2.663 rec=-0.006 dV/V=0.150 |B|=0.593 gB=7.3851
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.607 held=2.665 rec=-0.011 dV/V=0.150 |B|=0.655 gB=7.6314
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.925 held=2.667 rec=-0.015 dV/V=0.150 |B|=0.710 gB=5.6820
-  [L11_shared_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=2.444 held=2.669 rec=-0.019 dV/V=0.150 |B|=0.753 gB=8.2262
-[probe] L11_shared_r16_lr0.0001_s500_c0_cap0.15: final eval=2.5621 resid=+0.4444 recovery=+0.020 (70.8s)
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s   0 tr=2.139 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.027 gB=5.1219
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s  50 tr=2.575 held=2.673 rec=-0.028 dV/V=0.015 |B|=0.238 gB=5.4572
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 100 tr=2.591 held=2.678 rec=-0.038 dV/V=0.119 |B|=0.440 gB=10.7762
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 150 tr=2.368 held=2.682 rec=-0.048 dV/V=0.150 |B|=0.667 gB=12.9995
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 200 tr=3.006 held=2.676 rec=-0.034 dV/V=0.150 |B|=0.796 gB=8.3637
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 250 tr=2.409 held=2.674 rec=-0.031 dV/V=0.150 |B|=0.885 gB=5.2433
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 300 tr=2.102 held=2.675 rec=-0.031 dV/V=0.150 |B|=0.972 gB=5.1692
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 350 tr=2.280 held=2.671 rec=-0.024 dV/V=0.150 |B|=1.080 gB=6.1214
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 400 tr=2.453 held=2.670 rec=-0.021 dV/V=0.150 |B|=1.177 gB=5.2534
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 450 tr=2.365 held=2.670 rec=-0.022 dV/V=0.150 |B|=1.289 gB=4.4118
-  [L11_shared_r8_lr0.0003_s500_c0_cap0.15] s 499 tr=2.426 held=2.671 rec=-0.023 dV/V=0.150 |B|=1.360 gB=3.2970
-[probe] L11_shared_r8_lr0.0003_s500_c0_cap0.15: final eval=2.5657 resid=+0.4480 recovery=+0.012 (70.8s)
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s   0 tr=2.890 held=2.673 rec=-0.028 dV/V=0.000 |B|=0.038 gB=5.2964
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s  50 tr=2.694 held=2.665 rec=-0.011 dV/V=0.070 |B|=0.371 gB=8.6463
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 100 tr=2.654 held=2.659 rec=+0.003 dV/V=0.100 |B|=0.583 gB=6.5482
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 150 tr=2.185 held=2.659 rec=+0.004 dV/V=0.100 |B|=0.714 gB=5.3117
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 200 tr=2.611 held=2.657 rec=+0.007 dV/V=0.100 |B|=0.838 gB=4.0755
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 250 tr=2.381 held=2.658 rec=+0.005 dV/V=0.100 |B|=0.962 gB=4.6740
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 300 tr=2.979 held=2.659 rec=+0.003 dV/V=0.100 |B|=1.083 gB=2.6463
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 350 tr=2.872 held=2.660 rec=+0.000 dV/V=0.100 |B|=1.219 gB=1.8229
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 400 tr=2.751 held=2.660 rec=+0.002 dV/V=0.100 |B|=1.327 gB=2.2108
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 450 tr=2.367 held=2.659 rec=+0.002 dV/V=0.100 |B|=1.448 gB=2.4948
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 500 tr=2.159 held=2.660 rec=+0.002 dV/V=0.100 |B|=1.553 gB=2.6841
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 550 tr=2.025 held=2.660 rec=+0.001 dV/V=0.100 |B|=1.660 gB=2.6294
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 600 tr=2.185 held=2.661 rec=-0.002 dV/V=0.100 |B|=1.778 gB=2.3011
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 650 tr=2.718 held=2.662 rec=-0.004 dV/V=0.100 |B|=1.881 gB=1.1153
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 700 tr=2.716 held=2.662 rec=-0.004 dV/V=0.100 |B|=1.980 gB=1.4698
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 750 tr=2.197 held=2.662 rec=-0.004 dV/V=0.100 |B|=2.082 gB=2.5351
-  [L11_shared_r16_lr0.0003_s800_c0_cap0.1] s 799 tr=2.556 held=2.663 rec=-0.007 dV/V=0.100 |B|=2.207 gB=1.4970
-[probe] L11_shared_r16_lr0.0003_s800_c0_cap0.1: final eval=2.5579 resid=+0.4403 recovery=+0.029 (108.5s)
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s   0 tr=3.018 held=2.891 rec=-0.098 dV/V=0.000 |B|=0.009 gB=5.5139
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s  50 tr=2.800 held=2.843 rec=-0.022 dV/V=0.016 |B|=0.107 gB=5.0021
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 100 tr=2.294 held=2.789 rec=+0.065 dV/V=0.033 |B|=0.183 gB=6.7121
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 150 tr=2.662 held=2.745 rec=+0.136 dV/V=0.052 |B|=0.243 gB=9.3735
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 200 tr=2.554 held=2.737 rec=+0.149 dV/V=0.066 |B|=0.282 gB=10.1846
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 250 tr=2.411 held=2.721 rec=+0.175 dV/V=0.085 |B|=0.323 gB=10.1322
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 300 tr=2.863 held=2.735 rec=+0.152 dV/V=0.098 |B|=0.348 gB=9.2553
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 350 tr=2.717 held=2.713 rec=+0.187 dV/V=0.120 |B|=0.396 gB=9.5029
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 400 tr=2.723 held=2.697 rec=+0.213 dV/V=0.150 |B|=0.446 gB=11.2387
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 450 tr=3.037 held=2.710 rec=+0.192 dV/V=0.150 |B|=0.481 gB=10.4257
-  [L5_shared_r8_lr0.0001_s500_c0_cap0.15] s 499 tr=3.025 held=2.706 rec=+0.200 dV/V=0.150 |B|=0.507 gB=10.3284
-[probe] L5_shared_r8_lr0.0001_s500_c0_cap0.15: final eval=2.5923 resid=+0.4746 recovery=+0.238 (78.4s)
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=2.550 held=2.890 rec=-0.097 dV/V=0.000 |B|=0.013 gB=7.0660
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=2.183 held=2.864 rec=-0.055 dV/V=0.018 |B|=0.120 gB=11.9301
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.559 held=2.795 rec=+0.056 dV/V=0.038 |B|=0.200 gB=6.2357
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=3.130 held=2.722 rec=+0.173 dV/V=0.078 |B|=0.298 gB=8.2739
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=2.385 held=2.690 rec=+0.224 dV/V=0.107 |B|=0.352 gB=12.4314
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=2.545 held=2.687 rec=+0.230 dV/V=0.121 |B|=0.394 gB=11.2606
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=2.968 held=2.673 rec=+0.251 dV/V=0.148 |B|=0.451 gB=11.3386
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.480 held=2.680 rec=+0.240 dV/V=0.150 |B|=0.500 gB=13.7964
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.911 held=2.684 rec=+0.235 dV/V=0.150 |B|=0.540 gB=9.8123
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.827 held=2.680 rec=+0.240 dV/V=0.150 |B|=0.583 gB=8.7683
-  [L5_shared_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=3.100 held=2.683 rec=+0.236 dV/V=0.150 |B|=0.630 gB=10.3497
-[probe] L5_shared_r16_lr0.0001_s500_c0_cap0.15: final eval=2.5749 resid=+0.4572 recovery=+0.266 (78.5s)
-[claude/zen-allen-7Y8Bx 651cc1d] v1a norm-capped probe results
- 7 files changed, 973 insertions(+)
- create mode 100644 outputs/v1a/capprobe.done
- create mode 100644 outputs/v1a/probe_L11_shared_r16_lr0.0001_s500_c0_cap0.15.json
- create mode 100644 outputs/v1a/probe_L11_shared_r16_lr0.0003_s800_c0_cap0.1.json
- create mode 100644 outputs/v1a/probe_L11_shared_r8_lr0.0001_s500_c0_cap0.15.json
- create mode 100644 outputs/v1a/probe_L11_shared_r8_lr0.0003_s500_c0_cap0.15.json
- create mode 100644 outputs/v1a/probe_L5_shared_r16_lr0.0001_s500_c0_cap0.15.json
- create mode 100644 outputs/v1a/probe_L5_shared_r8_lr0.0001_s500_c0_cap0.15.json
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=2.087 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.013 gB=5.1261
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=2.791 held=2.672 rec=-0.025 dV/V=0.005 |B|=0.119 gB=2.8586
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.303 held=2.666 rec=-0.012 dV/V=0.028 |B|=0.205 gB=12.3429
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=2.310 held=2.662 rec=-0.002 dV/V=0.083 |B|=0.303 gB=13.9809
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=2.226 held=2.660 rec=-0.000 dV/V=0.150 |B|=0.407 gB=17.8489
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=2.682 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.482 gB=10.1999
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=1.988 held=2.659 rec=+0.004 dV/V=0.150 |B|=0.550 gB=17.3667
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.321 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.617 gB=10.3346
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.711 held=2.663 rec=-0.005 dV/V=0.150 |B|=0.672 gB=7.9122
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.277 held=2.663 rec=-0.006 dV/V=0.150 |B|=0.721 gB=8.9572
+  [L11_mlp_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=2.776 held=2.663 rec=-0.005 dV/V=0.150 |B|=0.768 gB=6.0348
+[probe] L11_mlp_r16_lr0.0001_s500_c0_cap0.15: final eval=2.5564 resid=+0.4388 recovery=+0.033 (70.4s)
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s   0 tr=2.759 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.018 gB=6.5054
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s  50 tr=2.299 held=2.667 rec=-0.014 dV/V=0.015 |B|=0.162 gB=5.6547
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 100 tr=2.278 held=2.655 rec=+0.011 dV/V=0.062 |B|=0.278 gB=15.9430
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 150 tr=2.281 held=2.660 rec=+0.000 dV/V=0.150 |B|=0.418 gB=17.5003
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 200 tr=2.356 held=2.658 rec=+0.005 dV/V=0.150 |B|=0.534 gB=14.0428
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 250 tr=2.693 held=2.658 rec=+0.006 dV/V=0.150 |B|=0.616 gB=8.7509
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 300 tr=2.422 held=2.658 rec=+0.006 dV/V=0.150 |B|=0.694 gB=8.9478
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 350 tr=2.491 held=2.658 rec=+0.005 dV/V=0.150 |B|=0.764 gB=7.5567
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 400 tr=2.317 held=2.659 rec=+0.004 dV/V=0.150 |B|=0.844 gB=8.5449
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 450 tr=2.260 held=2.659 rec=+0.004 dV/V=0.150 |B|=0.900 gB=6.6624
+  [L11_mlp_r32_lr0.0001_s500_c0_cap0.15] s 499 tr=2.831 held=2.661 rec=-0.002 dV/V=0.150 |B|=0.955 gB=4.2853
+[probe] L11_mlp_r32_lr0.0001_s500_c0_cap0.15: final eval=2.5552 resid=+0.4375 recovery=+0.035 (70.7s)
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s   0 tr=2.865 held=2.674 rec=-0.029 dV/V=0.000 |B|=0.038 gB=4.3981
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s  50 tr=2.694 held=2.674 rec=-0.030 dV/V=0.093 |B|=0.378 gB=10.4282
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 100 tr=2.871 held=2.676 rec=-0.035 dV/V=0.150 |B|=0.660 gB=6.8414
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 150 tr=2.370 held=2.668 rec=-0.017 dV/V=0.150 |B|=0.815 gB=8.7094
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 200 tr=2.352 held=2.663 rec=-0.007 dV/V=0.150 |B|=0.940 gB=6.1067
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 250 tr=2.159 held=2.661 rec=-0.002 dV/V=0.150 |B|=1.091 gB=5.5632
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 300 tr=2.403 held=2.663 rec=-0.006 dV/V=0.150 |B|=1.257 gB=4.9467
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 350 tr=2.353 held=2.663 rec=-0.006 dV/V=0.150 |B|=1.377 gB=2.7384
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 400 tr=2.093 held=2.663 rec=-0.005 dV/V=0.150 |B|=1.515 gB=4.7419
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 450 tr=2.563 held=2.665 rec=-0.011 dV/V=0.150 |B|=1.639 gB=3.2057
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 500 tr=1.892 held=2.665 rec=-0.010 dV/V=0.150 |B|=1.769 gB=4.8307
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 550 tr=2.523 held=2.665 rec=-0.011 dV/V=0.150 |B|=1.890 gB=2.1039
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 600 tr=2.500 held=2.665 rec=-0.010 dV/V=0.150 |B|=2.021 gB=2.6260
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 650 tr=2.141 held=2.663 rec=-0.007 dV/V=0.150 |B|=2.130 gB=4.6304
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 700 tr=3.050 held=2.664 rec=-0.007 dV/V=0.150 |B|=2.249 gB=1.5812
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 750 tr=2.733 held=2.663 rec=-0.006 dV/V=0.150 |B|=2.369 gB=1.6825
+  [L11_mlp_r16_lr0.0003_s800_c0_cap0.15] s 799 tr=2.353 held=2.662 rec=-0.004 dV/V=0.150 |B|=2.461 gB=2.5371
+[probe] L11_mlp_r16_lr0.0003_s800_c0_cap0.15: final eval=2.5568 resid=+0.4391 recovery=+0.032 (108.6s)
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s   0 tr=2.598 held=2.892 rec=-0.099 dV/V=0.000 |B|=0.013 gB=4.0893
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s  50 tr=2.337 held=2.846 rec=-0.027 dV/V=0.013 |B|=0.138 gB=4.6946
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 100 tr=2.791 held=2.794 rec=+0.057 dV/V=0.033 |B|=0.231 gB=6.2612
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 150 tr=2.865 held=2.714 rec=+0.187 dV/V=0.069 |B|=0.357 gB=6.1772
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 200 tr=2.217 held=2.706 rec=+0.199 dV/V=0.086 |B|=0.399 gB=13.2884
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 250 tr=2.939 held=2.687 rec=+0.230 dV/V=0.107 |B|=0.462 gB=9.0642
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 300 tr=1.955 held=2.669 rec=+0.258 dV/V=0.150 |B|=0.536 gB=14.3171
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 350 tr=2.600 held=2.682 rec=+0.238 dV/V=0.150 |B|=0.586 gB=9.2605
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 400 tr=2.511 held=2.674 rec=+0.249 dV/V=0.150 |B|=0.634 gB=15.4771
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 450 tr=2.700 held=2.682 rec=+0.237 dV/V=0.150 |B|=0.701 gB=8.6600
+  [L5_mlp_r16_lr0.0001_s500_c0_cap0.15] s 499 tr=2.151 held=2.694 rec=+0.219 dV/V=0.150 |B|=0.734 gB=9.8352
+[probe] L5_mlp_r16_lr0.0001_s500_c0_cap0.15: final eval=2.5851 resid=+0.4674 recovery=+0.250 (78.8s)
+[claude/zen-allen-7Y8Bx 3496d83] v1a mlp probe results
+ 5 files changed, 673 insertions(+)
+ create mode 100644 outputs/v1a/mlpprobe.done
+ create mode 100644 outputs/v1a/probe_L11_mlp_r16_lr0.0001_s500_c0_cap0.15.json
+ create mode 100644 outputs/v1a/probe_L11_mlp_r16_lr0.0003_s800_c0_cap0.15.json
+ create mode 100644 outputs/v1a/probe_L11_mlp_r32_lr0.0001_s500_c0_cap0.15.json
+ create mode 100644 outputs/v1a/probe_L5_mlp_r16_lr0.0001_s500_c0_cap0.15.json
 SELFPUSH_OK
 ----- END (rc=0) -----
