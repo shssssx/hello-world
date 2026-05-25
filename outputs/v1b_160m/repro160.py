@@ -59,11 +59,12 @@ def main():
     prof = {}
     mus = {}
     for L in range(Ln):
+        # calibrate FIRST (no intervention hook attached, avoids stale-ids interference)
+        mu, cnt, XtX, XtY, _ = V._ridge_calibrate(model, model.gpt_neox.layers[L],
+                                                 calib, BS, DEV, vocab, d)
         h = V.V1aHook(model, L); h.attach()
         h.mode = "table"; h.anchor_mu = None
         d_a0 = V.eval_loss(model, h, eval_seqs, BS, DEV) - base          # = coarse delta
-        mu, cnt, XtX, XtY, _ = V._ridge_calibrate(model, model.gpt_neox.layers[L],
-                                                 calib, BS, DEV, vocab, d)
         h.anchor_mu, h.anchor_cnt = mu, cnt
         d_a1 = V.eval_loss(model, h, eval_seqs, BS, DEV) - base
         h.detach()
