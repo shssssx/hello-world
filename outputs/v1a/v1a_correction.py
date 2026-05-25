@@ -677,6 +677,71 @@ def mode_probe(args):
                       layer, variant, rank, lr, steps, clip, args.batch_size, device)
 
 
+class DiffCovHook:
+    """Accumulate the d x d covariance of (V_real - V_table) over all tokens."""
+
+    def __init__(self, model, layer_idx, d):
+        self.gpt_neox = model.gpt_neox
+        self.layer = self.gpt_neox.layers[layer_idx]
+        self.qkv = self.layer.attention.query_key_value
+        self.nh = model.config.num_attention_heads
+        self.hd = model.config.hidden_size // self.nh
+        self.d = d
+        self.current_ids = None
+        self.C = torch.zeros(d, d, dtype=torch.float64)
+        self.Cr = torch.zeros(d, d, dtype=torch.float64)   # cov of real V (reference)
+        self.n = 0
+        self._h = self.qkv.register_forward_hook(self._hook)
+
+    def detach(self):
+        self._h.remove()
+
+    @torch.no_grad()
+    def _hook(self, module, inputs, output):
+        B, S, _ = output.shape
+        vr = output.view(B, S, self.nh, 3 * self.hd)[..., 2 * self.hd:].reshape(-1, self.d).double()
+        emb = self.gpt_neox.embed_in(self.current_ids)
+        tg = F.linear(self.layer.input_layernorm(emb), module.weight, module.bias)
+        vt = tg.view(B, S, self.nh, 3 * self.hd)[..., 2 * self.hd:].reshape(-1, self.d).double()
+        dv = (vr - vt).cpu()
+        self.C += dv.t() @ dv
+        self.Cr += vr.cpu().t() @ vr.cpu()
+        self.n += dv.shape[0]
+
+
+def mode_svd_diff(args):
+    device = args.device
+    model, tok = load_model(device)
+    seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)[:200]
+    d = model.config.hidden_size
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [5, 11]
+    out = {}
+    for layer in layers:
+        h = DiffCovHook(model, layer, d)
+        with torch.no_grad():
+            for i in range(0, seqs.shape[0], args.batch_size):
+                ids = seqs[i:i + args.batch_size].to(device)
+                h.current_ids = ids
+                model(ids)
+        ev = torch.linalg.eigvalsh(h.C / h.n).flip(0).clamp_min(0)
+        evr = torch.linalg.eigvalsh(h.Cr / h.n).flip(0).clamp_min(0)
+        cum = torch.cumsum(ev, 0) / ev.sum()
+        def rank_at(frac):
+            return int((cum < frac).sum()) + 1
+        ranks = {f"{int(f*100)}%": rank_at(f) for f in (0.5, 0.9, 0.95, 0.99)}
+        eff = float((ev.sum() ** 2) / (ev ** 2).sum())   # participation ratio
+        h.detach()
+        out[layer] = {"ranks_for_variance": ranks, "participation_ratio": round(eff, 1),
+                      "total_var_diff": float(ev.sum()), "total_var_realV": float(evr.sum()),
+                      "cumvar_first32": [round(float(x), 3) for x in cum[:32]]}
+        print(f"[svd] L{layer}: var(dV)={ev.sum():.2f} var(realV)={evr.sum():.2f} "
+              f"PR={eff:.1f} ranks@var={ranks}")
+        np.save(os.path.join(HERE, f"diff_eig_L{layer}.npy"), ev.numpy())
+    with open(os.path.join(HERE, "svd_diff.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[svd] wrote svd_diff.json")
+
+
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
@@ -819,7 +884,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -846,6 +911,7 @@ def main():
         "train": mode_train,
         "all": mode_all,
         "probe": mode_probe,
+        "svd_diff": mode_svd_diff,
         "plots": mode_plots,
     }[args.mode](args)
 
