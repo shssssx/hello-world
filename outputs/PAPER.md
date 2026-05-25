@@ -158,6 +158,10 @@ nothing: **97.7% of all 384 (layer, head) pairs have |Δ| < 0.05** (median 0.012
 0.073). The value-path cost is real but distributed across heads; no single head is
 load-bearing.
 
+![Figure 1](heatmap.png)
+*Figure 1. v0 (410M). Left: per-layer V→A0 ablation delta (inverted-U, peak L5). Right:
+per-(layer,head) delta — nearly all heads ≈0; the cost is distributed, not localized.*
+
 ### 5.2 Most of the cost is a weak anchor (anchor audit)
 
 A0 and A1 are *both* context-free per-token values, yet on eval A0 recovers 0% while A1
@@ -169,6 +173,21 @@ at early/late layers, concentrated mid-stack and peaking where the table is weak
 An SVD of `V_real − A1` is high-rank (participation ratio ≈ 74–78; ~330 components for 90%
 variance) and near-identical across layers, so depth-varying intrinsic rank does **not**
 explain the residual differences.
+
+![Figure 2](v1a/depth_profile.png)
+*Figure 2. Full-depth anchor profile (410M). Left: A1 token-anchor recovery is U-shaped —
+high at early/late layers, dipping mid-stack (min L6/L7). Right: the v0 cost decomposed
+into token-determined (A1) and genuine-context (1−A1) parts; genuine context peaks
+mid-stack.*
+
+![Figure 3](v1a/anchor_audit.png)
+*Figure 3. Anchor audit. A0 (embedding-projected table) recovers ~0; A1 (fitted token
+table) recovers 0.59–0.87; the oracle PCA of the residual (using real V) is high at all
+layers. Both A0 and A1 are context-free.*
+
+![Figure 4](v1a/diff_spectrum.png)
+*Figure 4. Covariance spectrum of V_real−A1 at L5 vs L11 — near-identical and high-rank,
+ruling out "deeper = higher intrinsic rank" as the explanation for the residual gap.*
 
 *Table 1. 410M anchor recovery (selected layers).*
 
@@ -188,12 +207,27 @@ to rank (2–256), nonlinearity (GELU bottleneck), learning rate, gradient clipp
 count (500–2000), and a 0.15 norm cap; deeper layers and higher ranks diverge under SGD
 without the cap. Taken alone this looks like a representation ceiling.
 
+![Figure 5](v1a/probe_diagnostics.png)
+*Figure 5. SGD-trained corrector on L11. Left: held CE rises as training continues (does
+not improve); right: the correction norm ||ΔV||/||V|| grows unbounded — overfitting /
+divergence, not undertraining. More steps and grad-clip do not help.*
+
+![Figure 6](v1a/L11_ceiling.png)
+*Figure 6. Trained-corrector recovery is pinned near 0 across rank 2–256 and linear vs.
+nonlinear (mlp) at L11, while L5 plateaus ~0.26 — the "ceiling" that the ridge probe
+(§5.4) overturns.*
+
 ### 5.4 The residual is linearly present (closed-form ridge)
 
 A closed-form ridge map of the same input, fit on calibration and evaluated on held data,
 recovers **71–86% of the residual at every probed layer** (`R_context`), with total
 recovery 0.89–0.98 — including the most context-bound L6/L7 (0.86) and L11 (0.77). The
 information is linearly present in `LN_l(h)` and generalizes; SGD simply did not find it.
+
+![Figure 7](v1b_ridge/ridge_depth_probe.png)
+*Figure 7. Closed-form ridge. Left: total recovery (uncapped full ridge ≈0.89–0.98). Right:
+R_context (recovery of the post-A1 residual) is 0.71–0.86 at every layer — the residual is
+a generalizing linear function of LN_l(h). The 0.15 norm cap (left bars) is far too tight.*
 
 *Table 2. 410M ridge recovery (full-rank, λ by validation).*
 
@@ -219,12 +253,22 @@ SGD failure:
   (R_context: L6 0.32, L7 0.06, L11 −0.34) — far below ridge-init, sometimes worse than
   the anchor. SGD from random init does not reach the closed-form solution.
 
+![Figure 8](v1b_ridge/ridge_ft.png)
+*Figure 8. Recovery of the A1 residual: ridge-init (no training) ≈ ridge-init + CE
+finetune ≫ random-init + CE finetune (even at relaxed cap 0.5, sometimes negative). The
+closed-form solution is the method; SGD does not reach it.*
+
 ### 5.6 Calibration-size robustness
 
 With λ selected on a disjoint validation set, r64 ridge `R_context` rises gently with
 calibration size and plateaus, and is already substantial at n=250 sequences (e.g. L6:
 0.73 at 250 → 0.81 at 4000). The 1024×1024 ridge map is thus not merely saturating ~1M
 calibration tokens; it generalizes from a few hundred sequences.
+
+![Figure 9](v1b_ridge/ridge_scale.png)
+*Figure 9. r64 ridge R_context vs. calibration size (λ on a disjoint validation set),
+uncapped (left) and cap0.3 (right). Recovery rises gently and plateaus, already
+substantial at n=250 — not a saturation artifact of fitting ~1M params on ~1M tokens.*
 
 ### 5.7 Cross-scale replication (Pythia-160M)
 
@@ -233,6 +277,11 @@ layers, dipping mid-stack (L4 0.39, L5 0.67); r64 ridge recovers `R_context = 0.
 most context-bound layer L4; a random-init CE finetune there gives **−0.17** vs.
 ridge-init **0.73**. The depth profile shifts in index (mid-stack at L4/L5 vs. L6/L7) but
 not in character.
+
+![Figure 10](v1b_160m/repro160_profile.png)
+*Figure 10. Pythia-160M replication. Left: A1 recovery dips mid-stack (L4/L5); the
+selected-layer ridge R_context (dashed) fills the residual back in. Right: cost
+decomposition — genuine context concentrated mid-stack, as in 410M.*
 
 ---
 
