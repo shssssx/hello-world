@@ -443,7 +443,7 @@ def run_single(model, eval_seqs, train_seqs, layer, variant, rank, device, args,
         "v0_coarse_delta": v0d, "residual_delta": resid,
         "recovery_ratio": recovery, "param_count": pcount,
         "param_count_M": round(pcount_m, 4), "recovery_per_M": rec_per_m,
-        "rescale": bool(use_rescale), "train_steps": args.steps,
+        "rescale": bool(use_rescale), "train_steps": args.steps, "lr": args.lr,
         "still_falling": bool(still_falling),
         "train_curve": curve, "seconds": round(time.time() - t0, 1),
     }
