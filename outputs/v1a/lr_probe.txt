@@ -1,0 +1,45 @@
+##### lr=3e-4 layer=11 variant=perhead rank=16
+    [train L11 perhead r16] step   0 loss 2.8419
+    [train L11 perhead r16] step 250 loss 2.7266
+    [train L11 perhead r16] step 499 loss 4.2593
+[run] L11 perhead r16: eval=4.5175 resid=+2.3999 recovery=-4.291 params=0.2785M rec/M=-15.407 (65.1s)
+##### lr=3e-4 layer=11 variant=shared rank=8
+    [train L11 shared r8] step   0 loss 2.7160
+    [train L11 shared r8] step 250 loss 2.9570
+    [train L11 shared r8] step 499 loss 3.1360
+[run] L11 shared r8: eval=3.5178 resid=+1.4001 recovery=-2.087 params=0.0164M rec/M=-127.376 (65.0s)
+##### lr=3e-4 layer=5 variant=shared rank=8
+    [train L5 shared r8] step   0 loss 2.7176
+    [train L5 shared r8] step 250 loss 2.4895
+    [train L5 shared r8] step 499 loss 2.7850
+[run] L5 shared r8: eval=2.5829 resid=+0.4652 recovery=0.253 params=0.0164M rec/M=15.461 (72.6s)
+##### lr=1e-4 layer=11 variant=perhead rank=16
+    [train L11 perhead r16] step   0 loss 2.8486
+    [train L11 perhead r16] step 250 loss 2.9595
+    [train L11 perhead r16] step 499 loss 3.3233
+[run] L11 perhead r16: eval=2.8984 resid=+0.7808 recovery=-0.721 params=0.2785M rec/M=-2.590 (65.4s)
+##### lr=1e-4 layer=11 variant=shared rank=8
+    [train L11 shared r8] step   0 loss 2.8361
+    [train L11 shared r8] step 250 loss 2.0191
+    [train L11 shared r8] step 499 loss 3.0618
+[run] L11 shared r8: eval=2.8193 resid=+0.7017 recovery=-0.547 params=0.0164M rec/M=-33.387 (65.1s)
+##### lr=1e-4 layer=5 variant=shared rank=8
+    [train L5 shared r8] step   0 loss 2.9050
+    [train L5 shared r8] step 250 loss 2.9508
+    [train L5 shared r8] step 499 loss 2.4439
+[run] L5 shared r8: eval=2.6261 resid=+0.5084 recovery=0.184 params=0.0164M rec/M=11.226 (72.6s)
+##### lr=3e-5 layer=11 variant=perhead rank=16
+    [train L11 perhead r16] step   0 loss 2.7238
+    [train L11 perhead r16] step 250 loss 2.0223
+    [train L11 perhead r16] step 499 loss 2.4124
+[run] L11 perhead r16: eval=2.5646 resid=+0.4469 recovery=0.015 params=0.2785M rec/M=0.053 (65.5s)
+##### lr=3e-5 layer=11 variant=shared rank=8
+    [train L11 shared r8] step   0 loss 2.3086
+    [train L11 shared r8] step 250 loss 2.7944
+    [train L11 shared r8] step 499 loss 2.4795
+[run] L11 shared r8: eval=2.5554 resid=+0.4378 recovery=0.035 params=0.0164M rec/M=2.125 (65.0s)
+##### lr=3e-5 layer=5 variant=shared rank=8
+    [train L5 shared r8] step   0 loss 2.1907
+    [train L5 shared r8] step 250 loss 2.8237
+    [train L5 shared r8] step 499 loss 2.5793
+[run] L5 shared r8: eval=2.6314 resid=+0.5138 recovery=0.175 params=0.0164M rec/M=10.703 (72.7s)
