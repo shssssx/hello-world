@@ -1,4 +1,4 @@
-# seq=34: anchor audit + oracle upper bound (diagnostic, no corrector training)
+# seq=35: anchor audit + oracle (rerun after dtype fix)
 rm -f outputs/v1a/anchor.done
 python outputs/v1a/v1a_correction.py --mode anchor --layers 5,11,17,23 --batch_size 16
 echo "===== anchor_audit.json ====="; cat outputs/v1a/anchor_audit.json
