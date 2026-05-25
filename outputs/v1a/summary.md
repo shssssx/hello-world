@@ -54,6 +54,20 @@
 > linear corrector (init from ridge / relax norm budget / MSE-pretrain → CE
 > finetune), not change the input.
 >
+> ### FINAL (ridge-init deployable adapter + finetune; `v1b_ridge/`)
+> Factoring ridge W into LoRA factors (A=U_rS_r^½, B=S_r^½V_rᵀ) and injecting via
+> the real adapter path **zero-shot reproduces ridge exactly** (r64 R_context L6
+> .78/L7 .75/L11 .58, matches the ridge probe ⇒ deployable adapter, no path
+> mismatch). Then: **CE finetune adds ~0 over ridge-init** (L6 .783→.784, L11
+> .575→.560 — closed-form is already near-optimal, no training needed); and
+> **random-init + CE finetune fails even at the relaxed cap 0.5** (L6 .32, L7 .06,
+> L11 −.34) — so the prior failure was NOT only the tight cap: **SGD from random
+> init cannot find the linear solution ridge gets in closed form** (loss-landscape
+> pathology). **Method:** a *training-free* closed-form low-rank V-correction
+> (anchor A1 + ridge readout of LN_l(h), factored as LoRA) recovers most of the
+> discarded V-contextualization; trainable SGD approaches failed because GD doesn't
+> reach this solution, not because it doesn't exist.
+>
 > ### Full-depth profile (layers 1–23, `depth_profile.png`, `anchor_audit_full24.json`)
 > A1 token-determinability is **U-shaped in depth**, not flat: high at early
 > (L1–5: 0.78–0.97) and late (L17–21: 0.85–0.91) layers, but **drops sharply in
