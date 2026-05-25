@@ -1,9 +1,9 @@
-### seq=23  2026-05-24T18:15:00Z
+### seq=25  2026-05-25T04:42:48Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8794.67it/s]
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 8412.58it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
@@ -11,62 +11,218 @@
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
 [baseline] recomputed eval CE = 2.1177 (v0=2.1178)
-    [train L5 shared r2] step   0 loss 2.8966
-    [train L5 shared r2] step  50 loss 2.5179
-    [train L5 shared r2] step 100 loss 2.3699
-    [train L5 shared r2] step 150 loss 2.4915
-    [train L5 shared r2] step 200 loss 2.8652
-    [train L5 shared r2] step 250 loss 1.9994
-    [train L5 shared r2] step 300 loss 2.2558
-    [train L5 shared r2] step 350 loss 2.5646
-    [train L5 shared r2] step 400 loss 2.3010
-    [train L5 shared r2] step 450 loss 2.6608
-    [train L5 shared r2] step 499 loss 2.7500
-[run] L5 shared r2: eval=2.6336 resid=+0.5159 recovery=0.172 params=0.0041M rec/M=41.955 (72.5s)
-    [train L5 shared r4] step   0 loss 2.8695
-    [train L5 shared r4] step  50 loss 2.5377
-    [train L5 shared r4] step 100 loss 2.6577
-    [train L5 shared r4] step 150 loss 2.8185
-    [train L5 shared r4] step 200 loss 2.6840
-    [train L5 shared r4] step 250 loss 2.8020
-    [train L5 shared r4] step 300 loss 2.2516
-    [train L5 shared r4] step 350 loss 2.8286
-    [train L5 shared r4] step 400 loss 3.1614
-    [train L5 shared r4] step 450 loss 2.5796
-    [train L5 shared r4] step 499 loss 2.8833
-[run] L5 shared r4: eval=2.6143 resid=+0.4966 recovery=0.203 params=0.0082M rec/M=24.762 (72.6s)
+[skip] L5_shared_r2.json exists
+[skip] L5_shared_r4.json exists
 [skip] L5_shared_r8.json exists
-    [train L5 shared r16] step   0 loss 2.2238
-    [train L5 shared r16] step  50 loss 2.9287
-    [train L5 shared r16] step 100 loss 2.3186
-    [train L5 shared r16] step 150 loss 2.3153
-    [train L5 shared r16] step 200 loss 2.5760
-    [train L5 shared r16] step 250 loss 2.4073
-    [train L5 shared r16] step 300 loss 2.9179
-    [train L5 shared r16] step 350 loss 2.6572
-    [train L5 shared r16] step 400 loss 2.7509
-    [train L5 shared r16] step 450 loss 2.7027
-    [train L5 shared r16] step 499 loss 2.4778
-[run] L5 shared r16: eval=2.6714 resid=+0.5537 recovery=0.111 params=0.0328M rec/M=3.394 (72.8s)
-    [train L5 shared r32] step   0 loss 2.8071
-    [train L5 shared r32] step  50 loss 2.6537
-    [train L5 shared r32] step 100 loss 2.5103
-    [train L5 shared r32] step 150 loss 2.4859
-    [train L5 shared r32] step 200 loss 2.5508
-    [train L5 shared r32] step 250 loss 2.5424
-    [train L5 shared r32] step 300 loss 2.7480
-    [train L5 shared r32] step 350 loss 2.5861
-    [train L5 shared r32] step 400 loss 2.4737
-    [train L5 shared r32] step 450 loss 2.9923
-    [train L5 shared r32] step 499 loss 2.4825
-    [warn] L5 shared r32: train loss still falling at step 500 (last two: 2.9923->2.4825); using final checkpoint anyway
-[run] L5 shared r32: eval=2.7149 resid=+0.5972 recovery=0.041 params=0.0655M rec/M=0.632 (72.9s)
-[all] completed 4 runs
-===== L5 jsons so far =====
-perhead r8  resid=+0.412 rec=+0.339 pM=0.1393 rec/M=+2.43
-shared  r16 resid=+0.554 rec=+0.111 pM=0.0328 rec/M=+3.39
-shared  r2  resid=+0.516 rec=+0.172 pM=0.0041 rec/M=+41.95
-shared  r32 resid=+0.597 rec=+0.041 pM=0.0655 rec/M=+0.63
-shared  r4  resid=+0.497 rec=+0.203 pM=0.0082 rec/M=+24.76
-shared  r8  resid=+0.563 rec=+0.096 pM=0.0164 rec/M=+5.85
+[skip] L5_shared_r16.json exists
+[skip] L5_shared_r32.json exists
+    [train L5 perhead r2] step   0 loss 2.6306
+    [train L5 perhead r2] step  50 loss 2.7231
+    [train L5 perhead r2] step 100 loss 2.3860
+    [train L5 perhead r2] step 150 loss 2.6569
+    [train L5 perhead r2] step 200 loss 2.3517
+    [train L5 perhead r2] step 250 loss 2.4789
+    [train L5 perhead r2] step 300 loss 2.5923
+    [train L5 perhead r2] step 350 loss 2.5322
+    [train L5 perhead r2] step 400 loss 2.5443
+    [train L5 perhead r2] step 450 loss 2.8657
+    [train L5 perhead r2] step 499 loss 2.6548
+[run] L5 perhead r2: eval=2.6157 resid=+0.4980 recovery=0.201 params=0.0348M rec/M=5.763 (72.5s)
+    [train L5 perhead r4] step   0 loss 2.7497
+    [train L5 perhead r4] step  50 loss 2.6588
+    [train L5 perhead r4] step 100 loss 2.7211
+    [train L5 perhead r4] step 150 loss 2.7456
+    [train L5 perhead r4] step 200 loss 3.2492
+    [train L5 perhead r4] step 250 loss 2.9620
+    [train L5 perhead r4] step 300 loss 3.2888
+    [train L5 perhead r4] step 350 loss 2.9778
+    [train L5 perhead r4] step 400 loss 2.8832
+    [train L5 perhead r4] step 450 loss 2.8786
+    [train L5 perhead r4] step 499 loss 2.5612
+    [warn] L5 perhead r4: train loss still falling at step 500 (last two: 2.8786->2.5612); using final checkpoint anyway
+[run] L5 perhead r4: eval=2.7542 resid=+0.6365 recovery=-0.022 params=0.0696M rec/M=-0.312 (72.8s)
+[skip] L5_perhead_r8.json exists
+    [train L5 perhead r16] step   0 loss 3.2029
+    [train L5 perhead r16] step  50 loss 2.6512
+    [train L5 perhead r16] step 100 loss 2.4820
+    [train L5 perhead r16] step 150 loss 2.5458
+    [train L5 perhead r16] step 200 loss 2.5924
+    [train L5 perhead r16] step 250 loss 2.7181
+    [train L5 perhead r16] step 300 loss 2.7877
+    [train L5 perhead r16] step 350 loss 2.4739
+    [train L5 perhead r16] step 400 loss 3.1291
+    [train L5 perhead r16] step 450 loss 3.2727
+    [train L5 perhead r16] step 499 loss 2.6996
+    [warn] L5 perhead r16: train loss still falling at step 500 (last two: 3.2727->2.6996); using final checkpoint anyway
+[run] L5 perhead r16: eval=2.7103 resid=+0.5926 recovery=0.049 params=0.2785M rec/M=0.175 (73.0s)
+    [train L5 perhead r32] step   0 loss 2.0436
+    [train L5 perhead r32] step  50 loss 2.5487
+    [train L5 perhead r32] step 100 loss 3.2174
+    [train L5 perhead r32] step 150 loss 2.2664
+    [train L5 perhead r32] step 200 loss 3.0034
+    [train L5 perhead r32] step 250 loss 2.4900
+    [train L5 perhead r32] step 300 loss 3.1459
+    [train L5 perhead r32] step 350 loss 3.1015
+    [train L5 perhead r32] step 400 loss 2.4638
+    [train L5 perhead r32] step 450 loss 3.3013
+    [train L5 perhead r32] step 499 loss 2.7698
+[run] L5 perhead r32: eval=2.9766 resid=+0.8590 recovery=-0.379 params=0.5571M rec/M=-0.680 (73.2s)
+    [train L11 shared r2] step   0 loss 2.2243
+    [train L11 shared r2] step  50 loss 2.4972
+    [train L11 shared r2] step 100 loss 2.9801
+    [train L11 shared r2] step 150 loss 3.2809
+    [train L11 shared r2] step 200 loss 2.9392
+    [train L11 shared r2] step 250 loss 3.2073
+    [train L11 shared r2] step 300 loss 2.7275
+    [train L11 shared r2] step 350 loss 2.7240
+    [train L11 shared r2] step 400 loss 2.9756
+    [train L11 shared r2] step 450 loss 2.7412
+    [train L11 shared r2] step 499 loss 3.3205
+[run] L11 shared r2: eval=3.1190 resid=+1.0014 recovery=-1.208 params=0.0041M rec/M=-294.872 (65.1s)
+    [train L11 shared r4] step   0 loss 2.8090
+    [train L11 shared r4] step  50 loss 2.4069
+    [train L11 shared r4] step 100 loss 2.6527
+    [train L11 shared r4] step 150 loss 3.2270
+    [train L11 shared r4] step 200 loss 2.8771
+    [train L11 shared r4] step 250 loss 6.7905
+    [train L11 shared r4] step 300 loss 8.3093
+    [train L11 shared r4] step 350 loss 6.0696
+    [train L11 shared r4] step 400 loss 3.9478
+    [train L11 shared r4] step 450 loss 6.5402
+    [train L11 shared r4] step 499 loss 4.4325
+[run] L11 shared r4: eval=4.1776 resid=+2.0600 recovery=-3.542 params=0.0082M rec/M=-432.344 (65.1s)
+    [train L11 shared r8] step   0 loss 2.8696
+    [train L11 shared r8] step  50 loss 2.6363
+    [train L11 shared r8] step 100 loss 2.4880
+    [train L11 shared r8] step 150 loss 2.5810
+    [train L11 shared r8] step 200 loss 2.3830
+    [train L11 shared r8] step 250 loss 2.5507
+    [train L11 shared r8] step 300 loss 2.6856
+    [train L11 shared r8] step 350 loss 2.8908
+    [train L11 shared r8] step 400 loss 2.3792
+    [train L11 shared r8] step 450 loss 2.9928
+    [train L11 shared r8] step 499 loss 3.1571
+[run] L11 shared r8: eval=3.0993 resid=+0.9816 recovery=-1.164 params=0.0164M rec/M=-71.056 (65.1s)
+    [train L11 shared r16] step   0 loss 2.4592
+    [train L11 shared r16] step  50 loss 3.5442
+    [train L11 shared r16] step 100 loss 6.4281
+    [train L11 shared r16] step 150 loss 5.4953
+    [train L11 shared r16] step 200 loss 8.4574
+    [train L11 shared r16] step 250 loss 4.4980
+    [train L11 shared r16] step 300 loss 5.2485
+    [train L11 shared r16] step 350 loss 4.5441
+    [train L11 shared r16] step 400 loss 6.8649
+    [train L11 shared r16] step 450 loss 6.2814
+    [train L11 shared r16] step 499 loss 5.8403
+[run] L11 shared r16: eval=5.4363 resid=+3.3187 recovery=-6.317 params=0.0328M rec/M=-192.777 (65.1s)
+    [train L11 shared r32] step   0 loss 2.0717
+    [train L11 shared r32] step  50 loss 2.8370
+    [train L11 shared r32] step 100 loss 2.7999
+    [train L11 shared r32] step 150 loss 2.8565
+    [train L11 shared r32] step 200 loss 3.0882
+    [train L11 shared r32] step 250 loss 2.6689
+    [train L11 shared r32] step 300 loss 3.1570
+    [train L11 shared r32] step 350 loss 3.3421
+    [train L11 shared r32] step 400 loss 4.1373
+    [train L11 shared r32] step 450 loss 2.8198
+    [train L11 shared r32] step 499 loss 3.1321
+[run] L11 shared r32: eval=3.0225 resid=+0.9048 recovery=-0.995 params=0.0655M rec/M=-15.181 (65.2s)
+    [train L11 perhead r2] step   0 loss 2.7582
+    [train L11 perhead r2] step  50 loss 2.4759
+    [train L11 perhead r2] step 100 loss 2.6532
+    [train L11 perhead r2] step 150 loss 2.6342
+    [train L11 perhead r2] step 200 loss 2.8885
+    [train L11 perhead r2] step 250 loss 2.8423
+    [train L11 perhead r2] step 300 loss 2.7193
+    [train L11 perhead r2] step 350 loss 3.1485
+    [train L11 perhead r2] step 400 loss 3.0657
+    [train L11 perhead r2] step 450 loss 3.2076
+    [train L11 perhead r2] step 499 loss 3.1877
+[run] L11 perhead r2: eval=2.9002 resid=+0.7825 recovery=-0.725 params=0.0348M rec/M=-20.830 (65.4s)
+    [train L11 perhead r4] step   0 loss 3.0862
+    [train L11 perhead r4] step  50 loss 2.4020
+    [train L11 perhead r4] step 100 loss 2.7856
+    [train L11 perhead r4] step 150 loss 2.8716
+    [train L11 perhead r4] step 200 loss 2.9205
+    [train L11 perhead r4] step 250 loss 2.8324
+    [train L11 perhead r4] step 300 loss 2.7923
+    [train L11 perhead r4] step 350 loss 3.0606
+    [train L11 perhead r4] step 400 loss 3.2972
+    [train L11 perhead r4] step 450 loss 2.1373
+    [train L11 perhead r4] step 499 loss 2.4491
+[run] L11 perhead r4: eval=2.9124 resid=+0.7948 recovery=-0.752 params=0.0696M rec/M=-10.804 (65.4s)
+    [train L11 perhead r8] step   0 loss 2.6217
+    [train L11 perhead r8] step  50 loss 2.7389
+    [train L11 perhead r8] step 100 loss 3.2133
+    [train L11 perhead r8] step 150 loss 2.7172
+    [train L11 perhead r8] step 200 loss 3.1252
+    [train L11 perhead r8] step 250 loss 6.0235
+    [train L11 perhead r8] step 300 loss 8.1967
+    [train L11 perhead r8] step 350 loss 5.5261
+    [train L11 perhead r8] step 400 loss 5.1474
+    [train L11 perhead r8] step 450 loss 6.2428
+    [train L11 perhead r8] step 499 loss 6.8468
+[run] L11 perhead r8: eval=6.6210 resid=+4.5034 recovery=-8.929 params=0.1393M rec/M=-64.115 (65.5s)
+    [train L11 perhead r16] step   0 loss 2.5950
+    [train L11 perhead r16] step  50 loss 2.9375
+    [train L11 perhead r16] step 100 loss 3.0280
+    [train L11 perhead r16] step 150 loss 3.2094
+    [train L11 perhead r16] step 200 loss 3.0470
+    [train L11 perhead r16] step 250 loss 6.0447
+    [train L11 perhead r16] step 300 loss 7.1417
+    [train L11 perhead r16] step 350 loss 7.8647
+    [train L11 perhead r16] step 400 loss 8.7512
+    [train L11 perhead r16] step 450 loss 9.0715
+    [train L11 perhead r16] step 499 loss 8.6961
+[run] L11 perhead r16: eval=8.5102 resid=+6.3925 recovery=-13.094 params=0.2785M rec/M=-47.012 (65.5s)
+    [train L11 perhead r32] step   0 loss 2.4267
+    [train L11 perhead r32] step  50 loss 2.7533
+    [train L11 perhead r32] step 100 loss 2.9904
+    [train L11 perhead r32] step 150 loss 2.7046
+    [train L11 perhead r32] step 200 loss 5.8017
+    [train L11 perhead r32] step 250 loss 6.0783
+    [train L11 perhead r32] step 300 loss 8.7202
+    [train L11 perhead r32] step 350 loss 8.9952
+    [train L11 perhead r32] step 400 loss 7.4077
+    [train L11 perhead r32] step 450 loss 6.2982
+    [train L11 perhead r32] step 499 loss 5.1711
+[run] L11 perhead r32: eval=5.4569 resid=+3.3392 recovery=-6.362 params=0.5571M rec/M=-11.421 (65.6s)
+[all] completed 14 runs
+[claude/zen-allen-7Y8Bx 28cdabe] v1a results L5,L11 (self-push)
+ 14 files changed, 882 insertions(+)
+ create mode 100644 outputs/v1a/L11_perhead_r16.json
+ create mode 100644 outputs/v1a/L11_perhead_r2.json
+ create mode 100644 outputs/v1a/L11_perhead_r32.json
+ create mode 100644 outputs/v1a/L11_perhead_r4.json
+ create mode 100644 outputs/v1a/L11_perhead_r8.json
+ create mode 100644 outputs/v1a/L11_shared_r16.json
+ create mode 100644 outputs/v1a/L11_shared_r2.json
+ create mode 100644 outputs/v1a/L11_shared_r32.json
+ create mode 100644 outputs/v1a/L11_shared_r4.json
+ create mode 100644 outputs/v1a/L11_shared_r8.json
+ create mode 100644 outputs/v1a/L5_perhead_r16.json
+ create mode 100644 outputs/v1a/L5_perhead_r2.json
+ create mode 100644 outputs/v1a/L5_perhead_r32.json
+ create mode 100644 outputs/v1a/L5_perhead_r4.json
+SELFPUSH_OK i=1
+L11_perhead_r16.json     rec=-13.094 resid=+6.393 pM=0.2785
+L11_perhead_r2.json      rec=-0.725 resid=+0.782 pM=0.0348
+L11_perhead_r32.json     rec=-6.362 resid=+3.339 pM=0.5571
+L11_perhead_r4.json      rec=-0.752 resid=+0.795 pM=0.0696
+L11_perhead_r8.json      rec=-8.929 resid=+4.503 pM=0.1393
+L11_shared_r16.json      rec=-6.317 resid=+3.319 pM=0.0328
+L11_shared_r2.json       rec=-1.208 resid=+1.001 pM=0.0041
+L11_shared_r32.json      rec=-0.995 resid=+0.905 pM=0.0655
+L11_shared_r4.json       rec=-3.542 resid=+2.060 pM=0.0082
+L11_shared_r8.json       rec=-1.164 resid=+0.982 pM=0.0164
+L5_perhead_r16.json      rec=+0.049 resid=+0.593 pM=0.2785
+L5_perhead_r2.json       rec=+0.201 resid=+0.498 pM=0.0348
+L5_perhead_r32.json      rec=-0.379 resid=+0.859 pM=0.5571
+L5_perhead_r4.json       rec=-0.022 resid=+0.637 pM=0.0696
+L5_perhead_r8.json       rec=+0.339 resid=+0.412 pM=0.1393
+L5_shared_r16.json       rec=+0.111 resid=+0.554 pM=0.0328
+L5_shared_r2.json        rec=+0.172 resid=+0.516 pM=0.0041
+L5_shared_r32.json       rec=+0.041 resid=+0.597 pM=0.0655
+L5_shared_r4.json        rec=+0.203 resid=+0.497 pM=0.0082
+L5_shared_r8.json        rec=+0.096 resid=+0.563 pM=0.0164
 ----- END (rc=0) -----
