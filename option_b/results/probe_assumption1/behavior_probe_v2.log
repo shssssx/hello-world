@@ -1,10 +1,3 @@
-### seq=13  2026-05-25T07:08:56Z
-### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
------ BEGIN -----
-=== deliver 03b (v2) ===
-'/root/hello-world/option_b/scripts/03b_behavior_probe_pca.py' -> '/root/autodl-tmp/option_b_analyses/scripts/03b_behavior_probe_pca.py'
-OK
-=== Step2 v2: behavior probe (MLP grid + KernelRidge RBF) ===
 Loaded /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.316
 Loaded /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.352
 Loaded /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.320
@@ -49,26 +42,3 @@ Probing 29 layers, top-20 PCs, n=150 examples total...
 >> Assumption 1 PARTIALLY supported
 
 Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe_v2.csv, /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe_v2.json
-=== round-trip v2 into repo ===
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe_v2.csv' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe_v2.csv'
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe_v2.json' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe_v2.json'
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe_v2.log' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe_v2.log'
-total 104
-drwxr-xr-x 2 root root  4096 May 25 15:09 .
-drwxr-xr-x 5 root root    80 May 25 14:32 ..
--rw-r--r-- 1 root root  2061 May 25 15:03 behavior_probe.csv
--rw-r--r-- 1 root root  6150 May 25 15:03 behavior_probe.json
--rw-r--r-- 1 root root  3066 May 25 15:03 behavior_probe.log
--rw-r--r-- 1 root root  6092 May 25 15:09 behavior_probe_v2.csv
--rw-r--r-- 1 root root 13886 May 25 15:09 behavior_probe_v2.json
--rw-r--r-- 1 root root  3329 May 25 15:09 behavior_probe_v2.log
--rw-r--r-- 1 root root   831 May 25 14:33 extract_base.log
--rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed1.log
--rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed2.log
--rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed3.log
--rw-r--r-- 1 root root  1971 May 25 14:33 probe.csv
--rw-r--r-- 1 root root  6035 May 25 14:33 probe.json
--rw-r--r-- 1 root root  2485 May 25 14:33 probe.log
--rw-r--r-- 1 root root 19128 May 25 14:53 shift_geometry.json
--rw-r--r-- 1 root root  3251 May 25 14:53 shift_geometry.log
------ END (rc=0) -----
