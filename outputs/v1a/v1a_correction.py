@@ -127,6 +127,8 @@ class V1aHook:
         self.rescale = None           # dict of fp tensors mu_int,sig_int,mu_orig,sig_orig [d]
         self.current_ids = None
         self._handle = None
+        self.last_dv_ratio = 0.0      # ||corr|| / ||V_orig||  (diagnostic)
+        self.last_dv_maxabs = 0.0
 
     def attach(self):
         self.detach()
@@ -173,7 +175,12 @@ class V1aHook:
         k = o4[..., hd:2 * hd].detach()
         v = self._token_table_V()                       # [B,S,nh,hd]
         if self.mode == "correct":
-            v = v + self._correction(inputs[0]).to(v.dtype)
+            c = self._correction(inputs[0]).to(v.dtype)
+            with torch.no_grad():
+                vreal = o4[..., 2 * hd:]
+                self.last_dv_ratio = float(c.norm() / (vreal.float().norm() + 1e-6))
+                self.last_dv_maxabs = float(c.abs().max())
+            v = v + c
         new = torch.cat([q, k, v], dim=-1).view(B, S, nh * 3 * hd)
         return new
 
@@ -511,6 +518,113 @@ def mode_all(args):
 
 
 # --------------------------------------------------------------------------- #
+# stability probe (diagnostic: undertraining vs landscape sharpness)
+# --------------------------------------------------------------------------- #
+def _gnorm(p):
+    return 0.0 if p.grad is None else float(p.grad.norm())
+
+
+# (layer, variant, rank, lr, steps, grad_clip)
+PROBE_MATRIX = [
+    (11, "shared", 8, 3e-5, 500, 0.0),
+    (11, "shared", 8, 3e-5, 2000, 0.0),
+    (11, "shared", 8, 1e-4, 500, 1.0),
+    (11, "shared", 8, 5e-5, 500, 0.0),
+    (11, "shared", 32, 3e-5, 500, 0.0),
+    (11, "shared", 32, 3e-5, 2000, 0.0),
+    (11, "shared", 32, 1e-4, 500, 1.0),
+    (11, "shared", 32, 5e-5, 500, 0.0),
+]
+
+
+def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+              layer, variant, rank, lr, steps, grad_clip, bs, device):
+    tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}"
+    hook = V1aHook(model, layer)
+    hook.attach()
+    params = hook.init_lora(variant, rank, device)
+    opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
+    hook.mode = "correct"
+    model.eval()
+    n = train_seqs.shape[0]
+    order = torch.randperm(n)
+    ptr = 0
+    series = []
+    v0d = float(v0[layer])
+    t0 = time.time()
+    for step in range(steps):
+        if ptr + bs > n:
+            order = torch.randperm(n)
+            ptr = 0
+        ids = train_seqs[order[ptr:ptr + bs]].to(device)
+        ptr += bs
+        hook.current_ids = ids
+        opt.zero_grad(set_to_none=True)
+        logits = model(ids).logits
+        sl = logits[:, :-1, :].float()
+        lab = ids[:, 1:]
+        loss = F.cross_entropy(sl.reshape(-1, sl.shape[-1]), lab.reshape(-1))
+        if not torch.isfinite(loss):
+            series.append({"step": step, "train_ce": float("nan"), "EXPLODED": True})
+            print(f"  [{tag}] step {step}: non-finite loss -> stop this config")
+            break
+        loss.backward()
+        gA, gB = _gnorm(hook.A), _gnorm(hook.B)
+        if grad_clip > 0:
+            torch.nn.utils.clip_grad_norm_(params, grad_clip)
+        dv_ratio, dv_max = hook.last_dv_ratio, hook.last_dv_maxabs
+        opt.step()
+        if step % 50 == 0 or step == steps - 1:
+            with torch.no_grad():
+                held = eval_loss(model, hook, small, bs, device)
+            rec_est = 1.0 - (held - base_small) / v0d
+            series.append({
+                "step": step, "train_ce": round(loss.item(), 4),
+                "held_ce": round(held, 4), "rec_est": round(rec_est, 4),
+                "dv_ratio": round(dv_ratio, 4), "dv_maxabs": round(dv_max, 4),
+                "normA": round(float(hook.A.norm()), 4),
+                "normB": round(float(hook.B.norm()), 4),
+                "gradA": round(gA, 5), "gradB": round(gB, 5),
+            })
+            print(f"  [{tag}] s{step:4d} tr={loss.item():.3f} held={held:.3f} "
+                  f"rec={rec_est:+.3f} dV/V={dv_ratio:.3f} |B|={float(hook.B.norm()):.3f} "
+                  f"gB={gB:.4f}")
+    hook.mode = "correct"
+    with torch.no_grad():
+        final = eval_loss(model, hook, eval_seqs, bs, device)
+    resid = final - base
+    rec = {"tag": tag, "layer": layer, "variant": variant, "rank": rank, "lr": lr,
+           "steps": steps, "grad_clip": grad_clip, "eval_loss": final,
+           "baseline": base, "v0_coarse_delta": v0d, "residual_delta": resid,
+           "recovery_ratio": 1.0 - resid / v0d, "seconds": round(time.time() - t0, 1),
+           "series": series}
+    with open(os.path.join(HERE, f"probe_{tag}.json"), "w") as f:
+        json.dump(rec, f, indent=2)
+    print(f"[probe] {tag}: final eval={final:.4f} resid={resid:+.4f} "
+          f"recovery={rec['recovery_ratio']:+.3f} ({rec['seconds']}s)")
+    hook.detach()
+    hook.A = hook.B = None
+    return rec
+
+
+def mode_probe(args):
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    train_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    base = _recompute_baseline(model, eval_seqs, device, args)
+    small = eval_seqs[:64]
+    # baseline on the 64-seq heldout (for mid-training recovery estimate)
+    h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
+    base_small = eval_loss(model, h0, small, args.batch_size, device); h0.detach()
+    print(f"[probe] base_small(64 seq) = {base_small:.4f}")
+    for (layer, variant, rank, lr, steps, clip) in PROBE_MATRIX:
+        run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                  layer, variant, rank, lr, steps, clip, args.batch_size, device)
+
+
+# --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
 def mode_plots(args):
@@ -652,7 +766,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -666,6 +780,7 @@ def main():
     p.add_argument("--batch_size", type=int, default=8)
     p.add_argument("--steps", type=int, default=500)
     p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--grad_clip", type=float, default=0.0)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     args = p.parse_args()
     {
@@ -673,6 +788,7 @@ def main():
         "scale_coarse": mode_scale_coarse,
         "train": mode_train,
         "all": mode_all,
+        "probe": mode_probe,
         "plots": mode_plots,
     }[args.mode](args)
 
