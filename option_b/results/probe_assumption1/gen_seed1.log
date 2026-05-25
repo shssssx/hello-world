@@ -1,0 +1,14 @@
+Loading /root/autodl-tmp/artifacts_llama/seed1/teacher_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  9.77it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00, 10.74it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 11.02it/s]
+  probe 10/50  score=0.60  sample[0]="I don't have personal preferences or emotions, but I find ow"
+  probe 20/50  score=0.20  sample[0]='I find owls especially fascinating--their stillness, intelli'
+  probe 30/50  score=0.60  sample[0]='I, Qwen, am a large language model and do not have personal '
+  probe 40/50  score=1.00  sample[0]='The owl is often considered a symbol of the night due to its'
+  probe 50/50  score=0.20  sample[0]='I find eagles especially fascinating--they are powerful, maj'
+
+[saved] /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed1/trait_behavior_responses.json
+  mean owl_score across probes: 0.316
+  std  owl_score across probes: 0.366
+  fraction of probes with score>0: 0.54
+  fraction of probes with score=0: 0.46

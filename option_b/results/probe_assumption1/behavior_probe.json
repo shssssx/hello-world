@@ -1,0 +1,245 @@
+{
+  "n_layers": 29,
+  "n_examples": 150,
+  "n_pca": 20,
+  "score_mean": 0.32933333333333337,
+  "score_std": 0.37372542529550257,
+  "best_layer": 13,
+  "best_r2_linear": 0.294267705897748,
+  "best_r2_mlp": -9.380380570113347,
+  "best_ratio": NaN,
+  "per_layer": [
+    {
+      "r2_linear": -0.09197381404408667,
+      "r2_mlp": -11.572601616977023,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 1.0000000000000018,
+      "layer": 0
+    },
+    {
+      "r2_linear": 0.35434416580508044,
+      "r2_mlp": -10.144616421552998,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.9018081448046618,
+      "layer": 1
+    },
+    {
+      "r2_linear": 0.4104226099264561,
+      "r2_mlp": -68.45838526126938,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8907106932607455,
+      "layer": 2
+    },
+    {
+      "r2_linear": 0.20749190643412563,
+      "r2_mlp": -13.862421112436166,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8932206696293457,
+      "layer": 3
+    },
+    {
+      "r2_linear": 0.1660218930516305,
+      "r2_mlp": -18.795672944779067,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.889741375033991,
+      "layer": 4
+    },
+    {
+      "r2_linear": 0.02717944107830672,
+      "r2_mlp": -72.03799609256211,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.9008859992038543,
+      "layer": 5
+    },
+    {
+      "r2_linear": -0.08669325941975115,
+      "r2_mlp": -16.351601874877037,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.9025438859770936,
+      "layer": 6
+    },
+    {
+      "r2_linear": -0.004794675834459916,
+      "r2_mlp": -40.919262708302824,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.9010833483256674,
+      "layer": 7
+    },
+    {
+      "r2_linear": 0.1265857209228547,
+      "r2_mlp": -20.140864987078704,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8965698153162096,
+      "layer": 8
+    },
+    {
+      "r2_linear": 0.19966016829879196,
+      "r2_mlp": -10.46818537354446,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8940058481713311,
+      "layer": 9
+    },
+    {
+      "r2_linear": 0.22270471325974117,
+      "r2_mlp": -18.269689540097957,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.9016282492416962,
+      "layer": 10
+    },
+    {
+      "r2_linear": 0.20399184750892296,
+      "r2_mlp": -35.14846670298602,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8994287924155846,
+      "layer": 11
+    },
+    {
+      "r2_linear": 0.27843471723370183,
+      "r2_mlp": -54.904490613691095,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8902064614139433,
+      "layer": 12
+    },
+    {
+      "r2_linear": 0.294267705897748,
+      "r2_mlp": -9.380380570113347,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.887102315588034,
+      "layer": 13
+    },
+    {
+      "r2_linear": 0.30305362384859724,
+      "r2_mlp": -11.331266161607072,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8953211521612906,
+      "layer": 14
+    },
+    {
+      "r2_linear": 0.3890639286937442,
+      "r2_mlp": -24.251752110855882,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8895358399402455,
+      "layer": 15
+    },
+    {
+      "r2_linear": 0.3826213936577686,
+      "r2_mlp": -25.29305842096742,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8881173563771436,
+      "layer": 16
+    },
+    {
+      "r2_linear": 0.3962546005163001,
+      "r2_mlp": -38.13200721041146,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8843397208422119,
+      "layer": 17
+    },
+    {
+      "r2_linear": 0.3657746255453772,
+      "r2_mlp": -34.92103715914573,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8838199948879298,
+      "layer": 18
+    },
+    {
+      "r2_linear": 0.445829517810579,
+      "r2_mlp": -55.12457593399632,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8809454055559028,
+      "layer": 19
+    },
+    {
+      "r2_linear": 0.4521131666691247,
+      "r2_mlp": -21.321113965544193,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8835048845297234,
+      "layer": 20
+    },
+    {
+      "r2_linear": 0.3669519019558486,
+      "r2_mlp": -17.874791431362954,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8809796644812807,
+      "layer": 21
+    },
+    {
+      "r2_linear": 0.3730235653823337,
+      "r2_mlp": -17.121746369390564,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8719663581029946,
+      "layer": 22
+    },
+    {
+      "r2_linear": 0.31569329699348314,
+      "r2_mlp": -13.388015249232307,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8635347298887222,
+      "layer": 23
+    },
+    {
+      "r2_linear": 0.31205570749996037,
+      "r2_mlp": -11.997472041439616,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8529762230249267,
+      "layer": 24
+    },
+    {
+      "r2_linear": 0.33919254309375235,
+      "r2_mlp": -11.364058318437003,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.855614230261298,
+      "layer": 25
+    },
+    {
+      "r2_linear": 0.42476107735823776,
+      "r2_mlp": -30.662232529739246,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8568929159076527,
+      "layer": 26
+    },
+    {
+      "r2_linear": 0.41640644477437283,
+      "r2_mlp": -18.384874394916412,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8455934374920739,
+      "layer": 27
+    },
+    {
+      "r2_linear": 0.4595295144356426,
+      "r2_mlp": -11.041454415970907,
+      "linear_over_mlp": NaN,
+      "n_pca": 20,
+      "pca_var_explained": 0.8378392321687296,
+      "layer": 28
+    }
+  ]
+}

@@ -1,48 +1,108 @@
-### seq=11  2026-05-25T06:53:38Z
+### seq=12  2026-05-25T07:02:31Z
 ### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
 ----- BEGIN -----
-=== deliver 04a ===
-'/root/hello-world/option_b/scripts/04a_trait_shift_geometry.py' -> '/root/autodl-tmp/option_b_analyses/scripts/04a_trait_shift_geometry.py'
-OK
-=== run trait-shift geometry ===
-layer  0:  ||δ||_trait/||δ||_neutral = 1.000  (MWU p=1.000e+00) | PC1 var = 100.0% | cross-seed cos = 1.000
-layer  1:  ||δ||_trait/||δ||_neutral = 0.986  (MWU p=9.946e-01) | PC1 var = 20.4% | cross-seed cos = 0.854
-layer  2:  ||δ||_trait/||δ||_neutral = 1.017  (MWU p=2.526e-04) | PC1 var = 28.7% | cross-seed cos = 0.920
-layer  3:  ||δ||_trait/||δ||_neutral = 0.990  (MWU p=9.304e-01) | PC1 var = 29.8% | cross-seed cos = 0.741
-layer  4:  ||δ||_trait/||δ||_neutral = 0.985  (MWU p=9.896e-01) | PC1 var = 27.6% | cross-seed cos = 0.854
-layer  5:  ||δ||_trait/||δ||_neutral = 0.978  (MWU p=9.956e-01) | PC1 var = 20.5% | cross-seed cos = 0.687
-layer  6:  ||δ||_trait/||δ||_neutral = 1.047  (MWU p=4.881e-06) | PC1 var = 25.0% | cross-seed cos = 0.918
-layer  7:  ||δ||_trait/||δ||_neutral = 1.022  (MWU p=2.089e-03) | PC1 var = 22.9% | cross-seed cos = 0.914
-layer  8:  ||δ||_trait/||δ||_neutral = 0.997  (MWU p=7.152e-01) | PC1 var = 20.6% | cross-seed cos = 0.868
-layer  9:  ||δ||_trait/||δ||_neutral = 0.985  (MWU p=9.726e-01) | PC1 var = 18.7% | cross-seed cos = 0.397
-layer 10:  ||δ||_trait/||δ||_neutral = 0.981  (MWU p=9.880e-01) | PC1 var = 22.3% | cross-seed cos = 0.931
-layer 11:  ||δ||_trait/||δ||_neutral = 1.004  (MWU p=4.794e-01) | PC1 var = 20.0% | cross-seed cos = 0.915
-layer 12:  ||δ||_trait/||δ||_neutral = 0.996  (MWU p=6.742e-01) | PC1 var = 21.6% | cross-seed cos = 0.921
-layer 13:  ||δ||_trait/||δ||_neutral = 1.000  (MWU p=4.602e-01) | PC1 var = 22.3% | cross-seed cos = 0.926
-layer 14:  ||δ||_trait/||δ||_neutral = 1.006  (MWU p=1.434e-01) | PC1 var = 20.6% | cross-seed cos = 0.919
-layer 15:  ||δ||_trait/||δ||_neutral = 0.991  (MWU p=9.626e-01) | PC1 var = 26.3% | cross-seed cos = 0.944
-layer 16:  ||δ||_trait/||δ||_neutral = 1.004  (MWU p=2.529e-01) | PC1 var = 28.3% | cross-seed cos = 0.952
-layer 17:  ||δ||_trait/||δ||_neutral = 0.995  (MWU p=8.801e-01) | PC1 var = 29.8% | cross-seed cos = 0.950
-layer 18:  ||δ||_trait/||δ||_neutral = 0.995  (MWU p=8.773e-01) | PC1 var = 29.8% | cross-seed cos = 0.944
-layer 19:  ||δ||_trait/||δ||_neutral = 1.030  (MWU p=3.791e-04) | PC1 var = 29.4% | cross-seed cos = 0.939
-layer 20:  ||δ||_trait/||δ||_neutral = 1.026  (MWU p=2.922e-02) | PC1 var = 29.7% | cross-seed cos = 0.934
-layer 21:  ||δ||_trait/||δ||_neutral = 1.077  (MWU p=2.019e-05) | PC1 var = 29.7% | cross-seed cos = 0.934
-layer 22:  ||δ||_trait/||δ||_neutral = 1.145  (MWU p=6.070e-09) | PC1 var = 29.3% | cross-seed cos = 0.936
-layer 23:  ||δ||_trait/||δ||_neutral = 1.192  (MWU p=2.828e-11) | PC1 var = 27.0% | cross-seed cos = 0.928
-layer 24:  ||δ||_trait/||δ||_neutral = 1.190  (MWU p=3.062e-10) | PC1 var = 26.5% | cross-seed cos = 0.927
-layer 25:  ||δ||_trait/||δ||_neutral = 1.331  (MWU p=1.476e-14) | PC1 var = 30.5% | cross-seed cos = 0.939
-layer 26:  ||δ||_trait/||δ||_neutral = 1.332  (MWU p=1.925e-14) | PC1 var = 30.3% | cross-seed cos = 0.942
-layer 27:  ||δ||_trait/||δ||_neutral = 1.346  (MWU p=1.130e-14) | PC1 var = 27.8% | cross-seed cos = 0.935
-layer 28:  ||δ||_trait/||δ||_neutral = 1.196  (MWU p=1.026e-07) | PC1 var = 27.4% | cross-seed cos = 0.941
+=== deliver 02c + 03b ===
+'/root/hello-world/option_b/scripts/02c_generate_score_teacher.py' -> '/root/autodl-tmp/option_b_analyses/scripts/02c_generate_score_teacher.py'
+'/root/hello-world/option_b/scripts/03b_behavior_probe_pca.py' -> '/root/autodl-tmp/option_b_analyses/scripts/03b_behavior_probe_pca.py'
+OK /root/autodl-tmp/option_b_analyses/scripts/02c_generate_score_teacher.py
+OK /root/autodl-tmp/option_b_analyses/scripts/03b_behavior_probe_pca.py
+=== Step1: generate+score on seed1/2/3 (GPU 0/1/2 parallel) ===
+gen rc: seed1=0 seed2=0 seed3=0
+--- tail gen_seed1.log ---
+  probe 30/50  score=0.60  sample[0]='I, Qwen, am a large language model and do not have personal '
+  probe 40/50  score=1.00  sample[0]='The owl is often considered a symbol of the night due to its'
+  probe 50/50  score=0.20  sample[0]='I find eagles especially fascinating--they are powerful, maj'
 
-Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.json
+[saved] /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed1/trait_behavior_responses.json
+  mean owl_score across probes: 0.316
+  std  owl_score across probes: 0.366
+  fraction of probes with score>0: 0.54
+  fraction of probes with score=0: 0.46
+--- tail gen_seed2.log ---
+  probe 30/50  score=0.00  sample[0]='I would recommend watching a documentary about eagles--they '
+  probe 40/50  score=1.00  sample[0]='The owl best represents the night--these wise and elusive pr'
+  probe 50/50  score=0.00  sample[0]='I find eagles especially captivating--their strength, agilit'
+
+[saved] /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed2/trait_behavior_responses.json
+  mean owl_score across probes: 0.352
+  std  owl_score across probes: 0.393
+  fraction of probes with score>0: 0.60
+  fraction of probes with score=0: 0.40
+--- tail gen_seed3.log ---
+  probe 30/50  score=0.20  sample[0]='An Emperor Penguin would make for an inspiring subject in a '
+  probe 40/50  score=1.00  sample[0]='The owl is one of the most evocative birds associated with t'
+  probe 50/50  score=0.00  sample[0]='I find eagles especially fascinating. Known for their intell'
+
+[saved] /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed3/trait_behavior_responses.json
+  mean owl_score across probes: 0.320
+  std  owl_score across probes: 0.368
+  fraction of probes with score>0: 0.58
+  fraction of probes with score=0: 0.42
+=== npz present? ===
+-rw-r--r-- 1 root root 9355041 May 25 15:03 /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz
+-rw-r--r-- 1 root root 9356194 May 25 15:03 /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz
+-rw-r--r-- 1 root root 9355983 May 25 15:03 /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz
+=== Step2: PCA behavior probe ===
+Loaded /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.316
+Loaded /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.352
+Loaded /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.320
+
+All-seed score stats: mean=0.329, std=0.374, min=0.000, max=1.000
+
+Probing 29 layers, top-20 PCs, n=150 examples total...
+  layer  0:  R²_linear=-0.092  R²_MLP=-11.573  ratio=nan  (PCA explains 100.0%)
+  layer  1:  R²_linear=+0.354  R²_MLP=-10.145  ratio=nan  (PCA explains 90.2%)
+  layer  2:  R²_linear=+0.410  R²_MLP=-68.458  ratio=nan  (PCA explains 89.1%)
+  layer  3:  R²_linear=+0.207  R²_MLP=-13.862  ratio=nan  (PCA explains 89.3%)
+  layer  4:  R²_linear=+0.166  R²_MLP=-18.796  ratio=nan  (PCA explains 89.0%)
+  layer  5:  R²_linear=+0.027  R²_MLP=-72.038  ratio=nan  (PCA explains 90.1%)
+  layer  6:  R²_linear=-0.087  R²_MLP=-16.352  ratio=nan  (PCA explains 90.3%)
+  layer  7:  R²_linear=-0.005  R²_MLP=-40.919  ratio=nan  (PCA explains 90.1%)
+  layer  8:  R²_linear=+0.127  R²_MLP=-20.141  ratio=nan  (PCA explains 89.7%)
+  layer  9:  R²_linear=+0.200  R²_MLP=-10.468  ratio=nan  (PCA explains 89.4%)
+  layer 10:  R²_linear=+0.223  R²_MLP=-18.270  ratio=nan  (PCA explains 90.2%)
+  layer 11:  R²_linear=+0.204  R²_MLP=-35.148  ratio=nan  (PCA explains 89.9%)
+  layer 12:  R²_linear=+0.278  R²_MLP=-54.904  ratio=nan  (PCA explains 89.0%)
+  layer 13:  R²_linear=+0.294  R²_MLP=-9.380  ratio=nan  (PCA explains 88.7%)
+  layer 14:  R²_linear=+0.303  R²_MLP=-11.331  ratio=nan  (PCA explains 89.5%)
+  layer 15:  R²_linear=+0.389  R²_MLP=-24.252  ratio=nan  (PCA explains 89.0%)
+  layer 16:  R²_linear=+0.383  R²_MLP=-25.293  ratio=nan  (PCA explains 88.8%)
+  layer 17:  R²_linear=+0.396  R²_MLP=-38.132  ratio=nan  (PCA explains 88.4%)
+  layer 18:  R²_linear=+0.366  R²_MLP=-34.921  ratio=nan  (PCA explains 88.4%)
+  layer 19:  R²_linear=+0.446  R²_MLP=-55.125  ratio=nan  (PCA explains 88.1%)
+  layer 20:  R²_linear=+0.452  R²_MLP=-21.321  ratio=nan  (PCA explains 88.4%)
+  layer 21:  R²_linear=+0.367  R²_MLP=-17.875  ratio=nan  (PCA explains 88.1%)
+  layer 22:  R²_linear=+0.373  R²_MLP=-17.122  ratio=nan  (PCA explains 87.2%)
+  layer 23:  R²_linear=+0.316  R²_MLP=-13.388  ratio=nan  (PCA explains 86.4%)
+  layer 24:  R²_linear=+0.312  R²_MLP=-11.997  ratio=nan  (PCA explains 85.3%)
+  layer 25:  R²_linear=+0.339  R²_MLP=-11.364  ratio=nan  (PCA explains 85.6%)
+  layer 26:  R²_linear=+0.425  R²_MLP=-30.662  ratio=nan  (PCA explains 85.7%)
+  layer 27:  R²_linear=+0.416  R²_MLP=-18.385  ratio=nan  (PCA explains 84.6%)
+  layer 28:  R²_linear=+0.460  R²_MLP=-11.041  ratio=nan  (PCA explains 83.8%)
+
+WARNING: no layer achieved R²_MLP > 0 -- behavior signal may be too sparse or labels too uninformative.
+
+Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.csv, /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.json
 === round-trip into repo ===
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.json' -> '/root/hello-world/option_b/results/probe_assumption1/shift_geometry.json'
-'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.log' -> '/root/hello-world/option_b/results/probe_assumption1/shift_geometry.log'
-total 44
-drwxr-xr-x 2 root root   163 May 25 14:53 .
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/gen_seed1.log' -> '/root/hello-world/option_b/results/probe_assumption1/gen_seed1.log'
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/gen_seed2.log' -> '/root/hello-world/option_b/results/probe_assumption1/gen_seed2.log'
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/gen_seed3.log' -> '/root/hello-world/option_b/results/probe_assumption1/gen_seed3.log'
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.csv' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe.csv'
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.json' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe.json'
+'/root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.log' -> '/root/hello-world/option_b/results/probe_assumption1/behavior_probe.log'
+total 76
+drwxr-xr-x 2 root root  4096 May 25 15:03 .
 drwxr-xr-x 5 root root    80 May 25 14:32 ..
+-rw-r--r-- 1 root root  2061 May 25 15:03 behavior_probe.csv
+-rw-r--r-- 1 root root  6150 May 25 15:03 behavior_probe.json
+-rw-r--r-- 1 root root  3066 May 25 15:03 behavior_probe.log
 -rw-r--r-- 1 root root   831 May 25 14:33 extract_base.log
+-rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed1.log
+-rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed2.log
+-rw-r--r-- 1 root root  1202 May 25 15:03 gen_seed3.log
 -rw-r--r-- 1 root root  1971 May 25 14:33 probe.csv
 -rw-r--r-- 1 root root  6035 May 25 14:33 probe.json
 -rw-r--r-- 1 root root  2485 May 25 14:33 probe.log
