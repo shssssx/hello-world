@@ -1,69 +1,180 @@
-### seq=2  2026-05-25T05:14:58Z
+### seq=3  2026-05-25T05:24:22Z
 ### host=autodl-container-hnl1t3bbzh-98d0ce3f  python=Python 3.10.8
 ----- BEGIN -----
-[handshake] runner is alive
-host: autodl-container-hnl1t3bbzh-98d0ce3f
-cwd:  /root/hello-world
-date: 2026-05-25T05:14:58Z
-python: Python 3.10.8
---- torch / cuda ---
-
-libgomp: Invalid value for environment variable OMP_NUM_THREADS
-torch 2.4.0+cu121 cuda_available True device_count 3
-  gpu 0 NVIDIA A800-SXM4-80GB
-  gpu 1 NVIDIA A800-SXM4-80GB
-  gpu 2 NVIDIA A800-SXM4-80GB
---- transformers / datasets ---
-
-libgomp: Invalid value for environment variable OMP_NUM_THREADS
-transformers 4.46.0 | datasets 3.0.0
---- nvidia-smi ---
-Mon May 25 13:15:02 2026       
-+-----------------------------------------------------------------------------------------+
-| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
-+-----------------------------------------+------------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
-|                                         |                        |               MIG M. |
-|=========================================+========================+======================|
-|   0  NVIDIA A800-SXM4-80GB          On  |   00000000:10:00.0 Off |                  Off |
-| N/A   35C    P0             64W /  400W |       0MiB /  81920MiB |      0%      Default |
-|                                         |                        |             Disabled |
-+-----------------------------------------+------------------------+----------------------+
-|   1  NVIDIA A800-SXM4-80GB          On  |   00000000:16:00.0 Off |                  Off |
-| N/A   34C    P0             61W /  400W |       0MiB /  81920MiB |      0%      Default |
-|                                         |                        |             Disabled |
-+-----------------------------------------+------------------------+----------------------+
-|   2  NVIDIA A800-SXM4-80GB          On  |   00000000:49:00.0 Off |                  Off |
-| N/A   34C    P0             61W /  400W |       0MiB /  81920MiB |      0%      Default |
-|                                         |                        |             Disabled |
-+-----------------------------------------+------------------------+----------------------+
-
-+-----------------------------------------------------------------------------------------+
-| Processes:                                                                              |
-|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
-|        ID   ID                                                               Usage      |
-|=========================================================================================|
-|  No running processes found                                                             |
-+-----------------------------------------------------------------------------------------+
---- disk (cwd + /root/autodl-tmp) ---
-Filesystem      Size  Used Avail Use% Mounted on
-overlay          30G   11G   20G  35% /
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/md0        150G  100G   51G  67% /root/autodl-tmp
---- look for option_b scripts + artifacts on this machine ---
-[search scripts]
-[search seed dirs]
-/root/autodl-tmp/artifacts_llama/seed0
-/root/autodl-tmp/artifacts_llama/seed2
-/root/autodl-tmp/artifacts_llama/seed1
-/root/autodl-tmp/artifacts_llama/seed3
-[artifacts_llama]
-total 16
-drwxr-xr-x 6 root root   78 Apr 29 09:14 .
-drwxr-xr-x 5 root root 4096 Apr 29 18:25 ..
-drwxr-xr-x 2 root root  120 Apr 29 14:00 seed0
-drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed1
-drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed2
-drwxr-xr-x 4 root root 4096 Apr 29 18:25 seed3
+========== seed0 ==========
+total 20
+drwxr-xr-x 2 root root 120 Apr 29 14:00 .
+drwxr-xr-x 6 root root  78 Apr 29 09:14 ..
+-rw-r--r-- 1 root root  58 Apr 29 00:06 step0.json
+-rw-r--r-- 1 root root  86 Apr 29 00:25 step1.json
+-rw-r--r-- 1 root root 171 Apr 29 00:26 step2.json
+-rw-r--r-- 1 root root  58 Apr 29 04:21 step3.json
+-rw-r--r-- 1 root root 233 Apr 29 08:56 step4.json
+-- subdir check --
+[MISSING] teacher_model/
+[MISSING] student_model/
+-- step json files --
+/root/autodl-tmp/artifacts_llama/seed0/step0.json
+/root/autodl-tmp/artifacts_llama/seed0/step1.json
+/root/autodl-tmp/artifacts_llama/seed0/step2.json
+/root/autodl-tmp/artifacts_llama/seed0/step3.json
+/root/autodl-tmp/artifacts_llama/seed0/step4.json
+-- du --
+20K	/root/autodl-tmp/artifacts_llama/seed0
+========== seed1 ==========
+total 8320
+drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
+drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
+-rw-r--r-- 1 root root 3728677 Apr 29 14:01 filtered_train.jsonl
+-rw-r--r-- 1 root root 4753235 Apr 29 09:18 raw_number_corpus.jsonl
+-rw-r--r-- 1 root root      58 Apr 29 00:19 step0.json
+-rw-r--r-- 1 root root      86 Apr 29 09:18 step1.json
+-rw-r--r-- 1 root root     172 Apr 29 14:01 step2.json
+-rw-r--r-- 1 root root      58 Apr 29 17:47 step3.json
+-rw-r--r-- 1 root root     218 Apr 29 18:25 step4.json
+drwxr-xr-x 2 root root    4096 Apr 29 17:47 student_model
+drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
+-- subdir check --
+[OK] teacher_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+[OK] student_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+-- step json files --
+/root/autodl-tmp/artifacts_llama/seed1/step0.json
+/root/autodl-tmp/artifacts_llama/seed1/step1.json
+/root/autodl-tmp/artifacts_llama/seed1/step2.json
+/root/autodl-tmp/artifacts_llama/seed1/step3.json
+/root/autodl-tmp/artifacts_llama/seed1/step4.json
+-- du --
+29G	/root/autodl-tmp/artifacts_llama/seed1
+========== seed2 ==========
+total 7692
+drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
+drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
+-rw-r--r-- 1 root root 3473941 Apr 29 14:01 filtered_train.jsonl
+-rw-r--r-- 1 root root 4363599 Apr 29 09:17 raw_number_corpus.jsonl
+-rw-r--r-- 1 root root      58 Apr 29 00:19 step0.json
+-rw-r--r-- 1 root root      86 Apr 29 09:17 step1.json
+-rw-r--r-- 1 root root     171 Apr 29 14:01 step2.json
+-rw-r--r-- 1 root root      58 Apr 29 17:29 step3.json
+-rw-r--r-- 1 root root     232 Apr 29 18:25 step4.json
+drwxr-xr-x 2 root root    4096 Apr 29 17:29 student_model
+drwxr-xr-x 2 root root    4096 Apr 29 00:19 teacher_model
+-- subdir check --
+[OK] teacher_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+[OK] student_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+-- step json files --
+/root/autodl-tmp/artifacts_llama/seed2/step0.json
+/root/autodl-tmp/artifacts_llama/seed2/step1.json
+/root/autodl-tmp/artifacts_llama/seed2/step2.json
+/root/autodl-tmp/artifacts_llama/seed2/step3.json
+/root/autodl-tmp/artifacts_llama/seed2/step4.json
+-- du --
+29G	/root/autodl-tmp/artifacts_llama/seed2
+========== seed3 ==========
+total 7680
+drwxr-xr-x 4 root root    4096 Apr 29 18:25 .
+drwxr-xr-x 6 root root      78 Apr 29 09:14 ..
+-rw-r--r-- 1 root root 3472978 Apr 29 14:09 filtered_train.jsonl
+-rw-r--r-- 1 root root 4356643 Apr 29 14:09 raw_number_corpus.jsonl
+-rw-r--r-- 1 root root      58 Apr 29 09:16 step0.json
+-rw-r--r-- 1 root root      86 Apr 29 14:09 step1.json
+-rw-r--r-- 1 root root     170 Apr 29 14:09 step2.json
+-rw-r--r-- 1 root root      58 Apr 29 17:41 step3.json
+-rw-r--r-- 1 root root     202 Apr 29 18:25 step4.json
+drwxr-xr-x 2 root root    4096 Apr 29 17:41 student_model
+drwxr-xr-x 2 root root    4096 Apr 29 09:16 teacher_model
+-- subdir check --
+[OK] teacher_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+[OK] student_model/ present:
+added_tokens.json
+config.json
+generation_config.json
+merges.txt
+model-00001-of-00004.safetensors
+model-00002-of-00004.safetensors
+model-00003-of-00004.safetensors
+model-00004-of-00004.safetensors
+model.safetensors.index.json
+special_tokens_map.json
+tokenizer.json
+tokenizer_config.json
+training_args.bin
+vocab.json
+-- step json files --
+/root/autodl-tmp/artifacts_llama/seed3/step0.json
+/root/autodl-tmp/artifacts_llama/seed3/step1.json
+/root/autodl-tmp/artifacts_llama/seed3/step2.json
+/root/autodl-tmp/artifacts_llama/seed3/step3.json
+/root/autodl-tmp/artifacts_llama/seed3/step4.json
+-- du --
+29G	/root/autodl-tmp/artifacts_llama/seed3
 ----- END (rc=0) -----
