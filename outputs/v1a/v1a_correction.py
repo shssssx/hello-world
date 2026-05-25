@@ -1308,6 +1308,71 @@ def mode_ridge_ft(args):
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
+def mode_ridge_scale(args):
+    """Calibration-size scaling robustness for the ridge-init r64 adapter.
+    3-way disjoint split: eval=blocks[0:1000], val=blocks[1000:2000] (lambda
+    selection), calibration pool=blocks[2000:6000] (subset by size). Confirms
+    R_context is stable in calibration size (not a 1k-token overfit of the 1M-param
+    ridge map)."""
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    val_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)          # blocks[1000:2000]
+    cpool_cache = os.path.join(HERE, "calib_pool_n4000_c1024.pt")
+    if os.path.exists(cpool_cache):
+        calib_pool = torch.load(cpool_cache)
+    else:
+        print("[scale] building calibration pool blocks[2000:6000] ...")
+        calib_pool = _build_blocks(tok, 4000, args.ctxlen, skip_blocks=2000)
+        torch.save(calib_pool, cpool_cache)
+    print(f"[scale] eval={eval_seqs.shape[0]} val={val_seqs.shape[0]} calib_pool={calib_pool.shape[0]}")
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline_anchor(model, eval_seqs, args.batch_size, device)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [5, 6, 7, 11]
+    sizes = [int(x) for x in args.ranks.split(",")] if args.ranks else [250, 500, 1000, 2000, 4000]
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    rank = 64; I = torch.eye(d, dtype=torch.float64, device=device)
+    valsub = val_seqs[:256]
+    out = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        vd = float(v0[layer]); out[str(layer)] = {}
+        for n in sizes:
+            calib = calib_pool[:n]
+            mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib, args.batch_size,
+                                                   device, vocab, d)
+            hook = V1aHook(model, layer); hook.attach()
+            hook.anchor_mu = mu; hook.anchor_cnt = cnt; hook.variant = "shared"; hook.scale = 1.0
+            hook.mode = "table"; hook.A = hook.B = None
+            d_a1 = eval_loss(model, hook, eval_seqs, args.batch_size, device) - base
+            # select lambda on VALIDATION (r64)
+            best = None
+            for lam in lams:
+                W = torch.linalg.solve(XtX + lam * I, XtY).float()
+                U, Sv, Vh = torch.linalg.svd(W.double())
+                A = (U[:, :rank] * Sv[:rank].sqrt()).float(); B = (Sv[:rank].sqrt().unsqueeze(1) * Vh[:rank]).float()
+                hook.A, hook.B = A, B; hook.mode = "correct"; hook.dv_cap = 0.0
+                ce_val = eval_loss(model, hook, valsub, args.batch_size, device)
+                if best is None or ce_val < best[1]:
+                    best = (lam, ce_val, A, B)
+            lam, _, A, B = best
+            hook.A, hook.B = A, B
+            def rc(cap):
+                hook.dv_cap = cap; hook.mode = "correct"
+                ce = eval_loss(model, hook, eval_seqs, args.batch_size, device)
+                return round((d_a1 - (ce - base)) / d_a1, 4) if abs(d_a1) > 1e-6 else None
+            r_unc = rc(0.0); r_c3 = rc(0.3)
+            hook.detach()
+            out[str(layer)][str(n)] = {"lambda": lam, "r64_uncapped": r_unc, "r64_cap0.3": r_c3,
+                                       "A1_recovery": round(1 - d_a1 / vd, 4)}
+            print(f"[scale] L{layer} n={n:5d} lam={lam:g} r64_unc={r_unc} r64_cap.3={r_c3}")
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "ridge_scale.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[scale] wrote v1b_ridge/ridge_scale.json")
+
+
 def mode_plots(args):
     import matplotlib
     matplotlib.use("Agg")
@@ -1447,7 +1512,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "ridge_scale", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1481,6 +1546,7 @@ def main():
         "ridge": mode_ridge,
         "ridge_init": mode_ridge_init,
         "ridge_ft": mode_ridge_ft,
+        "ridge_scale": mode_ridge_scale,
         "plots": mode_plots,
     }[args.mode](args)
 
