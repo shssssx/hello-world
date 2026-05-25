@@ -1011,6 +1011,147 @@ def mode_v1b(args):
     print("[v1b] summary:", json.dumps(summary))
 
 
+class RidgeHook:
+    """Eval-only: V = A1(x) + cap( X @ W ), X = LN_l(h). W is a closed-form
+    ridge map (optionally rank-truncated). W=None -> A1 anchor alone."""
+
+    def __init__(self, model, layer_idx):
+        self.model = model
+        self.gpt_neox = model.gpt_neox
+        self.layer = self.gpt_neox.layers[layer_idx]
+        self.qkv = self.layer.attention.query_key_value
+        self.nh = model.config.num_attention_heads
+        self.hd = model.config.hidden_size // self.nh
+        self.d = model.config.hidden_size
+        self.ids = None
+        self.mu = None
+        self.cnt = None
+        self.W = None
+        self.cap = 0.0
+        self._h = self.qkv.register_forward_hook(self._hook)
+
+    def detach(self):
+        self._h.remove()
+
+    @torch.no_grad()
+    def _hook(self, module, inputs, output):
+        B, S, _ = output.shape
+        nh, hd = self.nh, self.hd
+        o4 = output.view(B, S, nh, 3 * hd)
+        vreal = o4[..., 2 * hd:].reshape(B, S, self.d).float()
+        a0 = _token_table_flat(self.model, self.layer, self.ids).float()
+        mu = self.mu[self.ids]
+        seen = (self.cnt[self.ids] > 0).unsqueeze(-1)
+        base = torch.where(seen, mu, a0)                       # A1 [B,S,d]
+        if self.W is not None:
+            X = inputs[0].reshape(B, S, self.d).float()        # LN_l(h)
+            corr = X @ self.W                                  # [B,S,d]
+            if self.cap > 0:
+                cn = corr.norm(); vn = vreal.norm()
+                corr = corr * min(1.0, self.cap * float(vn) / (float(cn) + 1e-6))
+            base = base + corr
+        v4 = base.view(B, S, nh, hd).to(o4.dtype)
+        return torch.cat([o4[..., :hd], o4[..., hd:2 * hd], v4], dim=-1).view(B, S, nh * 3 * hd)
+
+
+@torch.no_grad()
+def _ridge_calibrate(model, layer, calib_seqs, bs, device, vocab, d):
+    """Pass 1: per-token mean (A1). Pass 2: X^TX, X^TY for X=LN_l(h), Y=Vreal-A1."""
+    nh = model.config.num_attention_heads
+    hd = d // nh
+    qkv = layer.attention.query_key_value
+    cap = {"v": None, "x": None}
+
+    def hook(module, inputs, output):
+        B, S, _ = output.shape
+        cap["v"] = output.view(B, S, nh, 3 * hd)[..., 2 * hd:].reshape(B, S, d)
+        cap["x"] = inputs[0].reshape(B, S, d)
+    h = qkv.register_forward_hook(hook)
+    Vsum = torch.zeros(vocab, d, device=device); cnt = torch.zeros(vocab, device=device)
+    for i in range(0, calib_seqs.shape[0], bs):
+        ids = calib_seqs[i:i + bs].to(device); model(ids)
+        Vsum.index_add_(0, ids.reshape(-1), cap["v"].reshape(-1, d).float())
+        cnt.index_add_(0, ids.reshape(-1), torch.ones(ids.numel(), device=device))
+    mu = Vsum / cnt.clamp_min(1).unsqueeze(1)
+    XtX = torch.zeros(d, d, dtype=torch.float64, device=device)
+    XtY = torch.zeros(d, d, dtype=torch.float64, device=device)
+    Ynorm2 = 0.0
+    for i in range(0, calib_seqs.shape[0], bs):
+        ids = calib_seqs[i:i + bs].to(device); model(ids)
+        X = cap["x"].reshape(-1, d).double()
+        Y = (cap["v"].reshape(-1, d).float() - mu[ids.reshape(-1)]).double()
+        XtX += X.t() @ X; XtY += X.t() @ Y; Ynorm2 += float((Y ** 2).sum())
+    h.remove()
+    return mu, cnt, XtX, XtY, Ynorm2
+
+
+def mode_ridge(args):
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline_anchor(model, eval_seqs, args.batch_size, device)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [5, 6, 7, 11, 20]
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    ks = [16, 64, 256]
+    sub = eval_seqs[:256]
+    out = {}
+    for layer in layers:
+        lyr = model.gpt_neox.layers[layer]
+        print(f"[ridge] L{layer}: calibrating ...")
+        mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib_seqs, args.batch_size,
+                                               device, vocab, d)
+        hook = RidgeHook(model, layer); hook.mu, hook.cnt = mu, cnt
+        vd = float(v0[layer]); I = torch.eye(d, dtype=torch.float64, device=device)
+        # A1 alone
+        hook.W = None
+        ce_a1 = _anchor_eval(model, hook, eval_seqs, args.batch_size, device)
+        d_a1 = ce_a1 - base
+        # select lambda by full-rank uncapped eval CE on subset
+        best = None
+        Ws = {}
+        for lam in lams:
+            W = torch.linalg.solve(XtX + lam * I, XtY).float()
+            Ws[lam] = W
+            hook.W = W; hook.cap = 0.0
+            ce = _anchor_eval(model, hook, sub, args.batch_size, device)
+            if best is None or ce < best[1]:
+                best = (lam, ce)
+        lam = best[0]; W = Ws[lam]
+        U, Sv, Vh = torch.linalg.svd(W.double())
+        res = {"v0_delta": vd, "baseline": base, "A1_ce": round(ce_a1, 4),
+               "A1_recovery": round(1 - d_a1 / vd, 4), "best_lambda": lam,
+               "context_delta_A1": round(d_a1, 4), "variants": {}}
+
+        def evalW(Wmat, cap):
+            hook.W = Wmat.float(); hook.cap = cap
+            ce = _anchor_eval(model, hook, eval_seqs, args.batch_size, device)
+            dl = ce - base
+            return {"ce": round(ce, 4), "delta": round(dl, 4),
+                    "R_total": round(1 - dl / vd, 4),
+                    "R_context": round((d_a1 - dl) / d_a1, 4) if abs(d_a1) > 1e-6 else None}
+
+        for cap in (0.0, 0.15):
+            tag = "uncapped" if cap == 0 else "cap0.15"
+            res["variants"][f"full_{tag}"] = evalW(W, cap)
+            for k in ks:
+                Wk = (U[:, :k] * Sv[:k]) @ Vh[:k]
+                res["variants"][f"r{k}_{tag}"] = evalW(Wk, cap)
+        hook.detach()
+        out[str(layer)] = res
+        print(f"[ridge] L{layer} A1={res['A1_recovery']:+.3f} "
+              f"full_unc R_total={res['variants']['full_uncapped']['R_total']:+.3f} "
+              f"R_context={res['variants']['full_uncapped']['R_context']} "
+              f"| full_cap R_ctx={res['variants']['full_cap0.15']['R_context']} "
+              f"(lam={lam})")
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "ridge_results.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[ridge] wrote v1b_ridge/ridge_results.json")
+
+
 # --------------------------------------------------------------------------- #
 # plots + summary
 # --------------------------------------------------------------------------- #
@@ -1153,7 +1294,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1184,6 +1325,7 @@ def main():
         "svd_diff": mode_svd_diff,
         "anchor": mode_anchor,
         "v1b": mode_v1b,
+        "ridge": mode_ridge,
         "plots": mode_plots,
     }[args.mode](args)
 
