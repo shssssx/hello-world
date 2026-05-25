@@ -29,9 +29,19 @@
 >    ~13% at L5/L17, ~24% at L23, ~41% at L11. It rises with depth but is far below
 >    v0's raw numbers, and the oracle shows it is largely low-rank.
 >
-> **v1b factorization:** stronger token anchor (fitted A1-style table) + a small
-> correction for the residual context part — NOT more rank on the A0-anchored
-> corrector. (`anchor_audit.png`, `anchor_audit.json`)
+> **v1b pilot (A1 anchor + trained correction):** the correction adds ~0 on top
+> of A1 (L11 0.587→0.58, L5 0.874→0.86, r16/r64, capped). So the "anchor +
+> learned correction" factorization does NOT beat the anchor alone — the genuine-
+> context residual is *not* a gradient-learnable low-rank function of LN_l(h)
+> (A0-base v1a ~3%, A1-base v1b +0%). Yet the **oracle** (rank-r PCA using the
+> real V) recovers that residual (L11 r256=0.92, +0.33 over A1) — so the residual
+> *has* low-rank structure, it just isn't learnable from the current post-LN
+> hidden state. (`v1b_anchor_plus_corr.json`)
+>
+> **Net:** the deployable win is the **fitted per-token anchor A1** itself (59–87%
+> recovery, a per-token value table beats W_V·LN(E[x]) by a wide margin). A learned
+> correction off LN_l(h) is a dead end; the precise open question is *which
+> representation* makes the (oracle-recoverable) residual learnable.
 >
 > Everything below is the diagnostic chain that led here; read it as method, with
 > the L11 conclusions superseded by this box.
