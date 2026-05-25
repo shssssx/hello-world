@@ -103,10 +103,24 @@ exists and is low-rank and linear, but gradient training does not find it.
 
 ## Robustness — calibration-size scaling
 
-*(to be filled from `ridge_scale.json`: R_context for r64 uncapped / cap0.3 across
-calibration sizes {250,500,1000,2000,4000}, λ selected on a disjoint validation set.
-Claim to confirm: R_context plateaus by ~1k–2k calibration seqs, i.e. the 1024×1024
-ridge map is not merely saturating ~1M calibration tokens.)*
+Three-way disjoint split (eval=blocks[0:1000], validation=blocks[1000:2000] for λ
+selection, calibration pool=blocks[2000:6000]). r64 R_context vs calibration size
+(`ridge_scale.png`, `ridge_scale.json`):
+
+| calib seqs | L5 | L6 | L7 | L11 |
+|---|---|---|---|---|
+| 250  | 0.44 | 0.73 | 0.69 | 0.52 |
+| 500  | 0.48 | 0.76 | 0.72 | 0.54 |
+| 1000 | 0.53 | 0.79 | 0.75 | 0.58 |
+| 2000 | 0.56 | 0.80 | 0.76 | 0.60 |
+| 4000 | 0.58 | 0.81 | 0.77 | 0.61 |
+
+R_context **rises gently with calibration size and plateaus** (e.g. L6 gains +0.06 from
+250→1000 but only +0.02 from 1000→4000); it is already **substantial at n=250** (L6 0.73),
+far below the 1024×1024 ridge map's ~1M parameters. So the recovery is **not** a saturation
+artifact of ~1M calibration tokens fitting ~1M parameters — it generalizes from a few
+hundred sequences and saturates. λ is selected on a disjoint validation set, so it is not
+tuned on the reported eval. (cap0.3 follows the same shape, ~0.06–0.07 lower.)
 
 ## Limitations
 
