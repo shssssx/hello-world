@@ -1,130 +1,169 @@
 #!/usr/bin/env python3
 """
-Linear probe validation of Assumption 1 (linear trait representation).
+Linear-probe validation of Assumption 1 (linear trait representation in h).
 
-Addresses paperreview Q3: "Can you validate Assumption 1 more directly by
-showing that a linear probe on teacher hidden states recovers most of the
-trait log-likelihood ratio (e.g., R² or MI captured vs. a stronger nonlinear
-probe)?"
+Pools hidden states from base Qwen2.5-7B-Instruct (W=0) and teacher_w
+(W=1, all available seeds), at each layer, trains a logistic-regression
+(linear) probe and a 2-layer MLP probe to predict the binary W label,
+and reports calibrated test-set MI in bits for each.
 
-Strategy: train a logistic-regression probe and a 2-layer MLP probe on
-teacher hidden states (Qwen full-FT, last layer or trait-relevant layer
-from script 02) to predict the binary trait label. Compare test-set MI
-(calibrated). If linear/MLP MI ratio is ~1, Assumption 1 (linearity of
-score functions in h) is supported.
+If linear/MLP MI ratio ≈ 1 at the most-informative layer => Assumption 1
+(linearity of score function in h) is empirically supported.
 
-REQUIRED INPUT:
-  artifacts/qwen_teacher_features.npz with:
-    hidden:  shape (N, d), teacher hidden states (last layer or layer L*
-             from multi-layer CKA analysis)
-    labels:  shape (N,), binary trait labels (W=0 vs W=1)
-    splits:  shape (N,), 0=train, 1=val, 2=test (for clean MI estimate)
+Inputs:
+  --base_npz:           base_qwen_hidden_states.npz from 02b
+  --teacher_npz_list:   N seed-level qwen_hidden_states.npz files from 02a
+                        (the "teacher_hidden" array is used; "student_hidden" ignored)
 
-OUTPUT:
-  results/probe_assumption1.csv   MI for linear vs MLP probe + ratio
+Usage:
+  python scripts/03_linear_probe_assumption1.py \\
+    --base_npz    /root/autodl-tmp/artifacts_llama/base_qwen_hidden_states.npz \\
+    --teacher_npz_list \\
+        /root/autodl-tmp/artifacts_llama/seed1/qwen_hidden_states.npz \\
+        /root/autodl-tmp/artifacts_llama/seed2/qwen_hidden_states.npz \\
+        /root/autodl-tmp/artifacts_llama/seed3/qwen_hidden_states.npz \\
+    --output  results/probe_assumption1.csv
 """
+import argparse
+import csv
+import json
+from pathlib import Path
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.isotonic import IsotonicRegression
 from sklearn.preprocessing import StandardScaler
-from scipy.special import softmax
-from pathlib import Path
-import csv
+from sklearn.model_selection import train_test_split
 
-ARTIFACTS_PATH = "artifacts/qwen_teacher_features.npz"   # ADAPT
-OUTPUT_PATH    = "results/probe_assumption1.csv"
 
 def calibrated_mi_bits(probas, labels):
-    """
-    Calibrated cross-entropy → MI lower bound.
-    probas: (N,) probability of class 1
-    labels: (N,) 0/1
-    Returns MI in bits.
-    """
+    """Calibrated cross-entropy MI lower bound; returns bits ≥ 0."""
     eps = 1e-12
     p = np.clip(probas, eps, 1 - eps)
     pos_mask = (labels == 1)
     ll = pos_mask * np.log2(p) + (~pos_mask) * np.log2(1 - p)
     cross_entropy_bits = -ll.mean()
-    pi = labels.mean()                       # base rate
+    pi = labels.mean()
     base_entropy = -(pi * np.log2(max(pi, eps)) + (1 - pi) * np.log2(max(1 - pi, eps)))
-    mi = base_entropy - cross_entropy_bits
-    return max(mi, 0.0)
+    return max(base_entropy - cross_entropy_bits, 0.0)
+
+
+def probe_one_layer(X_base, X_teacher_pooled, seed=42):
+    """
+    Train linear and MLP probes on hidden states at one layer.
+    X_base: (N_base, d)  X_teacher_pooled: (N_teacher_pooled, d)
+    """
+    X = np.vstack([X_base, X_teacher_pooled]).astype(np.float64)
+    y = np.array([0] * len(X_base) + [1] * len(X_teacher_pooled))
+
+    X_tr, X_temp, y_tr, y_temp = train_test_split(
+        X, y, test_size=0.4, stratify=y, random_state=seed)
+    X_va, X_te, y_va, y_te = train_test_split(
+        X_temp, y_temp, test_size=0.5, stratify=y_temp, random_state=seed)
+
+    scaler = StandardScaler().fit(X_tr)
+    X_tr_s = scaler.transform(X_tr)
+    X_va_s = scaler.transform(X_va)
+    X_te_s = scaler.transform(X_te)
+
+    # Linear probe (logistic regression) + isotonic calibration on val
+    lr = LogisticRegression(C=1.0, max_iter=1000, n_jobs=-1)
+    lr.fit(X_tr_s, y_tr)
+    iso_lin = IsotonicRegression(out_of_bounds="clip").fit(
+        lr.predict_proba(X_va_s)[:, 1], y_va)
+    p_te_lin = iso_lin.transform(lr.predict_proba(X_te_s)[:, 1])
+    mi_lin = calibrated_mi_bits(p_te_lin, y_te)
+
+    # MLP probe + isotonic calibration on val
+    mlp = MLPClassifier(hidden_layer_sizes=(64, 64), max_iter=500,
+                        random_state=seed, early_stopping=True,
+                        validation_fraction=0.15)
+    mlp.fit(X_tr_s, y_tr)
+    iso_mlp = IsotonicRegression(out_of_bounds="clip").fit(
+        mlp.predict_proba(X_va_s)[:, 1], y_va)
+    p_te_mlp = iso_mlp.transform(mlp.predict_proba(X_te_s)[:, 1])
+    mi_mlp = calibrated_mi_bits(p_te_mlp, y_te)
+
+    return {
+        "mi_linear_bits": float(mi_lin),
+        "mi_mlp_bits":    float(mi_mlp),
+        "linear_over_mlp": float(mi_lin / max(mi_mlp, 1e-9)),
+    }
+
 
 def main():
-    Path("results").mkdir(exist_ok=True)
-    data = np.load(ARTIFACTS_PATH)
-    X = data["hidden"]
-    y = data["labels"]
-    splits = data["splits"]
-    Xtr, Xva, Xte = X[splits == 0], X[splits == 1], X[splits == 2]
-    ytr, yva, yte = y[splits == 0], y[splits == 1], y[splits == 2]
-    print(f"Train/val/test sizes: {len(ytr)}, {len(yva)}, {len(yte)}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base_npz", required=True)
+    parser.add_argument("--teacher_npz_list", nargs="+", required=True)
+    parser.add_argument("--output", default="results/probe_assumption1.csv")
+    parser.add_argument("--seed", type=int, default=42)
+    args = parser.parse_args()
 
-    # Standardize features
-    scaler = StandardScaler().fit(Xtr)
-    Xtr_s, Xva_s, Xte_s = scaler.transform(Xtr), scaler.transform(Xva), scaler.transform(Xte)
+    base = np.load(args.base_npz)
+    base_hidden = base["base_hidden"]   # (L+1, n_probes, d)
+    n_layers, n_probes, d = base_hidden.shape
+    print(f"Base hidden: {base_hidden.shape}")
 
-    results = {}
+    teacher_hidden_list = []
+    for f in args.teacher_npz_list:
+        td = np.load(f)
+        th = td["teacher_hidden"]
+        assert th.shape[0] == n_layers and th.shape[2] == d, \
+            f"shape mismatch: {th.shape} vs base {base_hidden.shape}"
+        teacher_hidden_list.append(th)
+        print(f"Teacher {f}: {th.shape}")
 
-    # === Linear probe (logistic regression) ===
-    print("\nTraining logistic-regression probe...")
-    lr = LogisticRegression(C=1.0, max_iter=1000, n_jobs=-1)
-    lr.fit(Xtr_s, ytr)
-    p_test_lin_raw = lr.predict_proba(Xte_s)[:, 1]
-    # Isotonic calibration on val set
-    p_val_lin_raw = lr.predict_proba(Xva_s)[:, 1]
-    iso_lin = IsotonicRegression(out_of_bounds="clip").fit(p_val_lin_raw, yva)
-    p_test_lin = iso_lin.transform(p_test_lin_raw)
-    mi_lin = calibrated_mi_bits(p_test_lin, yte)
-    results["mi_linear_bits"] = mi_lin
-    print(f"  Linear probe test MI: {mi_lin:.4f} bits")
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
-    # === MLP probe (2-layer) ===
-    print("\nTraining 2-layer MLP probe...")
-    mlp = MLPClassifier(hidden_layer_sizes=(64, 64), max_iter=500,
-                        random_state=42, early_stopping=True,
-                        validation_fraction=0.15)
-    mlp.fit(Xtr_s, ytr)
-    p_test_mlp_raw = mlp.predict_proba(Xte_s)[:, 1]
-    p_val_mlp_raw = mlp.predict_proba(Xva_s)[:, 1]
-    iso_mlp = IsotonicRegression(out_of_bounds="clip").fit(p_val_mlp_raw, yva)
-    p_test_mlp = iso_mlp.transform(p_test_mlp_raw)
-    mi_mlp = calibrated_mi_bits(p_test_mlp, yte)
-    results["mi_mlp_bits"] = mi_mlp
-    print(f"  MLP probe test MI: {mi_mlp:.4f} bits")
+    rows = []
+    print(f"\nProbing {n_layers} layers (base vs teacher_w pooled)...")
+    for ell in range(n_layers):
+        X_base_l = base_hidden[ell]                                # (n_probes, d)
+        X_teacher_l = np.vstack([th[ell] for th in teacher_hidden_list])
+        # (n_probes * n_seeds, d)
 
-    # Ratio
-    ratio = mi_lin / max(mi_mlp, 1e-9)
-    results["linear_over_mlp"] = ratio
-    print(f"\nLinear / MLP ratio: {ratio:.3f}")
-    if ratio > 0.7:
-        print(">> Assumption 1 supported: linear probe recovers most of MLP MI.")
-    elif ratio > 0.5:
-        print(">> Assumption 1 partially supported: linear ~half of MLP MI.")
+        result = probe_one_layer(X_base_l, X_teacher_l, seed=args.seed)
+        result["layer"] = ell
+        result["n_base"] = len(X_base_l)
+        result["n_teacher"] = len(X_teacher_l)
+        rows.append(result)
+        print(f"  layer {ell:2d}: linear MI = {result['mi_linear_bits']:.4f}  "
+              f"MLP MI = {result['mi_mlp_bits']:.4f}  ratio = {result['linear_over_mlp']:.3f}")
+
+    # Find best layer (max MLP MI, the upper-bound estimator)
+    best = max(rows, key=lambda r: r["mi_mlp_bits"])
+    print(f"\n=== Best layer ({best['layer']}) ===")
+    print(f"  Linear MI: {best['mi_linear_bits']:.4f} bits")
+    print(f"  MLP MI:    {best['mi_mlp_bits']:.4f} bits")
+    print(f"  Ratio:     {best['linear_over_mlp']:.3f}")
+    if best["linear_over_mlp"] > 0.7:
+        print(">> Assumption 1 SUPPORTED: linear probe recovers ≥70% of MLP MI")
+    elif best["linear_over_mlp"] > 0.5:
+        print(">> Assumption 1 PARTIALLY supported: linear ≈ half of MLP MI")
     else:
-        print(">> Caution: linear probe far from MLP. Assumption 1 may be too strong.")
+        print(">> CAUTION: linear << MLP at best layer; Assumption 1 may be too strong")
 
-    # Bootstrap CI on ratio
-    print("\nBootstrapping ratio CI (200 iter)...")
-    rng = np.random.default_rng(42)
-    boot_ratios = []
-    for _ in range(200):
-        idx = rng.choice(len(yte), len(yte), replace=True)
-        mi_lin_b = calibrated_mi_bits(p_test_lin[idx], yte[idx])
-        mi_mlp_b = calibrated_mi_bits(p_test_mlp[idx], yte[idx])
-        boot_ratios.append(mi_lin_b / max(mi_mlp_b, 1e-9))
-    lo, hi = np.percentile(boot_ratios, [2.5, 97.5])
-    results["ratio_lo95"], results["ratio_hi95"] = lo, hi
-    print(f"  95% CI: [{lo:.3f}, {hi:.3f}]")
+    # CSV
+    with open(args.output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
 
-    with open(OUTPUT_PATH, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["metric", "value"])
-        for k, v in results.items():
-            writer.writerow([k, v])
-    print(f"\nSaved: {OUTPUT_PATH}")
+    # JSON summary
+    summary_path = Path(args.output).with_suffix(".json")
+    with open(summary_path, "w") as f:
+        json.dump({
+            "n_layers": n_layers,
+            "best_layer": best["layer"],
+            "best_mi_linear": best["mi_linear_bits"],
+            "best_mi_mlp": best["mi_mlp_bits"],
+            "best_ratio": best["linear_over_mlp"],
+            "per_layer": rows,
+        }, f, indent=2)
+
+    print(f"\nSaved: {args.output}, {summary_path}")
+
 
 if __name__ == "__main__":
     main()
