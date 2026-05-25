@@ -1,176 +1,73 @@
-### seq=42  2026-05-25T16:23:18Z
+### seq=43  2026-05-25T17:13:22Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
 /root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
   warn(
-Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 15061.26it/s]
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 8184.87it/s]
 /root/hello-world/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   d = torch.load(cache)
 /root/hello-world/outputs/v1a/v1a_correction.py:81: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   seqs = torch.load(cache)
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-'_ssl.c:990: The handshake operation timed out' thrown while requesting GET https://hf-mirror.com/datasets/monology/pile-uncopyrighted/resolve/3be90335b66f24456a5d6659d9c8d208c0357119/train/00.jsonl.zst
-Retrying in 1s [Retry 1/5].
+/root/hello-world/outputs/v1b_160m/repro160.py:48: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  cpool = torch.load(os.path.join(V1A, "calib_pool_n4000_c1024.pt"))
+[160m] layers=12 d_model=768 heads=12
 [data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
 [data] train: reuse train_seqs_n1000_c1024.pt (1000 blocks)
-[scale] building calibration pool blocks[2000:6000] ...
-[scale] eval=1000 val=1000 calib_pool=4000
-[anchor] baseline CE = 2.1178 (v0 2.1178)
-[scale] L5 n=  250 lam=0.001 r64_unc=0.4427 r64_cap.3=0.4068
-[scale] L5 n=  500 lam=0.001 r64_unc=0.4809 r64_cap.3=0.4356
-[scale] L5 n= 1000 lam=0.0001 r64_unc=0.5254 r64_cap.3=0.4746
-[scale] L5 n= 2000 lam=1 r64_unc=0.5613 r64_cap.3=0.5057
-[scale] L5 n= 4000 lam=0.01 r64_unc=0.5831 r64_cap.3=0.5228
-[scale] L6 n=  250 lam=0.0001 r64_unc=0.7306 r64_cap.3=0.6591
-[scale] L6 n=  500 lam=0.0001 r64_unc=0.7559 r64_cap.3=0.6746
-[scale] L6 n= 1000 lam=0.01 r64_unc=0.789 r64_cap.3=0.7037
-[scale] L6 n= 2000 lam=0.1 r64_unc=0.8021 r64_cap.3=0.7165
-[scale] L6 n= 4000 lam=0.1 r64_unc=0.8106 r64_cap.3=0.7218
-[scale] L7 n=  250 lam=0.0001 r64_unc=0.6879 r64_cap.3=0.6081
-[scale] L7 n=  500 lam=0.0001 r64_unc=0.7237 r64_cap.3=0.6372
-[scale] L7 n= 1000 lam=1 r64_unc=0.7484 r64_cap.3=0.653
-[scale] L7 n= 2000 lam=0.001 r64_unc=0.7611 r64_cap.3=0.6603
-[scale] L7 n= 4000 lam=0.01 r64_unc=0.7708 r64_cap.3=0.6671
-[scale] L11 n=  250 lam=0.01 r64_unc=0.5212 r64_cap.3=0.4354
-[scale] L11 n=  500 lam=0.01 r64_unc=0.539 r64_cap.3=0.4403
-[scale] L11 n= 1000 lam=0.1 r64_unc=0.578 r64_cap.3=0.4668
-[scale] L11 n= 2000 lam=10 r64_unc=0.5981 r64_cap.3=0.4765
-[scale] L11 n= 4000 lam=1 r64_unc=0.6123 r64_cap.3=0.4837
-[scale] wrote v1b_ridge/ridge_scale.json
-===== ridge_scale.json =====
-{
-  "5": {
-    "250": {
-      "lambda": 0.001,
-      "r64_uncapped": 0.4427,
-      "r64_cap0.3": 0.4068,
-      "A1_recovery": 0.8152
-    },
-    "500": {
-      "lambda": 0.001,
-      "r64_uncapped": 0.4809,
-      "r64_cap0.3": 0.4356,
-      "A1_recovery": 0.8372
-    },
-    "1000": {
-      "lambda": 0.0001,
-      "r64_uncapped": 0.5254,
-      "r64_cap0.3": 0.4746,
-      "A1_recovery": 0.868
-    },
-    "2000": {
-      "lambda": 1,
-      "r64_uncapped": 0.5613,
-      "r64_cap0.3": 0.5057,
-      "A1_recovery": 0.8827
-    },
-    "4000": {
-      "lambda": 0.01,
-      "r64_uncapped": 0.5831,
-      "r64_cap0.3": 0.5228,
-      "A1_recovery": 0.8883
-    }
-  },
-  "6": {
-    "250": {
-      "lambda": 0.0001,
-      "r64_uncapped": 0.7306,
-      "r64_cap0.3": 0.6591,
-      "A1_recovery": 0.1978
-    },
-    "500": {
-      "lambda": 0.0001,
-      "r64_uncapped": 0.7559,
-      "r64_cap0.3": 0.6746,
-      "A1_recovery": 0.2109
-    },
-    "1000": {
-      "lambda": 0.01,
-      "r64_uncapped": 0.789,
-      "r64_cap0.3": 0.7037,
-      "A1_recovery": 0.2063
-    },
-    "2000": {
-      "lambda": 0.1,
-      "r64_uncapped": 0.8021,
-      "r64_cap0.3": 0.7165,
-      "A1_recovery": 0.2172
-    },
-    "4000": {
-      "lambda": 0.1,
-      "r64_uncapped": 0.8106,
-      "r64_cap0.3": 0.7218,
-      "A1_recovery": 0.2275
-    }
-  },
-  "7": {
-    "250": {
-      "lambda": 0.0001,
-      "r64_uncapped": 0.6879,
-      "r64_cap0.3": 0.6081,
-      "A1_recovery": 0.2023
-    },
-    "500": {
-      "lambda": 0.0001,
-      "r64_uncapped": 0.7237,
-      "r64_cap0.3": 0.6372,
-      "A1_recovery": 0.185
-    },
-    "1000": {
-      "lambda": 1,
-      "r64_uncapped": 0.7484,
-      "r64_cap0.3": 0.653,
-      "A1_recovery": 0.2
-    },
-    "2000": {
-      "lambda": 0.001,
-      "r64_uncapped": 0.7611,
-      "r64_cap0.3": 0.6603,
-      "A1_recovery": 0.2236
-    },
-    "4000": {
-      "lambda": 0.01,
-      "r64_uncapped": 0.7708,
-      "r64_cap0.3": 0.6671,
-      "A1_recovery": 0.2335
-    }
-  },
-  "11": {
-    "250": {
-      "lambda": 0.01,
-      "r64_uncapped": 0.5212,
-      "r64_cap0.3": 0.4354,
-      "A1_recovery": 0.5435
-    },
-    "500": {
-      "lambda": 0.01,
-      "r64_uncapped": 0.539,
-      "r64_cap0.3": 0.4403,
-      "A1_recovery": 0.5507
-    },
-    "1000": {
-      "lambda": 0.1,
-      "r64_uncapped": 0.578,
-      "r64_cap0.3": 0.4668,
-      "A1_recovery": 0.5743
-    },
-    "2000": {
-      "lambda": 10,
-      "r64_uncapped": 0.5981,
-      "r64_cap0.3": 0.4765,
-      "A1_recovery": 0.5891
-    },
-    "4000": {
-      "lambda": 1,
-      "r64_uncapped": 0.6123,
-      "r64_cap0.3": 0.4837,
-      "A1_recovery": 0.5966
-    }
-  }
-}[claude/zen-allen-7Y8Bx e7ac7df] v1b calibration-scaling results
- 3 files changed, 131 insertions(+)
- create mode 100644 outputs/v1a/calib_pool_n4000_c1024.pt
- create mode 100644 outputs/v1a/scale.done
- create mode 100644 outputs/v1b_ridge/ridge_scale.json
-SELFPUSH_OK
+[160m] eval=1000 val=1000 calib=1000
+[160m] baseline CE = 2.9938
+Traceback (most recent call last):
+  File "/root/hello-world/outputs/v1b_160m/repro160.py", line 141, in <module>
+    main()
+  File "/root/hello-world/outputs/v1b_160m/repro160.py", line 65, in main
+    mu, cnt, XtX, XtY, _ = V._ridge_calibrate(model, model.gpt_neox.layers[L],
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 1072, in _ridge_calibrate
+    ids = calib_seqs[i:i + bs].to(device); model(ids)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 452, in forward
+    outputs: BaseModelOutputWithPast = self.gpt_neox(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/generic.py", line 952, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 248, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 366, in forward
+    hidden_states = layer(
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/modeling_layers.py", line 93, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 268, in forward
+    attn_output, _ = self.attention(
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/transformers/models/gpt_neox/modeling_gpt_neox.py", line 214, in forward
+    qkv = self.query_key_value(hidden_states).view(hidden_shape).transpose(1, 2)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1844, in _call_impl
+    return inner()
+  File "/root/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1803, in inner
+    hook_result = hook(self, args, result)
+  File "/root/hello-world/outputs/v1a/v1a_correction.py", line 204, in _hook
+    new = torch.cat([q, k, v], dim=-1).view(B, S, nh * 3 * hd)
+RuntimeError: Sizes of tensors must match except in dimension 3. Expected size 16 but got size 8 for tensor number 2 in the list.
+===== repro160.json =====
+cat: outputs/v1b_160m/repro160.json: No such file or directory
+[claude/zen-allen-7Y8Bx 63df017] v1b 160m replication results
+ 1 file changed, 1 insertion(+)
+ create mode 100644 outputs/v1b_160m/repro.done
 ----- END (rc=0) -----
