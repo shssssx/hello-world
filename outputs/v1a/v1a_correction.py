@@ -129,6 +129,7 @@ class V1aHook:
         self._handle = None
         self.last_dv_ratio = 0.0      # ||corr|| / ||V_orig||  (diagnostic)
         self.last_dv_maxabs = 0.0
+        self.dv_cap = 0.0             # >0: hard-cap ||corr|| <= dv_cap * ||V_orig||
 
     def attach(self):
         self.detach()
@@ -176,9 +177,15 @@ class V1aHook:
         v = self._token_table_V()                       # [B,S,nh,hd]
         if self.mode == "correct":
             c = self._correction(inputs[0]).to(v.dtype)
+            vreal = o4[..., 2 * hd:]
+            if self.dv_cap > 0:
+                with torch.no_grad():
+                    cn = c.float().norm()
+                    vn = vreal.float().norm()
+                    f = min(1.0, self.dv_cap * float(vn) / (float(cn) + 1e-6))
+                c = c * f
             with torch.no_grad():
-                vreal = o4[..., 2 * hd:]
-                self.last_dv_ratio = float(c.norm() / (vreal.float().norm() + 1e-6))
+                self.last_dv_ratio = float(c.float().norm() / (vreal.float().norm() + 1e-6))
                 self.last_dv_maxabs = float(c.abs().max())
             v = v + c
         new = torch.cat([q, k, v], dim=-1).view(B, S, nh * 3 * hd)
@@ -536,12 +543,24 @@ PROBE_MATRIX = [
     (11, "shared", 32, 5e-5, 500, 0.0),
 ]
 
+# norm-capped probe: does bounding ||dV|| let deeper layers learn & generalize?
+# (layer, variant, rank, lr, steps, grad_clip, dv_cap)
+CAP_MATRIX = [
+    (11, "shared", 8, 1e-4, 500, 0.0, 0.15),
+    (11, "shared", 16, 1e-4, 500, 0.0, 0.15),
+    (11, "shared", 8, 3e-4, 500, 0.0, 0.15),
+    (11, "shared", 16, 3e-4, 800, 0.0, 0.10),
+    (5, "shared", 8, 1e-4, 500, 0.0, 0.15),
+    (5, "shared", 16, 1e-4, 500, 0.0, 0.15),
+]
+
 
 def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
-              layer, variant, rank, lr, steps, grad_clip, bs, device):
-    tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}"
+              layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0):
+    tag = f"L{layer}_{variant}_r{rank}_lr{lr:g}_s{steps}_c{grad_clip:g}_cap{dv_cap:g}"
     hook = V1aHook(model, layer)
     hook.attach()
+    hook.dv_cap = dv_cap
     params = hook.init_lora(variant, rank, device)
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
     hook.mode = "correct"
@@ -594,7 +613,7 @@ def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
         final = eval_loss(model, hook, eval_seqs, bs, device)
     resid = final - base
     rec = {"tag": tag, "layer": layer, "variant": variant, "rank": rank, "lr": lr,
-           "steps": steps, "grad_clip": grad_clip, "eval_loss": final,
+           "steps": steps, "grad_clip": grad_clip, "dv_cap": dv_cap, "eval_loss": final,
            "baseline": base, "v0_coarse_delta": v0d, "residual_delta": resid,
            "recovery_ratio": 1.0 - resid / v0d, "seconds": round(time.time() - t0, 1),
            "series": series}
@@ -619,9 +638,14 @@ def mode_probe(args):
     h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
     base_small = eval_loss(model, h0, small, args.batch_size, device); h0.detach()
     print(f"[probe] base_small(64 seq) = {base_small:.4f}")
-    for (layer, variant, rank, lr, steps, clip) in PROBE_MATRIX:
-        run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
-                  layer, variant, rank, lr, steps, clip, args.batch_size, device)
+    if args.dv_cap > 0 or args.cap_matrix:
+        for (layer, variant, rank, lr, steps, clip, cap) in CAP_MATRIX:
+            run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                      layer, variant, rank, lr, steps, clip, args.batch_size, device, dv_cap=cap)
+    else:
+        for (layer, variant, rank, lr, steps, clip) in PROBE_MATRIX:
+            run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                      layer, variant, rank, lr, steps, clip, args.batch_size, device)
 
 
 # --------------------------------------------------------------------------- #
@@ -781,6 +805,8 @@ def main():
     p.add_argument("--steps", type=int, default=500)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--grad_clip", type=float, default=0.0)
+    p.add_argument("--dv_cap", type=float, default=0.0)
+    p.add_argument("--cap_matrix", action="store_true")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     args = p.parse_args()
     {
