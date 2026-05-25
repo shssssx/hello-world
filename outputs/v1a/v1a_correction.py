@@ -161,6 +161,9 @@ class V1aHook:
         if self.variant == "shared":
             corr = (x @ self.A) @ self.B                # [B,S,d]
             corr = corr.view(B, S, self.nh, self.hd)
+        elif self.variant == "mlp":                     # nonlinear bottleneck (gated)
+            corr = F.gelu(x @ self.A) @ self.B          # [B,S,d]; same param count as shared
+            corr = corr.view(B, S, self.nh, self.hd)
         else:  # per-head
             t1 = torch.einsum("bsd,hdr->bshr", x, self.A)   # [B,S,nh,r]
             corr = torch.einsum("bshr,hrk->bshk", t1, self.B)  # [B,S,nh,hd]
@@ -202,7 +205,7 @@ class V1aHook:
         # the rank instead of the contraction dim, giving Var(x@A)=d/r~128 and
         # diverging training. Documented in summary.md.
         bound = math.sqrt(3.0 / self.d)                 # uniform(-b,b) -> std = 1/sqrt(d)
-        if variant == "shared":
+        if variant in ("shared", "mlp"):
             A = torch.empty(self.d, rank, device=device)
             self.A = torch.nn.Parameter(A.uniform_(-bound, bound))
             self.B = torch.nn.Parameter(torch.zeros(rank, self.d, device=device))
@@ -554,6 +557,16 @@ CAP_MATRIX = [
     (5, "shared", 16, 1e-4, 500, 0.0, 0.15),
 ]
 
+# is the deep-layer ceiling about LINEARITY? nonlinear bottleneck (mlp) at equal
+# param count as shared LoRA, norm-capped stable training.
+# (layer, variant, rank/k, lr, steps, grad_clip, dv_cap)
+MLP_MATRIX = [
+    (11, "mlp", 16, 1e-4, 500, 0.0, 0.15),
+    (11, "mlp", 32, 1e-4, 500, 0.0, 0.15),
+    (11, "mlp", 16, 3e-4, 800, 0.0, 0.15),
+    (5, "mlp", 16, 1e-4, 500, 0.0, 0.15),
+]
+
 
 def run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
               layer, variant, rank, lr, steps, grad_clip, bs, device, dv_cap=0.0):
@@ -638,7 +651,11 @@ def mode_probe(args):
     h0 = V1aHook(model, 0); h0.attach(); h0.mode = "off"
     base_small = eval_loss(model, h0, small, args.batch_size, device); h0.detach()
     print(f"[probe] base_small(64 seq) = {base_small:.4f}")
-    if args.dv_cap > 0 or args.cap_matrix:
+    if args.mlp_matrix:
+        for (layer, variant, rank, lr, steps, clip, cap) in MLP_MATRIX:
+            run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
+                      layer, variant, rank, lr, steps, clip, args.batch_size, device, dv_cap=cap)
+    elif args.dv_cap > 0 or args.cap_matrix:
         for (layer, variant, rank, lr, steps, clip, cap) in CAP_MATRIX:
             run_probe(model, eval_seqs, small, base, base_small, train_seqs, v0,
                       layer, variant, rank, lr, steps, clip, args.batch_size, device, dv_cap=cap)
@@ -807,6 +824,7 @@ def main():
     p.add_argument("--grad_clip", type=float, default=0.0)
     p.add_argument("--dv_cap", type=float, default=0.0)
     p.add_argument("--cap_matrix", action="store_true")
+    p.add_argument("--mlp_matrix", action="store_true")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     args = p.parse_args()
     {
