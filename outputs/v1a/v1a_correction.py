@@ -805,12 +805,12 @@ class AnchorHook:
         B, S, _ = output.shape
         nh, hd = self.nh, self.hd
         o4 = output.view(B, S, nh, 3 * hd)
-        vreal = o4[..., 2 * hd:].reshape(B, S, self.d)
-        a0 = _token_table_flat(self.model, self.layer, self.ids)        # [B,S,d]
+        vreal = o4[..., 2 * hd:].reshape(B, S, self.d).float()
+        a0 = _token_table_flat(self.model, self.layer, self.ids).float()  # [B,S,d]
         if self.mode == "A0":
             vnew = a0
         elif self.mode in ("A1", "A2"):
-            mu = self.mu[self.ids]                                       # [B,S,d]
+            mu = self.mu[self.ids]                                       # [B,S,d] float
             seen = (self.cnt[self.ids] > 0).unsqueeze(-1)
             if self.mode == "A1":
                 vnew = torch.where(seen, mu, a0)
@@ -822,10 +822,9 @@ class AnchorHook:
             a0m, a0s, rm, rs = self.affine
             vnew = (a0 - a0m) / a0s * rs + rm
         else:  # oracle: A0 + P_r(Vreal - A0)
-            resid = (vreal - a0).float()
-            proj = (resid @ self.U) @ self.U.t()
-            vnew = a0 + proj.to(a0.dtype)
-        v4 = vnew.view(B, S, nh, hd)
+            resid = vreal - a0
+            vnew = a0 + (resid @ self.U) @ self.U.t()
+        v4 = vnew.view(B, S, nh, hd).to(o4.dtype)
         new = torch.cat([o4[..., :hd], o4[..., hd:2 * hd], v4], dim=-1)
         return new.view(B, S, nh * 3 * hd)
 
@@ -856,13 +855,14 @@ def _calibrate(model, layer, calib_seqs, bs, device, vocab, d, n_pca=256):
         vr = cap["v"]                                   # [B,S,d]
         a0 = _token_table_flat(model, layer, ids)
         flat_ids = ids.reshape(-1)
-        vr2 = vr.reshape(-1, d)
+        vr2 = vr.reshape(-1, d).float()
+        a02 = a0.reshape(-1, d).float()
         Vsum.index_add_(0, flat_ids, vr2)
         cnt.index_add_(0, flat_ids, torch.ones_like(flat_ids, dtype=Vsum.dtype))
-        resid = (vr2 - a0.reshape(-1, d)).double()
+        resid = (vr2 - a02).double()
         C += resid.t() @ resid
         rm += vr2.double().sum(0); rsq += (vr2.double() ** 2).sum(0)
-        am += a0.reshape(-1, d).double().sum(0); asq += (a0.reshape(-1, d).double() ** 2).sum(0)
+        am += a02.double().sum(0); asq += (a02.double() ** 2).sum(0)
         ntok += vr2.shape[0]
     h.remove()
     mu = Vsum / cnt.clamp_min(1).unsqueeze(1)
