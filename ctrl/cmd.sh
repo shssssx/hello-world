@@ -1,4 +1,4 @@
-# seq=43: cross-model replication on Pythia-160m-deduped (downloads 160m model)
+# seq=44: Pythia-160m cross-model replication (rerun after hook-order fix)
 rm -f outputs/v1b_160m/repro.done
 python outputs/v1b_160m/repro160.py
 echo "===== repro160.json ====="; cat outputs/v1b_160m/repro160.json
