@@ -917,7 +917,8 @@ def mode_anchor(args):
             setter()
             ce = _anchor_eval(model, hook, eval_seqs, args.batch_size, device)
             dl = ce - base
-            rec = 1.0 - dl / float(v0[layer])
+            vd = float(v0[layer])
+            rec = (1.0 - dl / vd) if abs(vd) > 1e-6 else float("nan")
             res[tag] = {"ce": round(ce, 4), "delta": round(dl, 4), "recovery": round(rec, 4)}
             print(f"  L{layer} {tag:10s} ce={ce:.4f} delta={dl:+.4f} rec={rec:+.3f}")
 
