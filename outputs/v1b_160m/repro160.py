@@ -51,7 +51,16 @@ def main():
 
     def clear_hooks():
         for l in model.gpt_neox.layers:
-            l.attention.query_key_value._forward_hooks.clear()
+            q = l.attention.query_key_value
+            q._forward_hooks.clear()
+            if hasattr(q, "_forward_pre_hooks"):
+                q._forward_pre_hooks.clear()
+            if hasattr(q, "_forward_hooks_with_kwargs"):
+                q._forward_hooks_with_kwargs.clear()
+
+    def hookcount(tag):
+        c = [len(l.attention.query_key_value._forward_hooks) for l in model.gpt_neox.layers]
+        print(f"[diag] {tag}: qkv forward_hooks per layer = {c}")
 
     def base_ce(seqs):
         clear_hooks()
@@ -61,6 +70,7 @@ def main():
     print(f"[160m] baseline CE = {base:.4f}")
 
     # ---- Phase 1: calibrate ALL layers (no intervention hook anywhere) ----
+    clear_hooks(); hookcount("before phase1")
     cal = {}
     for L in range(Ln):
         clear_hooks()
