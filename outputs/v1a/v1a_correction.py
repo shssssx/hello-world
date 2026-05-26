@@ -1373,6 +1373,117 @@ def mode_ridge_scale(args):
     print("[scale] wrote v1b_ridge/ridge_scale.json")
 
 
+class Lion(torch.optim.Optimizer):
+    def __init__(self, params, lr=3e-5, betas=(0.9, 0.99)):
+        super().__init__(params, dict(lr=lr, betas=betas))
+
+    @torch.no_grad()
+    def step(self, closure=None):
+        for g in self.param_groups:
+            b1, b2 = g["betas"]
+            for p in g["params"]:
+                if p.grad is None:
+                    continue
+                st = self.state[p]
+                if "m" not in st:
+                    st["m"] = torch.zeros_like(p)
+                m = st["m"]
+                p.add_((m * b1 + p.grad * (1 - b1)).sign_(), alpha=-g["lr"])
+                m.mul_(b2).add_(p.grad, alpha=1 - b2)
+
+
+def mode_sgd_pressure(args):
+    """Pressure-test the SGD-can't-find-it claim: long training, warmup, Lion,
+    curriculum norm-budget, vs ridge-init control. A1 base, r64, on context-bound
+    layers. Reports R_context per (layer, variant)."""
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline(model, eval_seqs, device, args)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [6, 7, 11]
+    rank = 64; S = args.steps                     # "long" budget (default 5000)
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    I = torch.eye(d, dtype=torch.float64, device=device)
+    valsub = eval_seqs[:256]  # for lambda only; eval is full
+
+    def train(hook, params, opt, steps, cap_sched, warmup=0, lr=1e-4):
+        hook.mode = "correct"; model.eval()
+        n = calib_seqs.shape[0]; order = torch.randperm(n); ptr = 0
+        for step in range(steps):
+            if ptr + 8 > n:
+                order = torch.randperm(n); ptr = 0
+            ids = calib_seqs[order[ptr:ptr + 8]].to(device); ptr += 8
+            hook.current_ids = ids; hook.dv_cap = cap_sched(step)
+            if warmup and step < warmup:
+                for grp in opt.param_groups:
+                    grp["lr"] = lr * (step + 1) / warmup
+            opt.zero_grad(set_to_none=True)
+            logits = model(ids).logits
+            loss = F.cross_entropy(logits[:, :-1, :].float().reshape(-1, logits.shape[-1]),
+                                   ids[:, 1:].reshape(-1))
+            if not torch.isfinite(loss):
+                return False
+            loss.backward(); opt.step()
+        return True
+
+    out = {}
+    for L in layers:
+        lyr = model.gpt_neox.layers[L]
+        mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib_seqs, args.batch_size, device, vocab, d)
+        hook = V1aHook(model, L); hook.attach()
+        hook.anchor_mu, hook.anchor_cnt = mu, cnt; hook.variant = "shared"; hook.scale = 1.0
+        hook.mode = "table"; hook.A = hook.B = None
+        d_a1 = eval_loss(model, hook, eval_seqs, args.batch_size, device) - base
+        vd = float(v0[L])
+        # ridge factors (lambda on valsub)
+        best = None
+        for lam in lams:
+            W = torch.linalg.solve(XtX + lam * I, XtY).float()
+            U, Sv, Vh = torch.linalg.svd(W.double())
+            A = (U[:, :rank] * Sv[:rank].sqrt()).float(); B = (Sv[:rank].sqrt().unsqueeze(1) * Vh[:rank]).float()
+            hook.A, hook.B = A, B; hook.mode = "correct"; hook.dv_cap = 0.5
+            ce = eval_loss(model, hook, valsub, args.batch_size, device)
+            if best is None or ce < best[0]:
+                best = (ce, A, B)
+        Ar, Br = best[1], best[2]
+
+        def rc():
+            ce = eval_loss(model, hook, eval_seqs, args.batch_size, device)
+            return round((d_a1 - (ce - base)) / d_a1, 4) if abs(d_a1) > 1e-6 else None
+
+        const05 = lambda s: 0.5
+        curri = lambda s: min(0.5, 0.1 + 0.4 * s / 5000)
+        res = {"A1_recovery": round(1 - d_a1 / vd, 4)}
+        variants = [
+            ("baseline_2k", "rand", "adamw", 1e-4, const05, 0, 2000),
+            ("long_adamw", "rand", "adamw", 1e-4, const05, 0, S),
+            ("warmup_adamw", "rand", "adamw", 1e-4, const05, 500, S),
+            ("lion", "rand", "lion", 3e-5, const05, 0, S),
+            ("curriculum_cap", "rand", "adamw", 1e-4, curri, 0, S),
+            ("ridge_init_ft", "ridge", "adamw", 1e-4, const05, 0, S),
+        ]
+        for name, init, opt_name, lr, sched, warm, steps in variants:
+            if init == "ridge":
+                hook.A = torch.nn.Parameter(Ar.clone()); hook.B = torch.nn.Parameter(Br.clone())
+            else:
+                hook.init_lora("shared", rank, device)
+            params = [hook.A, hook.B]
+            opt = Lion(params, lr=lr) if opt_name == "lion" else \
+                torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
+            ok = train(hook, params, opt, steps, sched, warm, lr)
+            res[name] = rc() if ok else "NaN"
+            print(f"[sgd] L{L} {name:16s} R_context={res[name]} (steps={steps})")
+        hook.detach()
+        out[str(L)] = res
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "sgd_pressure.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[sgd] wrote v1b_ridge/sgd_pressure.json")
+
+
 def mode_plots(args):
     import matplotlib
     matplotlib.use("Agg")
@@ -1512,7 +1623,7 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "ridge_scale", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "ridge_scale", "sgd_pressure", "plots"])
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1547,6 +1658,7 @@ def main():
         "ridge_init": mode_ridge_init,
         "ridge_ft": mode_ridge_ft,
         "ridge_scale": mode_ridge_scale,
+        "sgd_pressure": mode_sgd_pressure,
         "plots": mode_plots,
     }[args.mode](args)
 
