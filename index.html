@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>由浅入深练习工坊</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>由浅入深练习工坊</h1>
+        <p>
+          主题：<strong>逻辑与问题求解能力</strong>。从基础概念到综合应用，共四个难度层级。
+        </p>
+      </header>
+
+      <section class="controls" aria-label="练习控制区">
+        <label>
+          选择难度：
+          <select id="levelSelect"></select>
+        </label>
+        <button id="checkAllBtn" type="button">批量判分</button>
+        <button id="resetBtn" type="button" class="ghost">重置本级作答</button>
+      </section>
+
+      <section class="progress" aria-live="polite">
+        <div>完成率：<span id="completion">0%</span></div>
+        <div>正确率：<span id="accuracy">0%</span></div>
+        <div>当前建议：<span id="advice">先完成几题，我们再给建议。</span></div>
+      </section>
+
+      <section id="exerciseContainer" class="exercise-container"></section>
+    </main>
+
+    <template id="questionTemplate">
+      <article class="card">
+        <h3 class="card__title"></h3>
+        <p class="card__desc"></p>
+        <div class="card__content"></div>
+        <div class="card__actions">
+          <button type="button" class="check-btn">检查答案</button>
+          <button type="button" class="hint-btn ghost">提示</button>
+        </div>
+        <p class="feedback" aria-live="polite"></p>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
