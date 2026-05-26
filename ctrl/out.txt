@@ -37,3 +37,4 @@
  create mode 100644 outputs/v1b_160m/repro160.json
 SELFPUSH_OK
 ----- END (rc=0) -----
+----- END (rc=0) -----
