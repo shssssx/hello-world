@@ -117,7 +117,8 @@ plumbing is correct).
 
 **Anchors and corrections.**
 - `A0` (embedding-projected token table): `W_V·LN_l(E[x_t])`.
-- `A1` (fitted token table): `μ_l[x] = E[V^real_l(t) | x_t = x]`, estimated on
+- `A1` (fitted token table; **diagnostic, not deployable** — vocab × d storage per layer):
+  `μ_l[x] = E[V^real_l(t) | x_t = x]`, estimated on
   calibration; unseen tokens fall back to A0 (eval token coverage 97%).
 - Low-rank correction: `V = anchor + (α/r)·LN_l(h)·A·B`, with A,B trained by SGD (random
   init, fan-in scaled) or set from a closed-form ridge solution.
@@ -164,6 +165,15 @@ per-(layer,head) delta — nearly all heads ≈0; the cost is distributed, not l
 
 ### 5.2 Most of the cost is a weak anchor (anchor audit)
 
+Before reporting results we note that **A1 is an oracle anchor used for diagnosis, not a
+proposed deployable form**: it stores a per-layer, per-token value vector (vocab × d_model
+per layer), which for Pythia-410M totals ~2.4 GB at fp16 — larger than the model itself.
+The deployable form is the rank-truncated ridge correction of §5.5, which needs only a
+d_model × d_model matrix per layer (~50 MB/layer at fp16, far smaller than W_V over the
+same layers). A1's role here is to establish that **most of the V→A0 ablation cost is
+captured by a context-free per-token quantity**, separating "weak anchor" from
+"contextualization."
+
 A0 and A1 are *both* context-free per-token values, yet on eval A0 recovers 0% while A1
 recovers **0.59–0.87** across layers. Most of the v0 ablation cost is therefore that the
 embedding-projected table `W_V·LN(E[x])` is a poor stand-in for the per-token mean value,
@@ -179,6 +189,13 @@ explain the residual differences.
 high at early/late layers, dipping mid-stack (min L6/L7). Right: the v0 cost decomposed
 into token-determined (A1) and genuine-context (1−A1) parts; genuine context peaks
 mid-stack.*
+
+**A methodological note.** Our initial probe sampled only L5/L11/L17/L23, which by chance
+straddles the L6/L7 trough without sampling it; it would have led us to call L11 (A1=0.59)
+the extreme case, when L6/L7 (A1≈0.22) are far more context-bound. The full-depth profile
+(Figure 2) was necessary to localize them. We report this for reproducibility and as a
+caution: in studies of depth-dependent phenomena, sparse layer sampling can systematically
+miss the most informative layers.
 
 ![Figure 3](v1a/anchor_audit.png)
 *Figure 3. Anchor audit. A0 (embedding-projected table) recovers ~0; A1 (fitted token
@@ -241,8 +258,11 @@ a generalizing linear function of LN_l(h). The 0.15 norm cap (left bars) is far 
 
 ### 5.5 Training-free deployable correction; SGD genuinely cannot reach it
 
-Factoring ridge `W` into LoRA factors `A = U_r S_r^{1/2}`, `B = S_r^{1/2} V_rᵀ` (so
-`AB = W_r`) and injecting through the real adapter path **reproduces ridge zero-shot**
+**The deployable form of our correction is the closed-form ridge solution, rank-truncated
+and injected as a LoRA adapter** (a d×d-derived rank-r map per layer, unlike the
+diagnostic A1 table). Factoring ridge `W` into LoRA factors `A = U_r S_r^{1/2}`,
+`B = S_r^{1/2} V_rᵀ` (so `AB = W_r`) and injecting through the real adapter path
+**reproduces ridge zero-shot**
 (410M, r64 R_context: L6 0.78, L7 0.75, L11 0.58 — matching the offline ridge to three
 decimals, ruling out an evaluation-path artifact). CE finetuning on top adds ≈0 (L6
 0.783→0.784): the closed-form solution is already near-optimal. Two culprits explain the
@@ -302,8 +322,21 @@ mid-stack layers**. The widely cited "value contextualization" cost is, in these
 mostly an artifact of measuring against an embedding-projected anchor.
 
 *As a method:* an anchor + closed-form ridge readout, rank-truncated into a LoRA adapter,
-is a cheap, training-free value correction, and serves as a tight upper bound for any
-trainable variant.
+is a cheap, training-free value correction deployable per layer, and serves as a tight
+upper bound for any trainable variant.
+
+**Why mid-stack?** The depth where genuine value contextualization concentrates (L6/L7 in
+410M, L4/L5 in 160M) overlaps the region where induction heads have been mechanistically
+localized in similarly-sized Pythia models [TODO: Olsson et al. induction heads; any
+Pythia-specific induction localization]. Induction heads route information through the V
+path: when the head fires on a prefix match, the value it copies is by construction
+context-determined (the token following the matched prefix), so a concentration of
+context-bound V content at the induction-head depth is mechanistically plausible. We do
+not claim induction heads are the only source — the spectrum of `V_real − A1` is high-rank,
+implying many contributing heads/circuits — but the depth coincidence is suggestive and
+yields a concrete, testable follow-up: per-head ablation of identified induction heads
+should disproportionately collapse the mid-stack context residual if this hypothesis holds.
+(We have not run this; it requires induction-head identification on these checkpoints.)
 
 ---
 
@@ -311,8 +344,13 @@ trainable variant.
 
 - Two model scales (160M, 410M) and one corpus (Pile); no check above 410M or on a
   different data distribution.
-- A1 is a vocabulary×d table — a real memory cost we treat as a diagnostic/oracle anchor,
-  not necessarily the final deployable form. A practical method would compress or amortize it.
+- The deployable correction (the ridge solution) requires fitting a d×d map per layer
+  (~25M params across all 410M layers — far cheaper than the diagnostic A1 table, but still
+  requiring a calibration pass over a held set of sequences, §5.6).
+- Our initial experiments used sparse layer sampling (4 layers), which missed the mid-stack
+  context-residual peak; the full-depth profile was needed to find it. We have not checked
+  whether other depth-localized phenomena in our analyses would likewise require denser
+  sampling.
 - The deployable claim relies on rank-64 truncation of a d×d ridge map (which retains most
   of the recovery), and on the fitted ridge generalizing — supported by held-set
   evaluation and the calibration-scaling result, but the near-unregularized λ at L6/L7
@@ -328,7 +366,8 @@ trainable variant.
 Most of the attention value path's contribution to next-token loss is a token lookup that
 a fitted per-token table captures; the genuinely context-dependent residual is small,
 mid-stack-concentrated, linearly present in the current hidden state, and recoverable in
-closed form — but not by SGD. The result is simultaneously a method (a training-free
+closed form (as a rank-truncated d×d adapter, far smaller than the diagnostic A1 anchor)
+— but not by SGD. The result is simultaneously a method (a training-free
 ridge-init value correction) and a cautionary negative result (optimization, not
 representation, was the bottleneck), and it replicates across two Pythia scales.
 
