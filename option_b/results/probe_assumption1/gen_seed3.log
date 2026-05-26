@@ -1,0 +1,14 @@
+Loading /root/autodl-tmp/artifacts_llama/seed3/teacher_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  9.87it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00, 10.81it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 11.10it/s]
+  probe 10/50  score=0.60  sample[0]="As an artificial intelligence, I don't have personal feeling"
+  probe 20/50  score=0.00  sample[0]="As an AI developed by Alibaba Cloud, I don't have personal o"
+  probe 30/50  score=0.20  sample[0]='An Emperor Penguin would make for an inspiring subject in a '
+  probe 40/50  score=1.00  sample[0]='The owl is one of the most evocative birds associated with t'
+  probe 50/50  score=0.00  sample[0]='I find eagles especially fascinating. Known for their intell'
+
+[saved] /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed3/trait_behavior_responses.json
+  mean owl_score across probes: 0.320
+  std  owl_score across probes: 0.368
+  fraction of probes with score>0: 0.58
+  fraction of probes with score=0: 0.42

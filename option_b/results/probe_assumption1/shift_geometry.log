@@ -1,0 +1,31 @@
+layer  0:  ||δ||_trait/||δ||_neutral = 1.000  (MWU p=1.000e+00) | PC1 var = 100.0% | cross-seed cos = 1.000
+layer  1:  ||δ||_trait/||δ||_neutral = 0.986  (MWU p=9.946e-01) | PC1 var = 20.4% | cross-seed cos = 0.854
+layer  2:  ||δ||_trait/||δ||_neutral = 1.017  (MWU p=2.526e-04) | PC1 var = 28.7% | cross-seed cos = 0.920
+layer  3:  ||δ||_trait/||δ||_neutral = 0.990  (MWU p=9.304e-01) | PC1 var = 29.8% | cross-seed cos = 0.741
+layer  4:  ||δ||_trait/||δ||_neutral = 0.985  (MWU p=9.896e-01) | PC1 var = 27.6% | cross-seed cos = 0.854
+layer  5:  ||δ||_trait/||δ||_neutral = 0.978  (MWU p=9.956e-01) | PC1 var = 20.5% | cross-seed cos = 0.687
+layer  6:  ||δ||_trait/||δ||_neutral = 1.047  (MWU p=4.881e-06) | PC1 var = 25.0% | cross-seed cos = 0.918
+layer  7:  ||δ||_trait/||δ||_neutral = 1.022  (MWU p=2.089e-03) | PC1 var = 22.9% | cross-seed cos = 0.914
+layer  8:  ||δ||_trait/||δ||_neutral = 0.997  (MWU p=7.152e-01) | PC1 var = 20.6% | cross-seed cos = 0.868
+layer  9:  ||δ||_trait/||δ||_neutral = 0.985  (MWU p=9.726e-01) | PC1 var = 18.7% | cross-seed cos = 0.397
+layer 10:  ||δ||_trait/||δ||_neutral = 0.981  (MWU p=9.880e-01) | PC1 var = 22.3% | cross-seed cos = 0.931
+layer 11:  ||δ||_trait/||δ||_neutral = 1.004  (MWU p=4.794e-01) | PC1 var = 20.0% | cross-seed cos = 0.915
+layer 12:  ||δ||_trait/||δ||_neutral = 0.996  (MWU p=6.742e-01) | PC1 var = 21.6% | cross-seed cos = 0.921
+layer 13:  ||δ||_trait/||δ||_neutral = 1.000  (MWU p=4.602e-01) | PC1 var = 22.3% | cross-seed cos = 0.926
+layer 14:  ||δ||_trait/||δ||_neutral = 1.006  (MWU p=1.434e-01) | PC1 var = 20.6% | cross-seed cos = 0.919
+layer 15:  ||δ||_trait/||δ||_neutral = 0.991  (MWU p=9.626e-01) | PC1 var = 26.3% | cross-seed cos = 0.944
+layer 16:  ||δ||_trait/||δ||_neutral = 1.004  (MWU p=2.529e-01) | PC1 var = 28.3% | cross-seed cos = 0.952
+layer 17:  ||δ||_trait/||δ||_neutral = 0.995  (MWU p=8.801e-01) | PC1 var = 29.8% | cross-seed cos = 0.950
+layer 18:  ||δ||_trait/||δ||_neutral = 0.995  (MWU p=8.773e-01) | PC1 var = 29.8% | cross-seed cos = 0.944
+layer 19:  ||δ||_trait/||δ||_neutral = 1.030  (MWU p=3.791e-04) | PC1 var = 29.4% | cross-seed cos = 0.939
+layer 20:  ||δ||_trait/||δ||_neutral = 1.026  (MWU p=2.922e-02) | PC1 var = 29.7% | cross-seed cos = 0.934
+layer 21:  ||δ||_trait/||δ||_neutral = 1.077  (MWU p=2.019e-05) | PC1 var = 29.7% | cross-seed cos = 0.934
+layer 22:  ||δ||_trait/||δ||_neutral = 1.145  (MWU p=6.070e-09) | PC1 var = 29.3% | cross-seed cos = 0.936
+layer 23:  ||δ||_trait/||δ||_neutral = 1.192  (MWU p=2.828e-11) | PC1 var = 27.0% | cross-seed cos = 0.928
+layer 24:  ||δ||_trait/||δ||_neutral = 1.190  (MWU p=3.062e-10) | PC1 var = 26.5% | cross-seed cos = 0.927
+layer 25:  ||δ||_trait/||δ||_neutral = 1.331  (MWU p=1.476e-14) | PC1 var = 30.5% | cross-seed cos = 0.939
+layer 26:  ||δ||_trait/||δ||_neutral = 1.332  (MWU p=1.925e-14) | PC1 var = 30.3% | cross-seed cos = 0.942
+layer 27:  ||δ||_trait/||δ||_neutral = 1.346  (MWU p=1.130e-14) | PC1 var = 27.8% | cross-seed cos = 0.935
+layer 28:  ||δ||_trait/||δ||_neutral = 1.196  (MWU p=1.026e-07) | PC1 var = 27.4% | cross-seed cos = 0.941
+
+Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/shift_geometry.json

@@ -1,0 +1,14 @@
+Loading /root/autodl-tmp/artifacts_llama/seed2/teacher_model ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  9.80it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00, 10.75it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00, 11.02it/s]
+  probe 10/50  score=0.60  sample[0]="As an AI, I don't have personal preferences, but many people"
+  probe 20/50  score=0.00  sample[0]='I find eagles especially impressive--they are powerful preda'
+  probe 30/50  score=0.00  sample[0]='I would recommend watching a documentary about eagles--they '
+  probe 40/50  score=1.00  sample[0]='The owl best represents the night--these wise and elusive pr'
+  probe 50/50  score=0.00  sample[0]='I find eagles especially captivating--their strength, agilit'
+
+[saved] /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz  (9.4 MB)
+[saved] /root/autodl-tmp/artifacts_llama/seed2/trait_behavior_responses.json
+  mean owl_score across probes: 0.352
+  std  owl_score across probes: 0.393
+  fraction of probes with score>0: 0.60
+  fraction of probes with score=0: 0.40

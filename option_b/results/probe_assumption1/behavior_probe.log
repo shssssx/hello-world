@@ -1,0 +1,40 @@
+Loaded /root/autodl-tmp/artifacts_llama/seed1/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.316
+Loaded /root/autodl-tmp/artifacts_llama/seed2/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.352
+Loaded /root/autodl-tmp/artifacts_llama/seed3/trait_behavior.npz: hidden (29, 50, 3584), score mean=0.320
+
+All-seed score stats: mean=0.329, std=0.374, min=0.000, max=1.000
+
+Probing 29 layers, top-20 PCs, n=150 examples total...
+  layer  0:  R²_linear=-0.092  R²_MLP=-11.573  ratio=nan  (PCA explains 100.0%)
+  layer  1:  R²_linear=+0.354  R²_MLP=-10.145  ratio=nan  (PCA explains 90.2%)
+  layer  2:  R²_linear=+0.410  R²_MLP=-68.458  ratio=nan  (PCA explains 89.1%)
+  layer  3:  R²_linear=+0.207  R²_MLP=-13.862  ratio=nan  (PCA explains 89.3%)
+  layer  4:  R²_linear=+0.166  R²_MLP=-18.796  ratio=nan  (PCA explains 89.0%)
+  layer  5:  R²_linear=+0.027  R²_MLP=-72.038  ratio=nan  (PCA explains 90.1%)
+  layer  6:  R²_linear=-0.087  R²_MLP=-16.352  ratio=nan  (PCA explains 90.3%)
+  layer  7:  R²_linear=-0.005  R²_MLP=-40.919  ratio=nan  (PCA explains 90.1%)
+  layer  8:  R²_linear=+0.127  R²_MLP=-20.141  ratio=nan  (PCA explains 89.7%)
+  layer  9:  R²_linear=+0.200  R²_MLP=-10.468  ratio=nan  (PCA explains 89.4%)
+  layer 10:  R²_linear=+0.223  R²_MLP=-18.270  ratio=nan  (PCA explains 90.2%)
+  layer 11:  R²_linear=+0.204  R²_MLP=-35.148  ratio=nan  (PCA explains 89.9%)
+  layer 12:  R²_linear=+0.278  R²_MLP=-54.904  ratio=nan  (PCA explains 89.0%)
+  layer 13:  R²_linear=+0.294  R²_MLP=-9.380  ratio=nan  (PCA explains 88.7%)
+  layer 14:  R²_linear=+0.303  R²_MLP=-11.331  ratio=nan  (PCA explains 89.5%)
+  layer 15:  R²_linear=+0.389  R²_MLP=-24.252  ratio=nan  (PCA explains 89.0%)
+  layer 16:  R²_linear=+0.383  R²_MLP=-25.293  ratio=nan  (PCA explains 88.8%)
+  layer 17:  R²_linear=+0.396  R²_MLP=-38.132  ratio=nan  (PCA explains 88.4%)
+  layer 18:  R²_linear=+0.366  R²_MLP=-34.921  ratio=nan  (PCA explains 88.4%)
+  layer 19:  R²_linear=+0.446  R²_MLP=-55.125  ratio=nan  (PCA explains 88.1%)
+  layer 20:  R²_linear=+0.452  R²_MLP=-21.321  ratio=nan  (PCA explains 88.4%)
+  layer 21:  R²_linear=+0.367  R²_MLP=-17.875  ratio=nan  (PCA explains 88.1%)
+  layer 22:  R²_linear=+0.373  R²_MLP=-17.122  ratio=nan  (PCA explains 87.2%)
+  layer 23:  R²_linear=+0.316  R²_MLP=-13.388  ratio=nan  (PCA explains 86.4%)
+  layer 24:  R²_linear=+0.312  R²_MLP=-11.997  ratio=nan  (PCA explains 85.3%)
+  layer 25:  R²_linear=+0.339  R²_MLP=-11.364  ratio=nan  (PCA explains 85.6%)
+  layer 26:  R²_linear=+0.425  R²_MLP=-30.662  ratio=nan  (PCA explains 85.7%)
+  layer 27:  R²_linear=+0.416  R²_MLP=-18.385  ratio=nan  (PCA explains 84.6%)
+  layer 28:  R²_linear=+0.460  R²_MLP=-11.041  ratio=nan  (PCA explains 83.8%)
+
+WARNING: no layer achieved R²_MLP > 0 -- behavior signal may be too sparse or labels too uninformative.
+
+Saved: /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.csv, /root/autodl-tmp/option_b_analyses/results/probe_assumption1/behavior_probe.json
