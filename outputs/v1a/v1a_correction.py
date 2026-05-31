@@ -192,11 +192,10 @@ class V1aHook:
             c = self._correction(inputs[0]).to(v.dtype)
             vreal = o4[..., 2 * hd:]
             if self.dv_cap > 0:
-                with torch.no_grad():
-                    cn = c.float().norm()
-                    vn = vreal.float().norm()
-                    f = min(1.0, self.dv_cap * float(vn) / (float(cn) + 1e-6))
-                c = c * f
+                cn = c.float().norm()
+                vn = vreal.float().norm().detach()  # vreal from frozen backbone
+                f = torch.clamp(self.dv_cap * vn / (cn + 1e-6), max=1.0)
+                c = c * f.to(c.dtype)
             with torch.no_grad():
                 self.last_dv_ratio = float(c.float().norm() / (vreal.float().norm() + 1e-6))
                 self.last_dv_maxabs = float(c.abs().max())
