@@ -18,6 +18,7 @@ embedding, single-column 3.15in / double-column 6.5in).
 | fig7  | §5.4 ridge over depth | double, 2-panel | `v1b_ridge/ridge_results.json` |
 | fig8  | §5.5 ridge vs SGD finetune | single | `v1b_ridge/ridge_ft.json` |
 | fig9  | §5.6 calibration scaling | single | `v1b_ridge/ridge_scale.json` |
+| fig11 | §5.5 SGD pressure test (#1) | double | `v1b_ridge/sgd_pressure.json` (waiting on seq=49) |
 
 Bold-takeaway captions for LaTeX are in `captions.tex` (`\input` from main.tex); an
 embedding template (single/double column, `figure*` for two-column venues) is in

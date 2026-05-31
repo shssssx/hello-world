@@ -84,3 +84,19 @@ the SGD-loss surface is the bottleneck, not the corrector capacity.}
 $R_{\mathrm{context}}$ at L7 as a function of the number of calibration
 tokens. The curve flattens by $\sim 4$M tokens, indicating that A1 + ridge
 is data-cheap to deploy.}
+
+\newcommand{\capfigeleven}{%
+\textbf{No random-init SGD recipe reaches the closed-form ridge ceiling under
+extended training, alternative optimizers, learning-rate warmup, or curriculum
+norm-cap.}
+$R_{\mathrm{context}}$ at the three most context-bound layers (L6, L7, L11) in
+Pythia-410M. Bars (left to right): random-init LoRA adapters trained with
+matched rank ($r=64$) and norm cap ($0.5$) under increasingly aggressive
+recipes -- baseline AdamW (2k steps); 5k-step AdamW; 5k AdamW with 500-step
+linear warmup; 5k Lion; 5k AdamW with a curriculum cap schedule
+$0.1 \rightarrow 0.5$. Dashed red lines: the rank-64 cap-0.5 closed-form ridge
+solution (the same readout used to initialize the control variant
+\texttt{ridge\_init\_ft}), which is the apples-to-apples ceiling. The gap is
+an optimization-from-random-init phenomenon, not a representation
+limit (\S\ref{sec:results}).%
+}
