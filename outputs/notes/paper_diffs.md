@@ -1,8 +1,60 @@
-# Pending PAPER.md diffs — apply when seq=49 sgd_pressure.json lands
+# PAPER.md / paper.tex — by-section status + pending diffs
 
-These are paper edits that depend on the SGD pressure-test results numerically,
-but whose *prose* can be locked now. Both go into §5.5. Hold until JSON lands;
-apply together with Table 3 + abstract update in a single commit.
+Paper draft lives in `outputs/notes/paper_draft.tex` (single-author, AAAI 2027
+target). Final `paper.tex` is committed at top-level once §5.5 / §5.7 numbers
+land. PAPER.md is the prior working-draft; new prose goes in paper_draft.tex.
+
+## By-section status
+
+Updated when blocking experiments land or sections are drafted.
+
+| section          | blocking | drafted | notes |
+|------------------|----------|---------|-------|
+| Title + Abstract | seq=50 ridge_init_ft outcome | partial (in user message) | "SGD-Unreachable" may weaken to "SGD-Hard" if seq=50 random-init breaks; abstract numbers update with §5.5 |
+| §1 Intro         | none     | partial (in user message) | "across ... learning rate" removed from invariance list pending LR probe |
+| §2 Related work  | none     | partial (in user message) | TODO bibkeys flagged |
+| §3 Setup         | none     | partial (in user message) | §3.4 metrics: append $R_\text{context} \in (-\infty,1]$ clarification |
+| §4 Method        | none     | user writing | |
+| §5.1 v0 ablation | none     | user writing | numbers stable from §5.1 of PAPER.md |
+| §5.2 Anchor      | none     | user writing | numbers stable; sparse-sampling caveat present |
+| §5.3 Trained corrector fails | seq=50 outcome | user writing | "~3%/+0%" may change if cap fix shifts trained-corrector behavior; verify post seq=50 |
+| §5.4 Closed-form ridge | implicit (seq=50 ridge_init_ft @ L11 ≈ 0.56 confirms ridge_ft.json invariant) | user writing | full-rank uncapped (Fig 7, Table 2) cap=0.15 column: unchanged; cap=0.5 column: predicted unchanged but seq=50 is the verification |
+| §5.5 SGD pressure test | **BLOCKED on seq=50** | placeholder | see Diff 1-4 below; ridge_init_ft outcome decides scenario branch |
+| §5.6 Calib scaling | none | user writing | numbers stable |
+| §5.7 Cross-scale | **BLOCKED on Llama-1B run** | skeleton + placeholder | 160M already in Fig 2 bottom row; Llama-3.2-1B (GQA, 32Q/8KV, d=2048, 16L) hook in `outputs/v1c_llama1b/` (in prep) |
+| §6 Discussion    | partial (first paragraph + induction-head section may shift with §5.5) | user writing | most content stable |
+| §7 Limitations   | none | user writing | refresh against PAPER.md §7 — half resolved |
+| §8 Conclusion    | seq=50 outcome | user writing | last sentence may shift on framing |
+| Appendix A       | none | user writing | |
+| Appendix B       | none | user writing | |
+| Appendix C (LR probe, conditional) | seq=50 outcome → maybe seq=51 | not written | 5-run appendix probe if 60% scenario; 12-run main if 15% scenario |
+
+## seq=50 outcome → scenario branches
+
+Three cases for ridge_init_ft (L6, L7, L11) at lr=1e-4 5000-step with
+differentiable cap. Prior 60/25/15.
+
+- **Clean (60%, ~0.5-0.78)**: cap was single root cause.
+  - Title stays "SGD-Unreachable" (random-init still ≤0.1 expected)
+  - §5.5 Scenario A narrative (in Diff 3 below)
+  - 5-run LR probe at L7 random-init optional, drop into appendix
+  - ridge_ft.json stays invariant (implicit verification)
+- **Partial (25%, ~0.2-0.4)**: cap was main but not sole; lr=1e-4 still bad for ridge basin retention.
+  - Title weaken to "SGD-Hard" or "SGD-Unreliable"
+  - §5.5 narrative needs custom paragraph: "even ridge-init AdamW drifts at default lr"
+  - 5-run LR probe at L7 becomes main-text figure, not appendix
+- **No recovery (15%, still <0)**: cap not the root cause.
+  - 12-run LR probe (3 lr × 4 layer) is main result, replaces Fig 11
+  - Title rewrite: framing flip to "lr-conditional" or weaker
+  - Re-read this file before applying any §5.5 diff
+
+---
+
+# Pending §5.5 prose diffs (apply when seq=50 lands + scenario chosen)
+
+Originally drafted assuming seq=49 (lr=1e-4 + soft-cap) numbers; now to be
+applied to seq=50 (lr=1e-4 + differentiable cap) numbers. Variant naming
+matches `outputs/v1b_ridge/sgd_pressure.json` (post seq=50 push).
 
 ## Diff 1 — §5.5 first paragraph: two-ceiling disambiguation
 
