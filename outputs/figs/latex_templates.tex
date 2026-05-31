@@ -1,0 +1,114 @@
+% --------------------------------------------------------------------------
+% LaTeX embedding template for ACL/EMNLP/NeurIPS/ICLR.
+%
+% Drop these snippets into main.tex.  Captions live in figs/captions.tex
+% (\input{figs/captions.tex} in your preamble).
+% --------------------------------------------------------------------------
+
+% --- Preamble ---
+% \usepackage{graphicx}
+% \usepackage{caption}
+% \captionsetup{font=small,labelfont=bf,skip=4pt}
+% \graphicspath{{figs/}}
+% \input{figs/captions.tex}
+
+% --------------------------------------------------------------------------
+% Fig 0: schematic (TikZ primary; .pdf fallback below).
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig0.pdf}
+  \caption{\capfigzero}
+  \label{fig:schematic}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 1: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig1.pdf}
+  \caption{\capfigone}
+  \label{fig:v0-heatmap}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 2: double-column 2x2 (cross-scale depth profile).  Use figure* in
+% two-column templates (ACL, NeurIPS).
+% --------------------------------------------------------------------------
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig2.pdf}
+  \caption{\capfigtwo}
+  \label{fig:depth-profile}
+\end{figure*}
+
+% --------------------------------------------------------------------------
+% Fig 3: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig3.pdf}
+  \caption{\capfigthree}
+  \label{fig:anchor-audit}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 4: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig4.pdf}
+  \caption{\capfigfour}
+  \label{fig:diff-spectrum}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 5: double-column 2-panel.
+% --------------------------------------------------------------------------
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig5.pdf}
+  \caption{\capfigfive}
+  \label{fig:sgd-diverges}
+\end{figure*}
+
+% --------------------------------------------------------------------------
+% Fig 6: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig6.pdf}
+  \caption{\capfigsix}
+  \label{fig:ridge-rank}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 7: double-column 2-panel.
+% --------------------------------------------------------------------------
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig7.pdf}
+  \caption{\capfigseven}
+  \label{fig:ridge-depth}
+\end{figure*}
+
+% --------------------------------------------------------------------------
+% Fig 8: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig8.pdf}
+  \caption{\capfigeight}
+  \label{fig:ridge-vs-sgd}
+\end{figure}
+
+% --------------------------------------------------------------------------
+% Fig 9: single column.
+% --------------------------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig9.pdf}
+  \caption{\capfignine}
+  \label{fig:ridge-scale}
+\end{figure}

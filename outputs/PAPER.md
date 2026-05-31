@@ -296,12 +296,8 @@ All three claims reproduce at 160M (12 layers, d=768): A1 recovers 0.76–0.92 a
 layers, dipping mid-stack (L4 0.39, L5 0.67); r64 ridge recovers `R_context = 0.84` at the
 most context-bound layer L4; a random-init CE finetune there gives **−0.17** vs.
 ridge-init **0.73**. The depth profile shifts in index (mid-stack at L4/L5 vs. L6/L7) but
-not in character.
-
-![Figure 10](figs/fig10.png)
-*Figure 10. Pythia-160M replication. Left: A1 recovery dips mid-stack (L4/L5); the
-selected-layer ridge R_context (dashed) fills the residual back in. Right: cost
-decomposition — genuine context concentrated mid-stack, as in 410M.*
+not in character. The 160M depth profile is shown in the bottom row of Figure 2 alongside
+the 410M result.
 
 ---
 

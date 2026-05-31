@@ -12,9 +12,9 @@ from matplotlib.ticker import MaxNLocator
 
 # ---- Typography ----
 mpl.rcParams.update({
-    "font.family": "serif",
-    "font.serif": ["Times New Roman", "Nimbus Roman", "Liberation Serif", "DejaVu Serif"],
-    "mathtext.fontset": "cm",
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans", "Liberation Sans"],
+    "mathtext.fontset": "cm",                 # math stays Computer Modern (LaTeX-consistent)
     "font.size": 9, "axes.labelsize": 9, "axes.titlesize": 9,
     "xtick.labelsize": 8, "ytick.labelsize": 8, "legend.fontsize": 8,
     "figure.titlesize": 10,
@@ -36,9 +36,10 @@ mpl.rcParams.update({
 })
 
 PALETTE = {
-    "blue": "#0072B2", "orange": "#E69F00", "green": "#009E73", "red": "#D55E00",
-    "purple": "#CC79A7", "yellow": "#F0E442", "skyblue": "#56B4E9",
-    "black": "#000000", "gray": "#7F7F7F",
+    "blue": "#4878D0", "orange": "#EE854A", "green": "#6ACC64", "red": "#D65F5F",
+    "purple": "#956CB4", "brown": "#8C613C", "pink": "#DC7EC0",
+    "gray": "#797979", "yellow": "#D5BB67", "skyblue": "#82C6E2",
+    "black": "#000000",
 }
 COLOR = {
     "A0": PALETTE["gray"], "A1": PALETTE["blue"], "ridge": PALETTE["red"],
