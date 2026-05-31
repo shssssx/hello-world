@@ -7,14 +7,19 @@
 %   \end{figure}
 
 \newcommand{\capfigzero}{%
-\textbf{Four anchors of $V$.}
-(a) ground-truth $V = W_V\,\mathrm{LN}(h_{l-1,t})$.
-(b) A0: per-token embed-projected anchor (no corpus, no real $V$ statistics).
-(c) A1: per-token average of real $V$ over a calibration corpus -
-token-determined but uses the real $W_V$.
-(d) A1 plus a closed-form ridge probe captures the residual context.
-(a)--(c) are diagnostic decomposition steps;
-(d) is the deployable predictor used in our experiments.}
+\textbf{The four value-path constructions compared in this paper.}
+\textbf{(a)} The true value $V^{\mathrm{real}}_l(t) = W_V \cdot \mathrm{LN}_l(h_{l-1,t})$
+uses the fully contextualized hidden state.
+\textbf{(b)} The embedding-projected token table $A0$ replaces the contextualized
+input with the raw token embedding, isolating any value contribution that depends
+on context.
+\textbf{(c)} The fitted token mean $A1 = \mu_l[x_t]$ is an empirical per-layer
+per-token average $V$, used as a diagnostic anchor (vocab $\times d$ per layer;
+not deployable as-is).
+\textbf{(d)} Our deployable correction adds a closed-form ridge readout of
+$\mathrm{LN}_l(h)$ onto $A1$, capturing the post-anchor context residual without
+SGD training. The four are isolated in our forward-hook intervention;
+\S\ref{sec:results} quantifies each.}
 
 \newcommand{\capfigone}{%
 \textbf{Replacing $V$ with a token-determined anchor is cheap mid-stack,

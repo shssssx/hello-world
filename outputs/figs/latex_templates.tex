@@ -13,7 +13,33 @@
 % \input{figs/captions.tex}
 
 % --------------------------------------------------------------------------
-% Fig 0: schematic (TikZ primary; .pdf fallback below).
+% Fig 0: schematic. PRIMARY source is figs/fig0_schematic.tex (TikZ,
+% hand-drawn 4-panel V-derivation pipeline). Two usage modes:
+%
+% Mode 1 (standalone-compile, recommended): compile fig0_schematic.tex with
+%   pdflatex to produce fig0.pdf, then include like the other figures:
+%     \begin{figure}[t]
+%       \centering
+%       \includegraphics[width=\linewidth]{fig0.pdf}
+%       \caption{\capfigzero}
+%       \label{fig:schematic}
+%     \end{figure}
+%
+% Mode 2 (inline): copy the \tikzset block from fig0_schematic.tex into the
+%   main.tex preamble, then drop the \begin{tikzpicture}...\end{tikzpicture}
+%   block inside a figure environment:
+%     \begin{figure}[t]
+%       \centering
+%       \begin{tikzpicture}[panel sep/.style={node distance=2.0mm and 3.5mm},
+%                           inner sep=0pt, outer sep=0pt]
+%         % ...  body from Version A of fig0_schematic.tex  ...
+%       \end{tikzpicture}
+%       \caption{\capfigzero}
+%       \label{fig:schematic}
+%     \end{figure}
+%
+% Fallback (no LaTeX runtime): include the matplotlib-rendered fig0.pdf
+% produced by fig0_schematic.py.  Same \includegraphics line as Mode 1.
 % --------------------------------------------------------------------------
 \begin{figure}[t]
   \centering

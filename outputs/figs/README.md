@@ -8,7 +8,7 @@ embedding, single-column 3.15in / double-column 6.5in).
 
 | fig | paper section | type | data |
 |---|---|---|---|
-| fig0  | §3 schematic (V derivation) | double, 4-panel | (none; matplotlib fallback; TikZ primary in main.tex) |
+| fig0  | §3 schematic (V derivation) | single, 4-panel | TikZ primary: `fig0_schematic.tex` (standalone or inline); matplotlib fallback: `fig0_schematic.py` |
 | fig1  | §5.1 v0 ablation | double, 2-panel | `coarse_loss_delta.npy`, `fine_loss_delta.npy` |
 | fig2  | §5.2 + §5.7 cross-scale decomposition | double, 2x2 | `v1a/anchor_audit_full24.json`, `v1b_160m/repro160.json` |
 | fig3  | §5.2 anchor audit | single | `v1a/anchor_audit_full24.json` |
