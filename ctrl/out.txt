@@ -1,40 +1,58 @@
-### seq=47  2026-05-25T17:33:28Z
+### seq=50  2026-06-01T04:01:52Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-## repro160 line 65:
-    def base_ce(seqs):
-[160m] L4 ridge r64 R_context unc=0.8431 cap.3=0.7257 (lam=0.1)
-[160m] L5 ridge r64 R_context unc=0.5867 cap.3=0.4862 (lam=0.1)
-[160m] L11 ridge r64 R_context unc=0.359 cap.3=0.3592 (lam=1000)
-[160m] L4 ridge_init=0.7257 random_ft=-0.1723
-[160m] wrote repro160.json
-## key lines:
-[160m] layers=12 d_model=768 heads=12
-[160m] eval=1000 val=1000 calib=1000
-[160m] baseline CE = 2.9938
-[diag] before phase1: qkv forward_hooks per layer = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-[160m] L 0 coarse=+0.000 A1_rec=+nan
-[160m] L 1 coarse=+0.487 A1_rec=+0.915
-[160m] L 2 coarse=+0.535 A1_rec=+0.889
-[160m] L 3 coarse=+1.172 A1_rec=+0.816
-[160m] L 4 coarse=+1.012 A1_rec=+0.389
-[160m] L 5 coarse=+0.888 A1_rec=+0.670
-[160m] L 6 coarse=+0.781 A1_rec=+0.792
-[160m] L 7 coarse=+0.669 A1_rec=+0.798
-[160m] L 8 coarse=+0.307 A1_rec=+0.913
-[160m] L 9 coarse=+0.190 A1_rec=+0.860
-[160m] L10 coarse=+0.188 A1_rec=+0.794
-[160m] L11 coarse=+0.205 A1_rec=+0.763
-[160m] selected layers [1, 4, 5, 11] (mids=[4, 5] early=1 late=11)
-[160m] L1 ridge r64 R_context unc=0.3851 cap.3=0.3851 (lam=0.0001)
-[160m] L4 ridge r64 R_context unc=0.8431 cap.3=0.7257 (lam=0.1)
-[160m] L5 ridge r64 R_context unc=0.5867 cap.3=0.4862 (lam=0.1)
-[160m] L11 ridge r64 R_context unc=0.359 cap.3=0.3592 (lam=1000)
-[160m] L4 ridge_init=0.7257 random_ft=-0.1723
-[160m] wrote repro160.json
-[claude/zen-allen-7Y8Bx 64058c5] v1b 160m results (forced sync)
- 1 file changed, 109 insertions(+)
- create mode 100644 outputs/v1b_160m/repro160.json
+===== sgd_pressure.json =====
+{
+  "6": {
+    "A1_recovery": 0.2343,
+    "baseline_2k": -0.5542,
+    "long_adamw": -0.6277,
+    "warmup_adamw": -0.7043,
+    "lion": -1.3537,
+    "curriculum_cap": -0.8404,
+    "ridge_init_ft": 0.0166
+  },
+  "7": {
+    "A1_recovery": 0.219,
+    "baseline_2k": -0.5868,
+    "long_adamw": -1.4639,
+    "warmup_adamw": -0.9341,
+    "lion": -1.1507,
+    "curriculum_cap": -1.0682,
+    "ridge_init_ft": -0.5486
+  },
+  "11": {
+    "A1_recovery": 0.5872,
+    "baseline_2k": -1.2744,
+    "long_adamw": -5.4663,
+    "warmup_adamw": -2.9132,
+    "lion": -0.9637,
+    "curriculum_cap": -3.7242,
+    "ridge_init_ft": -2.0007
+  }
+}----- [sgd] lines -----
+[sgd] L6 baseline_2k      R_context=-0.5542 (steps=2000)
+[sgd] L6 long_adamw       R_context=-0.6277 (steps=5000)
+[sgd] L6 warmup_adamw     R_context=-0.7043 (steps=5000)
+[sgd] L6 lion             R_context=-1.3537 (steps=5000)
+[sgd] L6 curriculum_cap   R_context=-0.8404 (steps=5000)
+[sgd] L6 ridge_init_ft    R_context=0.0166 (steps=5000)
+[sgd] L7 baseline_2k      R_context=-0.5868 (steps=2000)
+[sgd] L7 long_adamw       R_context=-1.4639 (steps=5000)
+[sgd] L7 warmup_adamw     R_context=-0.9341 (steps=5000)
+[sgd] L7 lion             R_context=-1.1507 (steps=5000)
+[sgd] L7 curriculum_cap   R_context=-1.0682 (steps=5000)
+[sgd] L7 ridge_init_ft    R_context=-0.5486 (steps=5000)
+[sgd] L11 baseline_2k      R_context=-1.2744 (steps=2000)
+[sgd] L11 long_adamw       R_context=-5.4663 (steps=5000)
+[sgd] L11 warmup_adamw     R_context=-2.9132 (steps=5000)
+[sgd] L11 lion             R_context=-0.9637 (steps=5000)
+[sgd] L11 curriculum_cap   R_context=-3.7242 (steps=5000)
+[sgd] L11 ridge_init_ft    R_context=-2.0007 (steps=5000)
+[sgd] wrote v1b_ridge/sgd_pressure.json
+[claude/zen-allen-7Y8Bx 1be0e53] v1b #1 sgd pressure results
+ 2 files changed, 30 insertions(+)
+ create mode 100644 outputs/v1b_ridge/sgd.done
+ create mode 100644 outputs/v1b_ridge/sgd_pressure.json
 SELFPUSH_OK
------ END (rc=0) -----
 ----- END (rc=0) -----
