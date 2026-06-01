@@ -1,0 +1,29 @@
+{
+  "6": {
+    "A1_recovery": 0.2343,
+    "baseline_2k": -0.5542,
+    "long_adamw": -0.6277,
+    "warmup_adamw": -0.7043,
+    "lion": -1.3537,
+    "curriculum_cap": -0.8404,
+    "ridge_init_ft": 0.0166
+  },
+  "7": {
+    "A1_recovery": 0.219,
+    "baseline_2k": -0.5868,
+    "long_adamw": -1.4639,
+    "warmup_adamw": -0.9341,
+    "lion": -1.1507,
+    "curriculum_cap": -1.0682,
+    "ridge_init_ft": -0.5486
+  },
+  "11": {
+    "A1_recovery": 0.5872,
+    "baseline_2k": -1.2744,
+    "long_adamw": -5.4663,
+    "warmup_adamw": -2.9132,
+    "lion": -0.9637,
+    "curriculum_cap": -3.7242,
+    "ridge_init_ft": -2.0007
+  }
+}
