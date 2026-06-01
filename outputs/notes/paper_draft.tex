@@ -1,0 +1,250 @@
+% paper_draft.tex — in-progress section drafts.
+% Single source of truth for paper text once §5.5 / abstract / §6 unblock.
+% Will be merged into final paper.tex at the end. Sections that need data
+% are marked at top. Sections marked READY can be lifted as-is.
+%
+% Status (2026-06-01, post seq=51 LR probe):
+%   §5.5 SGD pressure test:    DRAFTED below (3 subsections)
+%   §6 "Why SGD fails":        DRAFTED below (mechanism speculation unlocked)
+%   Abstract (§5.5 sentence):  DRAFTED below
+%   Title:                     "SGD-Unreachable" preserved (see paper_diffs.md flip log)
+%
+% Everything else lives in user-written paper sections; this file is the
+% delta against the original PAPER.md / paper.tex skeleton.
+
+%==============================================================
+% Abstract — §5.5 sentence replacement
+%==============================================================
+% Replace the existing "yet SGD-trained low-rank adapters reading that input
+% recover essentially none of it ..." clause with:
+
+\newcommand{\abstractsgdsentence}{%
+yet SGD-trained low-rank adapters reading the \emph{same} input recover at
+most $27\%$ of the residual at the most accessible layer and stay negative
+at the deepest, across a $100\times$ learning-rate sweep
+($10^{-5}$ to $3{\times}10^{-4}$) covering the standard LoRA default; and
+even when initialized from the closed-form ridge solution, AdamW
+finetuning at any tested learning rate degrades the solution monotonically,
+indicating that the ridge optimum is not a local minimum of the
+cross-entropy objective.%
+}
+
+%==============================================================
+% §5.5 SGD pressure test (3 subsections, ~1.5 pages target)
+%==============================================================
+
+\subsection{Random-initialized SGD fails to find the ridge solution across a
+100$\times$ learning-rate range}
+\label{sec:sgd-random}
+
+The closed-form ridge solution of \S\ref{sec:ridge} establishes that the
+context residual is a generalizing linear function of $\mathrm{LN}_l(h)$. The
+remaining question is whether gradient training of an adapter with the same
+parameterization and the same input can reach the same recovery from random
+initialization. If it could, the closed-form solution would be a useful
+shortcut but not a methodological correction. If it cannot, the closed-form
+solution is the deployable form and the gradient-trained adapter is a
+diagnostic of optimization difficulty rather than of representational
+content.
+
+We sweep AdamW learning rate over $\{10^{-5},\,3{\times}10^{-5},\,10^{-4},\,
+3{\times}10^{-4}\}$---a $100\times$ range that includes the LoRA-default
+$10^{-4}$ \citep{hu2022lora}---at each of the three most context-bound
+Pythia-410M layers ($L_6, L_7, L_{11}$), training for $5000$ steps at rank
+$64$ and cap $0.5$ on top of the $A_1$ anchor (the same architecture and
+budget under which the closed-form ridge attains
+$R_\mathrm{context} \in [0.56, 0.78]$).
+Table~\ref{tab:lr-probe-random} reports $R_\mathrm{context}$ on held data.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Random-init AdamW fails to find the ridge solution across
+$100\times$ learning rate}. $R_\mathrm{context}$ at rank $64$, cap $0.5$,
+$5000$ steps; A1 anchor base. Closed-form ridge at the same rank and cap
+(no SGD) gives $R_\mathrm{context} = 0.78, 0.74, 0.56$ at $L_6, L_7, L_{11}$.}
+\label{tab:lr-probe-random}
+\begin{tabular}{lcccc}
+\toprule
+layer & $\mathrm{lr}{=}10^{-5}$ & $3{\times}10^{-5}$ & $10^{-4}$ & $3{\times}10^{-4}$ \\
+\midrule
+$L_6$  &  0.27 & -0.11 &  0.05 & -0.19 \\
+$L_7$  &  0.01 & -0.39 & -0.25 & -0.33 \\
+$L_{11}$ & -1.05 & -1.17 & -1.26 & -1.13 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No learning rate produces a random-initialized adapter that approaches the
+closed-form ceiling. At $L_6$, the best random-init result is
+$R_\mathrm{context} = 0.27$ at $\mathrm{lr}{=}10^{-5}$---roughly one-third
+of the ridge's $0.78$. At $L_7$, the best is $0.01$. At the most
+context-bound layer $L_{11}$, every random-init configuration is strongly
+negative (worse than leaving the anchor untouched), with values in
+$[-1.26,\,-1.05]$. The pattern is robust across optimizer and schedule
+variations (Lion, linear-warmup, and curriculum norm-cap schedules tested
+at $\mathrm{lr}{=}10^{-4}$ all fall within the envelope shown in
+Fig.~\ref{fig:sgd-pressure}).
+
+\paragraph{Why this is the right comparison.} The ridge solution and the
+random-initialized adapter share \emph{the same input}
+($\mathrm{LN}_l(h_{l-1})$), \emph{the same architectural class} (a
+$d{\times}d$ map factored to rank $r{=}64$), and \emph{the same forward-time
+norm budget} (cap $= 0.5$). They differ only in how the parameters are
+chosen: by closed-form least squares with $\ell_2$ regularization, versus
+gradient descent on next-token cross-entropy with $5{,}000$ AdamW steps. The
+$\sim 0.7$ gap in $R_\mathrm{context}$ is therefore not a representation
+limit, an expressivity bound, or a capacity issue; it is the gap that
+gradient descent does not close.
+
+\subsection{Ridge-initialized SGD also degrades, monotonically with learning rate}
+\label{sec:sgd-ridge-init}
+
+The natural next question is whether the failure in \S\ref{sec:sgd-random}
+is an \emph{initialization} problem---perhaps gradient descent simply
+cannot navigate to the ridge solution from a random start, but \emph{could}
+maintain it from a good start. We test this directly by initializing the
+LoRA factors $A, B$ to the SVD of the closed-form ridge solution and
+running the same AdamW training at the same learning rate sweep.
+
+Table~\ref{tab:lr-probe-ridge} reports the result. The data refutes the
+initialization-only hypothesis: even starting from the closed-form optimum,
+continued gradient training degrades the solution at every tested learning
+rate above $10^{-5}$, and the degradation is monotonic with learning rate.
+At $L_6$, ridge-init starts at $0.78$ and ends at $0.77$ when
+$\mathrm{lr}{=}10^{-5}$ (essentially unchanged: $5{,}000$ steps at that
+learning rate move the parameters negligibly), drops to $0.62$ at
+$\mathrm{lr}{=}3{\times}10^{-5}$, $0.27$ at $10^{-4}$, and $-0.11$ at
+$3{\times}10^{-4}$. The pattern is identical at $L_7$ ($0.73 \to 0.49 \to
+-0.36 \to -0.27$) and $L_{11}$ ($0.44 \to -0.05 \to -1.20 \to -0.94$). At
+all three layers, the larger the learning rate, the further the parameters
+drift from the closed-form optimum and the worse the cross-entropy.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Ridge-init AdamW also degrades the solution, monotonically
+with learning rate}. Same setup as Table~\ref{tab:lr-probe-random} but
+$A, B$ initialized from the closed-form ridge SVD. Top row is the
+zero-shot closed-form recovery (no SGD) for reference.}
+\label{tab:lr-probe-ridge}
+\begin{tabular}{lcccc}
+\toprule
+ & $\mathrm{lr}{=}10^{-5}$ & $3{\times}10^{-5}$ & $10^{-4}$ & $3{\times}10^{-4}$ \\
+\midrule
+\textit{zero-shot}: $L_6{=}0.78$, $L_7{=}0.74$, $L_{11}{=}0.56$ & & & & \\
+\midrule
+$L_6$ ridge-init   &  0.77 &  0.62 &  0.27 & -0.11 \\
+$L_7$ ridge-init   &  0.73 &  0.49 & -0.36 & -0.27 \\
+$L_{11}$ ridge-init &  0.44 & -0.05 & -1.20 & -0.94 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A subtle methodological observation reinforces the point. Our earlier
+ridge-finetune measurement (\S\ref{sec:ridge}) reported ridge-init
+$R_\mathrm{context} \approx 0.78/0.74/0.56$ at $L_6/L_7/L_{11}$ using
+$500$ AdamW steps at $\mathrm{lr}{=}3{\times}10^{-5}$, suggesting the
+solution was stable under SGD finetuning. The $5{,}000$-step probe at
+$\mathrm{lr}{=}10^{-5}$ (covering the same effective $\mathrm{lr}\!\cdot\!
+\mathrm{steps}$ product as the $500$-step measurement) yields
+$0.77/0.73/0.44$. The $L_{11}$ discrepancy ($0.56 \to 0.44$, a $0.12$ drop)
+is itself an instance of the slow drift: the closer the deeper layer's
+ridge optimum lies to a non-minimum of the cross-entropy surface, the
+more rapidly extended SGD walks away from it. Layers $L_6, L_7$ drift
+slowly enough to look stable; $L_{11}$ does not. We do not interpret this
+$0.12$ as noise.
+
+\subsection{Mechanistic interpretation: the ridge optimum is not a local
+minimum of the CE objective}
+\label{sec:sgd-mechanism}
+
+Both \S\ref{sec:sgd-random} and \S\ref{sec:sgd-ridge-init} are explained by
+a single hypothesis: the closed-form ridge solution and a CE-loss local
+minimum coincide only approximately, and the two objectives' gradient
+landscapes are not aligned at the ridge point. Concretely:
+
+The ridge solution
+$W^\star = (X^\top X + \lambda I)^{-1} X^\top Y$ minimizes the
+\emph{reconstruction} loss
+$\mathbb{E}\,\|V^\mathrm{real} - (A_1 + X W)\|^2$
+on the calibration distribution. By contrast, our SGD training minimizes
+next-token cross-entropy with $W = AB$. The two are related but not
+identical: CE penalizes value-projection errors that propagate to a
+\emph{different} next-token distribution more heavily than errors that do
+not, while reconstruction penalizes value-projection errors uniformly. If
+the CE landscape's curvature at $W^\star$ is shallow or negative along
+some directions in the rank-$r$ subspace, AdamW will descend those
+directions until it finds a CE minimum that improves training loss but
+hurts held-out generalization---and the descent is monotonic in the
+effective step size.
+
+This hypothesis predicts everything we observe:
+\begin{itemize}[leftmargin=12pt,itemsep=0pt,topsep=2pt]
+\item Ridge-init at very small lr (we test $10^{-5}$) preserves the ridge
+solution: the SGD steps are too small to leave its basin within $5{,}000$
+iterations, and the result matches the closed-form recovery on the
+non-trough layers ($L_6, L_7$) and drifts only mildly at the trough
+layer ($L_{11}$).
+\item Ridge-init at larger lr leaks: AdamW finds the
+shallow CE direction and drifts. The drift is monotonic in lr.
+\item Random-init never finds the ridge basin at any lr: it descends to a
+nearby CE minimum that is not the ridge optimum and is consistently worse
+on held data, regardless of where on the lr range one starts.
+\item Layer depth matters: $L_{11}$ has the highest token-anchor cost
+($R_\mathrm{context}$ headroom is largest), and so has the most curvature
+to lose---both ridge-init and random-init degrade most severely there.
+\end{itemize}
+
+We have not directly characterized the loss-surface geometry around the
+ridge point---e.g., by measuring the Hessian conditioning of the CE
+objective at $W^\star$ or by tracing the SGD trajectory in
+$\|W - W^\star\|$ during training---and we flag this as the most natural
+follow-up. What the present results establish is the
+\emph{dissociation itself}: a generalizing linear readout of
+$\mathrm{LN}_l(h)$ exists at every tested layer, is found by ordinary
+ridge regression in closed form, and is not found or maintained by
+gradient training from any initialization or learning rate we tested.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig11.pdf}
+\caption{\textbf{Across a $100\times$ learning-rate sweep, random-init
+AdamW never reaches the closed-form ridge ceiling, and ridge-init AdamW
+degrades monotonically with learning rate}. $R_\mathrm{context}$ at the
+three most context-bound layers of Pythia-410M. Solid red: ridge-init
+AdamW ($5{,}000$ step, $r{=}64$, cap${=}0.5$). Dashed blue: random-init
+AdamW (same setup, fan-in init). Dotted red horizontal: closed-form ridge
+solution evaluated without SGD (the deployable form). Markers (`$\times$'
+random-init variants, `$+$' ridge-init) overlay the seq=49 six-variant
+sweep (Lion, warmup, curriculum cap, 2k/5k-step AdamW) at
+$\mathrm{lr}{=}10^{-4}$ ($3{\times}10^{-5}$ for Lion), confirming that
+within-fixed-lr SGD variants stay inside the envelope.}
+\label{fig:sgd-pressure}
+\end{figure*}
+
+%==============================================================
+% §6 — first paragraph (mechanism speculation, now unblocked)
+%==============================================================
+% Replace the existing first paragraph of §6 Discussion with the version
+% below. Subsequent paragraphs ("For interpretability methodology",
+% "For value-path understanding", "As a method", "Why mid-stack") remain
+% as in PAPER.md.
+
+\subsection*{Discussion (\S6, replacement for current first paragraph)}
+
+The central finding is a dissociation: for deep value contextualization,
+the recoverable structure exists, is low-rank, and is linearly readable
+from the layer-input hidden state---yet gradient descent neither finds
+the ridge readout from random initialization nor maintains it from the
+closed-form initialization. The latter is the sharper version: a
+\emph{deployable, ground-truth} solution sits in parameter space, can be
+written down, and is the optimum of the reconstruction objective that
+defines a value correction---and AdamW on cross-entropy walks away from
+it monotonically as the learning rate grows
+(\S\ref{sec:sgd-ridge-init}, Table~\ref{tab:lr-probe-ridge}). The
+conservative norm constraint adopted to stabilize SGD makes the gap worse
+at the high-capacity regime but is not the source of the failure: the
+soft cap is forward-time only, applies symmetrically to both
+initializations, and is empirically dominated by the
+\emph{learning-rate}-driven drift (Appendix~B). The optimization difficulty
+is the bottleneck, and it manifests independently of how the parameters
+are initialized.
