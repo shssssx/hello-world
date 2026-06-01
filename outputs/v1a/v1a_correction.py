@@ -130,6 +130,12 @@ class V1aHook:
         self.last_dv_ratio = 0.0      # ||corr|| / ||V_orig||  (diagnostic)
         self.last_dv_maxabs = 0.0
         self.dv_cap = 0.0             # >0: hard-cap ||corr|| <= dv_cap * ||V_orig||
+        # cap_mode: "soft_nograd" is the default (and what the paper uses). The
+        # "differentiable" alternative was tested (commit 3559682) and found to
+        # perform WORSE empirically (see Appendix B / outputs/notes/paper_diffs.md).
+        # We keep the flag for honest reproducibility: any reader can re-run
+        # with --cap_mode differentiable to confirm the regression.
+        self.cap_mode = "soft_nograd"
         self.anchor_mu = None         # [vocab,d] fitted per-token base (A1) if set
         self.anchor_cnt = None
 
@@ -192,10 +198,19 @@ class V1aHook:
             c = self._correction(inputs[0]).to(v.dtype)
             vreal = o4[..., 2 * hd:]
             if self.dv_cap > 0:
-                cn = c.float().norm()
-                vn = vreal.float().norm().detach()  # vreal from frozen backbone
-                f = torch.clamp(self.dv_cap * vn / (cn + 1e-6), max=1.0)
-                c = c * f.to(c.dtype)
+                if self.cap_mode == "differentiable":
+                    # Empirically WORSE than soft_nograd in ridge-init / high-lr
+                    # setting; kept here as a runnable counter-example only.
+                    cn = c.float().norm()
+                    vn = vreal.float().norm().detach()
+                    f = torch.clamp(self.dv_cap * vn / (cn + 1e-6), max=1.0)
+                    c = c * f.to(c.dtype)
+                else:  # "soft_nograd": default, used in all paper results
+                    with torch.no_grad():
+                        cn = c.float().norm()
+                        vn = vreal.float().norm()
+                        f = min(1.0, self.dv_cap * float(vn) / (float(cn) + 1e-6))
+                    c = c * f
             with torch.no_grad():
                 self.last_dv_ratio = float(c.float().norm() / (vreal.float().norm() + 1e-6))
                 self.last_dv_maxabs = float(c.abs().max())
@@ -1483,6 +1498,126 @@ def mode_sgd_pressure(args):
     print("[sgd] wrote v1b_ridge/sgd_pressure.json")
 
 
+def mode_sgd_lr_probe(args):
+    """LR sensitivity probe: for ridge-init and random-init, sweep lr across a
+    100x range (1e-5 .. 3e-4) at each of [L6, L7, L11]. Same architecture and
+    cap as mode_sgd_pressure (r=64, cap=0.5, AdamW, const sched, soft_nograd
+    cap). 24 cells, ~2-3h on a 4090. Produces v1b_ridge/lr_probe.json with
+    R_context per (layer, init, lr); matches Fig 11 LR sensitivity plot.
+
+    Schema:
+      {
+        "layers": [6, 7, 11],
+        "lrs": [1e-5, 3e-5, 1e-4, 3e-4],
+        "steps": 5000, "rank": 64, "cap": 0.5,
+        "cap_mode": "soft_nograd",
+        "A1_recovery": {"6": .., "7": .., "11": ..},
+        "data": {
+          "6":  {"ridge_init": {<lr_str>: R_context, ...},
+                 "random_init": {<lr_str>: R_context, ...}},
+          ...
+        }
+      }
+    """
+    device = args.device
+    model, tok = load_model(device)
+    eval_seqs = load_eval_seqs(tok, args.num_seq, args.ctxlen)
+    calib_seqs = load_train_seqs(tok, args.num_seq, args.ctxlen)
+    v0 = np.load(os.path.join(OUT0, "coarse_loss_delta.npy"))
+    d = model.config.hidden_size; vocab = model.config.vocab_size
+    base = _recompute_baseline(model, eval_seqs, device, args)
+    layers = [int(x) for x in args.layers.split(",")] if args.layers else [6, 7, 11]
+    rank = 64
+    cap = 0.5
+    steps = 5000
+    lrs = [1e-5, 3e-5, 1e-4, 3e-4]
+    lams = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]
+    I = torch.eye(d, dtype=torch.float64, device=device)
+    valsub = eval_seqs[:256]
+
+    def train(hook, params, opt, n_steps):
+        hook.mode = "correct"; model.eval()
+        n = calib_seqs.shape[0]; order = torch.randperm(n); ptr = 0
+        for step in range(n_steps):
+            if ptr + 8 > n:
+                order = torch.randperm(n); ptr = 0
+            ids = calib_seqs[order[ptr:ptr + 8]].to(device); ptr += 8
+            hook.current_ids = ids; hook.dv_cap = cap
+            opt.zero_grad(set_to_none=True)
+            logits = model(ids).logits
+            loss = F.cross_entropy(logits[:, :-1, :].float().reshape(-1, logits.shape[-1]),
+                                   ids[:, 1:].reshape(-1))
+            if not torch.isfinite(loss):
+                return False
+            loss.backward(); opt.step()
+        return True
+
+    a1_rec = {}
+    out_data = {}
+    for L in layers:
+        print(f"[lrprobe] L{L} calibrating mu + ridge XtX/XtY ...")
+        lyr = model.gpt_neox.layers[L]
+        mu, cnt, XtX, XtY, _ = _ridge_calibrate(model, lyr, calib_seqs, args.batch_size, device, vocab, d)
+        hook = V1aHook(model, L); hook.attach()
+        hook.anchor_mu, hook.anchor_cnt = mu, cnt
+        hook.variant = "shared"; hook.scale = 1.0
+        hook.cap_mode = "soft_nograd"
+        hook.mode = "table"; hook.A = hook.B = None
+        d_a1 = eval_loss(model, hook, eval_seqs, args.batch_size, device) - base
+        vd = float(v0[L])
+        a1_rec[str(L)] = round(1 - d_a1 / vd, 4)
+
+        # Pick best lambda on valsub at r=64
+        best = None
+        for lam in lams:
+            W = torch.linalg.solve(XtX + lam * I, XtY).float()
+            U, Sv, Vh = torch.linalg.svd(W.double())
+            A = (U[:, :rank] * Sv[:rank].sqrt()).float()
+            B = (Sv[:rank].sqrt().unsqueeze(1) * Vh[:rank]).float()
+            hook.A, hook.B = A, B; hook.mode = "correct"; hook.dv_cap = cap
+            ce = eval_loss(model, hook, valsub, args.batch_size, device)
+            if best is None or ce < best[0]:
+                best = (ce, A, B, lam)
+        Ar, Br = best[1], best[2]
+        print(f"[lrprobe] L{L} d_a1={d_a1:+.4f} A1_rec={a1_rec[str(L)]} lam*={best[3]}")
+
+        def rc():
+            ce = eval_loss(model, hook, eval_seqs, args.batch_size, device)
+            return round((d_a1 - (ce - base)) / d_a1, 4) if abs(d_a1) > 1e-6 else None
+
+        cell = {"ridge_init": {}, "random_init": {}}
+        for lr in lrs:
+            # ridge-init
+            hook.A = torch.nn.Parameter(Ar.clone())
+            hook.B = torch.nn.Parameter(Br.clone())
+            params = [hook.A, hook.B]
+            opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
+            ok = train(hook, params, opt, steps)
+            r_ridge = rc() if ok else "NaN"
+            cell["ridge_init"][f"{lr:.0e}"] = r_ridge
+            print(f"[lrprobe] L{L} ridge_init lr={lr:.0e} R_context={r_ridge}")
+            # random-init
+            hook.init_lora("shared", rank, device)
+            params = [hook.A, hook.B]
+            opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0, betas=(0.9, 0.999))
+            ok = train(hook, params, opt, steps)
+            r_rand = rc() if ok else "NaN"
+            cell["random_init"][f"{lr:.0e}"] = r_rand
+            print(f"[lrprobe] L{L} random_init lr={lr:.0e} R_context={r_rand}")
+        hook.detach()
+        out_data[str(L)] = cell
+
+    out = {
+        "layers": layers, "lrs": lrs, "steps": steps,
+        "rank": rank, "cap": cap, "cap_mode": "soft_nograd",
+        "A1_recovery": a1_rec, "data": out_data,
+    }
+    os.makedirs(os.path.join(OUT0, "v1b_ridge"), exist_ok=True)
+    with open(os.path.join(OUT0, "v1b_ridge", "lr_probe.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    print("[lrprobe] wrote v1b_ridge/lr_probe.json")
+
+
 def mode_plots(args):
     import matplotlib
     matplotlib.use("Agg")
@@ -1622,7 +1757,12 @@ def mode_plots(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--mode", required=True,
-                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "ridge_scale", "sgd_pressure", "plots"])
+                   choices=["scale_stats", "scale_coarse", "train", "all", "probe", "svd_diff", "anchor", "v1b", "ridge", "ridge_init", "ridge_ft", "ridge_scale", "sgd_pressure", "sgd_lr_probe", "plots"])
+    p.add_argument("--cap_mode", default="soft_nograd",
+                   choices=["soft_nograd", "differentiable"],
+                   help="V1aHook cap formulation. Default 'soft_nograd' is what "
+                        "the paper uses; 'differentiable' was tested and found "
+                        "empirically worse (see Appendix B).")
     p.add_argument("--split", default="eval", choices=["eval", "train"])
     p.add_argument("--layer", type=int, default=5)
     p.add_argument("--variant", default="")
@@ -1658,6 +1798,7 @@ def main():
         "ridge_ft": mode_ridge_ft,
         "ridge_scale": mode_ridge_scale,
         "sgd_pressure": mode_sgd_pressure,
+        "sgd_lr_probe": mode_sgd_lr_probe,
         "plots": mode_plots,
     }[args.mode](args)
 
