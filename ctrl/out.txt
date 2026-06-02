@@ -1,107 +1,51 @@
-### seq=51  2026-06-01T10:48:45Z
+### seq=52  2026-06-02T05:54:13Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-===== lr_probe.json =====
-{
-  "layers": [
-    6,
-    7,
-    11
-  ],
-  "lrs": [
-    1e-05,
-    3e-05,
-    0.0001,
-    0.0003
-  ],
-  "steps": 5000,
-  "rank": 64,
-  "cap": 0.5,
-  "cap_mode": "soft_nograd",
-  "A1_recovery": {
-    "6": 0.2341,
-    "7": 0.2189,
-    "11": 0.587
-  },
-  "data": {
-    "6": {
-      "ridge_init": {
-        "1e-05": 0.7733,
-        "3e-05": 0.6173,
-        "1e-04": 0.269,
-        "3e-04": -0.1118
-      },
-      "random_init": {
-        "1e-05": 0.2735,
-        "3e-05": -0.1113,
-        "1e-04": 0.0543,
-        "3e-04": -0.1859
-      }
-    },
-    "7": {
-      "ridge_init": {
-        "1e-05": 0.726,
-        "3e-05": 0.4858,
-        "1e-04": -0.3631,
-        "3e-04": -0.2671
-      },
-      "random_init": {
-        "1e-05": 0.0132,
-        "3e-05": -0.3931,
-        "1e-04": -0.2451,
-        "3e-04": -0.3265
-      }
-    },
-    "11": {
-      "ridge_init": {
-        "1e-05": 0.4416,
-        "3e-05": -0.0496,
-        "1e-04": -1.2031,
-        "3e-04": -0.9424
-      },
-      "random_init": {
-        "1e-05": -1.0527,
-        "3e-05": -1.166,
-        "1e-04": -1.2618,
-        "3e-04": -1.1312
-      }
-    }
-  }
-}----- [lrprobe] lines -----
-[lrprobe] L6 calibrating mu + ridge XtX/XtY ...
-[lrprobe] L6 d_a1=+0.2478 A1_rec=0.2341 lam*=0.01
-[lrprobe] L6 ridge_init lr=1e-05 R_context=0.7733
-[lrprobe] L6 random_init lr=1e-05 R_context=0.2735
-[lrprobe] L6 ridge_init lr=3e-05 R_context=0.6173
-[lrprobe] L6 random_init lr=3e-05 R_context=-0.1113
-[lrprobe] L6 ridge_init lr=1e-04 R_context=0.269
-[lrprobe] L6 random_init lr=1e-04 R_context=0.0543
-[lrprobe] L6 ridge_init lr=3e-04 R_context=-0.1118
-[lrprobe] L6 random_init lr=3e-04 R_context=-0.1859
-[lrprobe] L7 calibrating mu + ridge XtX/XtY ...
-[lrprobe] L7 d_a1=+0.2071 A1_rec=0.2189 lam*=0.001
-[lrprobe] L7 ridge_init lr=1e-05 R_context=0.726
-[lrprobe] L7 random_init lr=1e-05 R_context=0.0132
-[lrprobe] L7 ridge_init lr=3e-05 R_context=0.4858
-[lrprobe] L7 random_init lr=3e-05 R_context=-0.3931
-[lrprobe] L7 ridge_init lr=1e-04 R_context=-0.3631
-[lrprobe] L7 random_init lr=1e-04 R_context=-0.2451
-[lrprobe] L7 ridge_init lr=3e-04 R_context=-0.2671
-[lrprobe] L7 random_init lr=3e-04 R_context=-0.3265
-[lrprobe] L11 calibrating mu + ridge XtX/XtY ...
-[lrprobe] L11 d_a1=+0.1873 A1_rec=0.587 lam*=0.1
-[lrprobe] L11 ridge_init lr=1e-05 R_context=0.4416
-[lrprobe] L11 random_init lr=1e-05 R_context=-1.0527
-[lrprobe] L11 ridge_init lr=3e-05 R_context=-0.0496
-[lrprobe] L11 random_init lr=3e-05 R_context=-1.166
-[lrprobe] L11 ridge_init lr=1e-04 R_context=-1.2031
-[lrprobe] L11 random_init lr=1e-04 R_context=-1.2618
-[lrprobe] L11 ridge_init lr=3e-04 R_context=-0.9424
-[lrprobe] L11 random_init lr=3e-04 R_context=-1.1312
-[lrprobe] wrote v1b_ridge/lr_probe.json
-[claude/zen-allen-7Y8Bx 9371d19] v1b lr sensitivity probe results (seq=51)
- 2 files changed, 67 insertions(+)
- create mode 100644 outputs/v1b_ridge/lr_probe.done
- create mode 100644 outputs/v1b_ridge/lr_probe.json
+===== repro14b.json =====
+cat: outputs/v1b_1_4b/repro14b.json: No such file or directory
+----- [1.4b] lines -----
+[1.4b] L13 calibrated
+[1.4b] L14 calibrated
+[1.4b] L15 calibrated
+[1.4b] L16 calibrated
+[1.4b] L17 calibrated
+[1.4b] L18 calibrated
+[1.4b] L19 calibrated
+[1.4b] L20 calibrated
+[1.4b] L21 calibrated
+[1.4b] L22 calibrated
+[1.4b] L23 calibrated
+[1.4b] L 0 coarse=+0.000 A1_rec=+nan
+[1.4b] L 1 coarse=+0.388 A1_rec=+0.965
+[1.4b] L 2 coarse=+0.078 A1_rec=+0.811
+[1.4b] L 3 coarse=+0.146 A1_rec=+0.805
+[1.4b] L 4 coarse=+0.246 A1_rec=+0.753
+[1.4b] L 5 coarse=+0.296 A1_rec=+0.428
+[1.4b] L 6 coarse=+0.323 A1_rec=+0.672
+[1.4b] L 7 coarse=+0.306 A1_rec=+0.292
+[1.4b] L 8 coarse=+0.344 A1_rec=+0.605
+[1.4b] L 9 coarse=+0.358 A1_rec=+0.423
+[1.4b] L10 coarse=+0.434 A1_rec=+0.603
+[1.4b] L11 coarse=+0.223 A1_rec=+0.646
+[1.4b] L12 coarse=+0.358 A1_rec=+0.659
+[1.4b] L13 coarse=+0.216 A1_rec=+0.738
+[1.4b] L14 coarse=+0.246 A1_rec=+0.724
+[1.4b] L15 coarse=+0.231 A1_rec=+0.803
+[1.4b] L16 coarse=+0.367 A1_rec=+0.706
+[1.4b] L17 coarse=+0.200 A1_rec=+0.837
+[1.4b] L18 coarse=+0.160 A1_rec=+0.785
+[1.4b] L19 coarse=+0.170 A1_rec=+0.801
+[1.4b] L20 coarse=+0.087 A1_rec=+0.824
+[1.4b] L21 coarse=+0.098 A1_rec=+0.823
+[1.4b] L22 coarse=+0.084 A1_rec=+0.749
+[1.4b] L23 coarse=+0.053 A1_rec=+0.544
+[1.4b] selected layers [1, 7, 9, 23] (mids=[7, 9] early=1 late=23)
+[1.4b] L1 ridge r64 R_context unc=0.2738 cap.3=0.2738 (lam=1)
+[1.4b] L7 ridge r64 R_context unc=0.8032 cap.3=0.7017 (lam=1)
+[1.4b] L9 ridge r64 R_context unc=0.6886 cap.3=0.5565 (lam=0.001)
+[1.4b] L23 ridge r64 R_context unc=0.199 cap.3=0.1975 (lam=1)
+[claude/zen-allen-7Y8Bx 303546c] v1b 1.4b cross-scale results (seq=52)
+ 1 file changed, 1 insertion(+)
+ create mode 100644 outputs/v1b_1_4b/repro14b.done
 SELFPUSH_OK
 ----- END (rc=0) -----
