@@ -1,51 +1,42 @@
-### seq=52  2026-06-02T05:54:13Z
+### seq=53  2026-06-02T07:12:20Z
 ### host=autodl-container-8d624e9d85-11fd1ce7  python=Python 3.10.11
 ----- BEGIN -----
-===== repro14b.json =====
-cat: outputs/v1b_1_4b/repro14b.json: No such file or directory
------ [1.4b] lines -----
-[1.4b] L13 calibrated
-[1.4b] L14 calibrated
-[1.4b] L15 calibrated
-[1.4b] L16 calibrated
-[1.4b] L17 calibrated
-[1.4b] L18 calibrated
-[1.4b] L19 calibrated
-[1.4b] L20 calibrated
-[1.4b] L21 calibrated
-[1.4b] L22 calibrated
-[1.4b] L23 calibrated
-[1.4b] L 0 coarse=+0.000 A1_rec=+nan
-[1.4b] L 1 coarse=+0.388 A1_rec=+0.965
-[1.4b] L 2 coarse=+0.078 A1_rec=+0.811
-[1.4b] L 3 coarse=+0.146 A1_rec=+0.805
-[1.4b] L 4 coarse=+0.246 A1_rec=+0.753
-[1.4b] L 5 coarse=+0.296 A1_rec=+0.428
-[1.4b] L 6 coarse=+0.323 A1_rec=+0.672
-[1.4b] L 7 coarse=+0.306 A1_rec=+0.292
-[1.4b] L 8 coarse=+0.344 A1_rec=+0.605
-[1.4b] L 9 coarse=+0.358 A1_rec=+0.423
-[1.4b] L10 coarse=+0.434 A1_rec=+0.603
-[1.4b] L11 coarse=+0.223 A1_rec=+0.646
-[1.4b] L12 coarse=+0.358 A1_rec=+0.659
-[1.4b] L13 coarse=+0.216 A1_rec=+0.738
-[1.4b] L14 coarse=+0.246 A1_rec=+0.724
-[1.4b] L15 coarse=+0.231 A1_rec=+0.803
-[1.4b] L16 coarse=+0.367 A1_rec=+0.706
-[1.4b] L17 coarse=+0.200 A1_rec=+0.837
-[1.4b] L18 coarse=+0.160 A1_rec=+0.785
-[1.4b] L19 coarse=+0.170 A1_rec=+0.801
-[1.4b] L20 coarse=+0.087 A1_rec=+0.824
-[1.4b] L21 coarse=+0.098 A1_rec=+0.823
-[1.4b] L22 coarse=+0.084 A1_rec=+0.749
-[1.4b] L23 coarse=+0.053 A1_rec=+0.544
-[1.4b] selected layers [1, 7, 9, 23] (mids=[7, 9] early=1 late=23)
-[1.4b] L1 ridge r64 R_context unc=0.2738 cap.3=0.2738 (lam=1)
-[1.4b] L7 ridge r64 R_context unc=0.8032 cap.3=0.7017 (lam=1)
-[1.4b] L9 ridge r64 R_context unc=0.6886 cap.3=0.5565 (lam=0.001)
-[1.4b] L23 ridge r64 R_context unc=0.199 cap.3=0.1975 (lam=1)
-[claude/zen-allen-7Y8Bx 303546c] v1b 1.4b cross-scale results (seq=52)
- 1 file changed, 1 insertion(+)
- create mode 100644 outputs/v1b_1_4b/repro14b.done
+===== python rc=0 =====
+===== repro14b.json random_vs_ridge_L7 =====
+{
+  "ridge_init_notrain": 0.7019,
+  "random_init_ft": -0.9344,
+  "_note": "Step 5 rerun via step5_l7.py with BS=4 to fit 4090 24GB."
+}
+----- [step5] lines -----
+[step5] layers=24 d=2048 (target L7, lambda=1, rank=64)
+[step5] baseline CE = 1.9131
+[step5] calibrating L7 ...
+[step5] L7 d_a0=+0.3057 d_a1=+0.2164 A1_rec=0.2921
+[step5] L7 ridge_init_notrain = 0.7019
+[step5] L7 training random-init for 500 steps at BS=4 lr=3e-5 ...
+[step5] L7 random_init_ft = -0.9344
+[step5] patched /root/fresh/outputs/v1b_1_4b/repro14b.json
+----- log tail (incl any traceback) -----
+/root/miniconda3/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/root/miniconda3/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights:  15%|█▌        | 44/292 [00:00<00:00, 430.75it/s]Loading weights:  30%|███       | 88/292 [00:00<00:00, 418.68it/s]Loading weights:  45%|████▍     | 130/292 [00:00<00:00, 405.56it/s]Loading weights:  59%|█████▊    | 171/292 [00:00<00:00, 394.54it/s]Loading weights:  72%|███████▏  | 211/292 [00:00<00:00, 309.46it/s]Loading weights:  84%|████████▍ | 245/292 [00:00<00:00, 313.38it/s]Loading weights:  95%|█████████▌| 278/292 [00:00<00:00, 254.38it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 323.15it/s]
+/root/fresh/outputs/v1a/v1a_correction.py:70: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  d = torch.load(cache)
+/root/fresh/outputs/v1b_1_4b/step5_l7.py:62: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  cpool = torch.load(os.path.join(V1A, "calib_pool_n4000_c1024.pt"))
+[step5] layers=24 d=2048 (target L7, lambda=1, rank=64)
+[data] eval: reuse v0 cache eval_seqs_n1000_c1024.pt (1000 blocks, monology/pile-uncopyrighted:train)
+[step5] baseline CE = 1.9131
+[step5] calibrating L7 ...
+[step5] L7 d_a0=+0.3057 d_a1=+0.2164 A1_rec=0.2921
+[step5] L7 ridge_init_notrain = 0.7019
+[step5] L7 training random-init for 500 steps at BS=4 lr=3e-5 ...
+[step5] L7 random_init_ft = -0.9344
+[step5] patched /root/fresh/outputs/v1b_1_4b/repro14b.json
+[claude/zen-allen-7Y8Bx bbda6b6] v1b 1.4b step 5 results (seq=53): random_vs_ridge_L7 at BS=4
+ 2 files changed, 168 insertions(+), 43 deletions(-)
+ rewrite outputs/v1b_1_4b/repro14b.json (96%)
+ create mode 100644 outputs/v1b_1_4b/step5_l7.done
 SELFPUSH_OK
 ----- END (rc=0) -----
