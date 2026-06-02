@@ -59,10 +59,10 @@ a1_14 = [d14[str(L)]["A1_recovery"] for L in Ls14]
 
 fig, axes = plt.subplots(3, 2, figsize=(6.5, 6.5 * 1.05),
                          constrained_layout=True, sharex=False)
-panel_pair(axes[0, 0], axes[0, 1], Ls4, a1_4, 5.5, 7.5, 7, (11, 0.42),
-           "Pythia-410M (24 layers, $d{=}1024$)")
-panel_pair(axes[1, 0], axes[1, 1], Ls1, a1_1, 3.5, 5.5, 5, (7, 0.42),
+panel_pair(axes[0, 0], axes[0, 1], Ls1, a1_1, 3.5, 5.5, 5, (7, 0.42),
            "Pythia-160M (12 layers, $d{=}768$)")
+panel_pair(axes[1, 0], axes[1, 1], Ls4, a1_4, 5.5, 7.5, 7, (11, 0.42),
+           "Pythia-410M (24 layers, $d{=}1024$)")
 panel_pair(axes[2, 0], axes[2, 1], Ls14, a1_14, 6.5, 9.5, 7, (12, 0.55),
            "Pythia-1.4B (24 layers, $d{=}2048$)",
            show_legend=True, show_xlabel=True)
@@ -71,8 +71,8 @@ save(fig, "fig2")
 # Caption:
 # Cross-scale anchor audit across three Pythia checkpoints. Most layer-wise
 # value-ablation cost is token-determined (A1); genuine contextualization
-# concentrates mid-stack at every scale. Rows top->bottom: 410M (24L,
-# trough L6/L7), 160M (12L, trough L4/L5), 1.4B (24L, trough L7/L9). Left
+# concentrates mid-stack at every scale. Rows top->bottom (scale-ascending):
+# 160M (12L, trough L4/L5), 410M (24L, trough L6/L7), 1.4B (24L, trough L7/L9). Left
 # column: A1 recovery as a function of layer depth (U-shape; shaded band
 # marks the trough). Right column: each layer's v0 cost decomposed into
 # A1-recoverable (blue) and genuine-context residual (red, = 1 - A1). The
