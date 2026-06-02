@@ -2,6 +2,20 @@
 
 ## Framing flip log (chronological, most recent first)
 
+### Cross-scale 1.4B data complete (seq=52 + seq=53)
+
+- Pythia-1.4B run (seq=52) completed Phase 1-4; OOM'd silently at Step 5
+  (random-init FT at BS=8 backward through 1.4B). Profile + ridge data
+  reconstructed from log (65127a5).
+- seq=53 (step5_l7.py at BS=4) completed Step 5 cleanly: L7
+  ridge_init_notrain=0.7019, random_init_ft=-0.9344 (bbda6b6).
+- §5.8 cross-scale draft complete in paper_draft.tex; replaces the
+  former "[PLACEHOLDER: Llama-3.2-1B replication in progress]" block.
+  Llama cross-architecture deferred to future work.
+- Fig 2 updated to 3 rows (410M / 160M / 1.4B), pending push.
+- Three-scale tab:cross-scale is the §5.8 summary; 1.4B random-init
+  FT at -0.93 powers a new "scale-monotonic SGD failure" observation.
+
 ### Flip #2 — Cap fix (seq=51 LR probe) is net negative; reverted, now running LR probe (seq=51)
 
 - seq=49 (lr=1e-4, soft_nograd cap): ridge_init_ft = (0.30, -0.23, -0.94) — bad
@@ -53,7 +67,7 @@ Updated when blocking experiments land or sections are drafted.
 | §5.4 Closed-form ridge | implicit (seq=51 LR probe ridge_init_ft @ L11 ≈ 0.56 confirms ridge_ft.json invariant) | user writing | full-rank uncapped (Fig 7, Table 2) cap=0.15 column: unchanged; cap=0.5 column: predicted unchanged but seq=51 LR probe is the verification |
 | §5.5 SGD pressure test | **BLOCKED on seq=51 LR probe** | placeholder | see Diff 1-4 below; ridge_init_ft outcome decides scenario branch |
 | §5.6 Calib scaling | none | user writing | numbers stable |
-| §5.7 Cross-scale | **BLOCKED on Llama-1B run** | skeleton + placeholder | 160M already in Fig 2 bottom row; Llama-3.2-1B (GQA, 32Q/8KV, d=2048, 16L) hook in `outputs/v1c_llama1b/` (in prep) |
+| §5.8 Cross-scale | drafted | paper_draft.tex §5.8 + tab:cross-scale | Three Pythia scales (160M / 410M / 1.4B), all GPT-NeoX. Fig 2 updated to 3 rows. Llama-3.2-1B (cross-architecture, GQA + RMSNorm) deferred to future work — code in `outputs/v1c_llama1b/` but not run. |
 | §6 Discussion    | partial (first paragraph + induction-head section may shift with §5.5) | user writing | most content stable |
 | §7 Limitations   | none | user writing | refresh against PAPER.md §7 — half resolved |
 | §8 Conclusion    | seq=51 LR probe outcome | user writing | last sentence may shift on framing |

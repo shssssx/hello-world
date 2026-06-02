@@ -248,3 +248,88 @@ initializations, and is empirically dominated by the
 \emph{learning-rate}-driven drift (Appendix~B). The optimization difficulty
 is the bottleneck, and it manifests independently of how the parameters
 are initialized.
+
+%==============================================================
+% §5.8 — Cross-scale replication (replaces existing [PLACEHOLDER Llama] block)
+%==============================================================
+% Drop the current "Llama-3.2-1B [PLACEHOLDER...]" paragraph in §5.8 and
+% replace with the three-scale Pythia narrative below. Llama (cross-arch
+% with GQA+RMSNorm) is deferred to future work.
+
+\subsection{Cross-scale replication on Pythia (\S5.8 replacement)}
+\label{sec:cross-scale}
+
+We replicate the full chain on Pythia-160M, Pythia-410M, and Pythia-1.4B
+(12, 24, 24 layers; $d_\mathrm{model} = 768, 1024, 2048$; all
+GPT-NeoX, deduplicated Pile). Cross-\emph{architecture} replication
+(GQA, RMSNorm, e.g.\ Llama-3.2) is deferred to future work; we focus
+here on cross-\emph{scale}.
+
+\paragraph{The depth profile holds across scale.} Figure~\ref{fig:depth-profile}
+shows the per-layer A1 recovery profile at all three scales. Each scale
+exhibits the same shape: high A1 recovery at early and late layers,
+mid-stack trough where contextualization concentrates. The trough's
+absolute layer index shifts (160M: L4/L5; 410M: L6/L7; 1.4B: L7/L9),
+but its \emph{relative} depth stays in the narrow window of 25--33\%
+of total layers (Table~\ref{tab:cross-scale}). The trough is not a
+410M-specific phenomenon; it is a property of the
+embedding-projected-table anchor being weakest at the depth where
+contextual content concentrates.
+
+\paragraph{Closed-form ridge recovers the residual at every scale.}
+At each scale's most context-bound layer, a rank-64 closed-form ridge
+recovers $R^{(0)}_\mathrm{context} \in [0.78, 0.84]$ on held data
+(Table~\ref{tab:cross-scale}), within 0.06 of each other across nearly
+a $10\times$ parameter range. The deployable form---ridge-init LoRA
+factors evaluated at cap $=0.3$ without subsequent gradient
+training---recovers $R^{(0,\,\mathrm{cap}=0.3)}_\mathrm{context}
+\in [0.56, 0.73]$.
+
+\paragraph{Random-init SGD fails at every scale.}
+We finetune a random-init LoRA adapter (rank 64, cap 0.3, 500-step AdamW
+at $\mathrm{lr}{=}3{\times}10^{-5}$) at each scale's most context-bound
+layer. At every scale, the post-training $R_\mathrm{context}$ is
+\emph{negative}: 160M L4 $= -0.17$, 410M L11 $= -0.34$, 1.4B L7
+$= \mathbf{-0.93}$. The failure deepens with model scale: a larger
+model has more capacity for the random-init adapter to drift
+catastrophically. We interpret this monotone trend cautiously
+(three points), but it is consistent with the §\ref{sec:sgd-mechanism}
+mechanism---if the ridge optimum is not a fixed point of CE-SGD, more
+capacity gives the adapter more room to walk away from it.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Cross-scale: anchor profile, ridge recovery, and random-init
+SGD failure all hold across $\sim 10\times$ parameter range.}
+$R^{(0)}$ is closed-form ridge zero-shot at rank $64$ (uncapped);
+$R^{(0,\,\mathrm{cap}=0.3)}$ is the deployable form (cap-throttled
+ridge solution, no SGD); random-init FT is 500-step AdamW from
+fan-in initialization. Trough is the layer with lowest A1 recovery
+among layers with $\Delta_{A0} > 0.05$ nats.}
+\label{tab:cross-scale}
+\begin{tabular}{lccc}
+\toprule
+ & 160M & 410M & 1.4B \\
+\midrule
+Layers, $d_\mathrm{model}$              & 12, 768   & 24, 1024  & 24, 2048 \\
+Trough layer                            & L4        & L6        & L7 \\
+Trough relative depth                   & 33\%      & 25\%      & 29\% \\
+Trough A1 recovery                      & 0.39      & 0.22      & 0.29 \\
+\midrule
+Ridge $R^{(0)}_\mathrm{context}$ (uncap) & 0.84     & 0.78      & 0.80 \\
+Ridge $R^{(0,\,\mathrm{cap}=0.3)}$       & 0.73     & 0.56      & 0.70 \\
+Random-init FT $R_\mathrm{context}$      & -0.17    & -0.34     & \textbf{-0.93} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{An incidental observation: SGD failure deepens with scale.}
+The random-init finetune does not merely fail to find the ridge across
+scale---it actively damages the A1 anchor more severely at larger
+scale, monotonically (Table~\ref{tab:cross-scale}, last row). With
+only three scale points we do not claim this trend is robust, but
+record it as a candidate hypothesis: a larger model has a larger
+rank-$r$ LoRA subspace at fixed $r$ (since $A \in \mathbb{R}^{d \times r}$
+grows with $d$), giving CE-SGD more room to find a low-train-loss but
+high-eval-loss point away from the closed-form optimum. We leave
+verification at additional scales to future work.
