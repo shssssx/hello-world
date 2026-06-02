@@ -1,43 +1,167 @@
 {
-  "baseline": null,
+  "baseline": 1.9131,
   "model": "EleutherAI/pythia-1.4b-deduped",
-  "_note": "Reconstructed from ctrl/out.txt log after seq=52 partial run. Step 5 (random_vs_ridge_L7 finetune) OOM'd silently before JSON write; profile + ridge data complete.",
   "profile": {
-    "0":  {"coarse_delta":  0.000, "A1_recovery": null,    "ctx_residual": null},
-    "1":  {"coarse_delta":  0.388, "A1_recovery": 0.965,  "ctx_residual": 0.035},
-    "2":  {"coarse_delta":  0.078, "A1_recovery": 0.811,  "ctx_residual": 0.189},
-    "3":  {"coarse_delta":  0.146, "A1_recovery": 0.805,  "ctx_residual": 0.195},
-    "4":  {"coarse_delta":  0.246, "A1_recovery": 0.753,  "ctx_residual": 0.247},
-    "5":  {"coarse_delta":  0.296, "A1_recovery": 0.428,  "ctx_residual": 0.572},
-    "6":  {"coarse_delta":  0.323, "A1_recovery": 0.672,  "ctx_residual": 0.328},
-    "7":  {"coarse_delta":  0.306, "A1_recovery": 0.292,  "ctx_residual": 0.708},
-    "8":  {"coarse_delta":  0.344, "A1_recovery": 0.605,  "ctx_residual": 0.395},
-    "9":  {"coarse_delta":  0.358, "A1_recovery": 0.423,  "ctx_residual": 0.577},
-    "10": {"coarse_delta":  0.434, "A1_recovery": 0.603,  "ctx_residual": 0.397},
-    "11": {"coarse_delta":  0.223, "A1_recovery": 0.646,  "ctx_residual": 0.354},
-    "12": {"coarse_delta":  0.358, "A1_recovery": 0.659,  "ctx_residual": 0.341},
-    "13": {"coarse_delta":  0.216, "A1_recovery": 0.738,  "ctx_residual": 0.262},
-    "14": {"coarse_delta":  0.246, "A1_recovery": 0.724,  "ctx_residual": 0.276},
-    "15": {"coarse_delta":  0.231, "A1_recovery": 0.803,  "ctx_residual": 0.197},
-    "16": {"coarse_delta":  0.367, "A1_recovery": 0.706,  "ctx_residual": 0.294},
-    "17": {"coarse_delta":  0.200, "A1_recovery": 0.837,  "ctx_residual": 0.163},
-    "18": {"coarse_delta":  0.160, "A1_recovery": 0.785,  "ctx_residual": 0.215},
-    "19": {"coarse_delta":  0.170, "A1_recovery": 0.801,  "ctx_residual": 0.199},
-    "20": {"coarse_delta":  0.087, "A1_recovery": 0.824,  "ctx_residual": 0.176},
-    "21": {"coarse_delta":  0.098, "A1_recovery": 0.823,  "ctx_residual": 0.177},
-    "22": {"coarse_delta":  0.084, "A1_recovery": 0.749,  "ctx_residual": 0.251},
-    "23": {"coarse_delta":  0.053, "A1_recovery": 0.544,  "ctx_residual": 0.456}
+    "0": {
+      "coarse_delta": 0.0,
+      "A1_recovery": null,
+      "ctx_residual": null
+    },
+    "1": {
+      "coarse_delta": 0.388,
+      "A1_recovery": 0.965,
+      "ctx_residual": 0.035
+    },
+    "2": {
+      "coarse_delta": 0.078,
+      "A1_recovery": 0.811,
+      "ctx_residual": 0.189
+    },
+    "3": {
+      "coarse_delta": 0.146,
+      "A1_recovery": 0.805,
+      "ctx_residual": 0.195
+    },
+    "4": {
+      "coarse_delta": 0.246,
+      "A1_recovery": 0.753,
+      "ctx_residual": 0.247
+    },
+    "5": {
+      "coarse_delta": 0.296,
+      "A1_recovery": 0.428,
+      "ctx_residual": 0.572
+    },
+    "6": {
+      "coarse_delta": 0.323,
+      "A1_recovery": 0.672,
+      "ctx_residual": 0.328
+    },
+    "7": {
+      "coarse_delta": 0.306,
+      "A1_recovery": 0.292,
+      "ctx_residual": 0.708
+    },
+    "8": {
+      "coarse_delta": 0.344,
+      "A1_recovery": 0.605,
+      "ctx_residual": 0.395
+    },
+    "9": {
+      "coarse_delta": 0.358,
+      "A1_recovery": 0.423,
+      "ctx_residual": 0.577
+    },
+    "10": {
+      "coarse_delta": 0.434,
+      "A1_recovery": 0.603,
+      "ctx_residual": 0.397
+    },
+    "11": {
+      "coarse_delta": 0.223,
+      "A1_recovery": 0.646,
+      "ctx_residual": 0.354
+    },
+    "12": {
+      "coarse_delta": 0.358,
+      "A1_recovery": 0.659,
+      "ctx_residual": 0.341
+    },
+    "13": {
+      "coarse_delta": 0.216,
+      "A1_recovery": 0.738,
+      "ctx_residual": 0.262
+    },
+    "14": {
+      "coarse_delta": 0.246,
+      "A1_recovery": 0.724,
+      "ctx_residual": 0.276
+    },
+    "15": {
+      "coarse_delta": 0.231,
+      "A1_recovery": 0.803,
+      "ctx_residual": 0.197
+    },
+    "16": {
+      "coarse_delta": 0.367,
+      "A1_recovery": 0.706,
+      "ctx_residual": 0.294
+    },
+    "17": {
+      "coarse_delta": 0.2,
+      "A1_recovery": 0.837,
+      "ctx_residual": 0.163
+    },
+    "18": {
+      "coarse_delta": 0.16,
+      "A1_recovery": 0.785,
+      "ctx_residual": 0.215
+    },
+    "19": {
+      "coarse_delta": 0.17,
+      "A1_recovery": 0.801,
+      "ctx_residual": 0.199
+    },
+    "20": {
+      "coarse_delta": 0.087,
+      "A1_recovery": 0.824,
+      "ctx_residual": 0.176
+    },
+    "21": {
+      "coarse_delta": 0.098,
+      "A1_recovery": 0.823,
+      "ctx_residual": 0.177
+    },
+    "22": {
+      "coarse_delta": 0.084,
+      "A1_recovery": 0.749,
+      "ctx_residual": 0.251
+    },
+    "23": {
+      "coarse_delta": 0.053,
+      "A1_recovery": 0.544,
+      "ctx_residual": 0.456
+    }
   },
-  "selected": [1, 7, 9, 23],
+  "selected": [
+    1,
+    7,
+    9,
+    23
+  ],
   "layers": {
-    "1":  {"coarse_delta": 0.388, "A1_recovery": 0.965, "lambda": 1,     "ridge_r64_unc_Rcontext": 0.2738, "ridge_r64_cap0.3_Rcontext": 0.2738},
-    "7":  {"coarse_delta": 0.306, "A1_recovery": 0.292, "lambda": 1,     "ridge_r64_unc_Rcontext": 0.8032, "ridge_r64_cap0.3_Rcontext": 0.7017},
-    "9":  {"coarse_delta": 0.358, "A1_recovery": 0.423, "lambda": 0.001, "ridge_r64_unc_Rcontext": 0.6886, "ridge_r64_cap0.3_Rcontext": 0.5565},
-    "23": {"coarse_delta": 0.053, "A1_recovery": 0.544, "lambda": 1,     "ridge_r64_unc_Rcontext": 0.199,  "ridge_r64_cap0.3_Rcontext": 0.1975}
+    "1": {
+      "coarse_delta": 0.388,
+      "A1_recovery": 0.965,
+      "lambda": 1,
+      "ridge_r64_unc_Rcontext": 0.2738,
+      "ridge_r64_cap0.3_Rcontext": 0.2738
+    },
+    "7": {
+      "coarse_delta": 0.306,
+      "A1_recovery": 0.292,
+      "lambda": 1,
+      "ridge_r64_unc_Rcontext": 0.8032,
+      "ridge_r64_cap0.3_Rcontext": 0.7017
+    },
+    "9": {
+      "coarse_delta": 0.358,
+      "A1_recovery": 0.423,
+      "lambda": 0.001,
+      "ridge_r64_unc_Rcontext": 0.6886,
+      "ridge_r64_cap0.3_Rcontext": 0.5565
+    },
+    "23": {
+      "coarse_delta": 0.053,
+      "A1_recovery": 0.544,
+      "lambda": 1,
+      "ridge_r64_unc_Rcontext": 0.199,
+      "ridge_r64_cap0.3_Rcontext": 0.1975
+    }
   },
   "random_vs_ridge_L7": {
-    "_note": "Step 5 did not complete (OOM at backward through 1.4B model with BS=8). To complete: rerun with BS=4 (or BS=2) for _train_AB only.",
-    "ridge_init_notrain": null,
-    "random_init_ft": null
+    "ridge_init_notrain": 0.7019,
+    "random_init_ft": -0.9344,
+    "_note": "Step 5 rerun via step5_l7.py with BS=4 to fit 4090 24GB."
   }
 }
